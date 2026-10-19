@@ -30,14 +30,14 @@
   function ui() { const s = MS().st(); s._top = s._top || {}; return s._top; }
 
   /* ---------- 페이지 ---------- */
-  const TABS = [['deep', '🧠', '심화 사고력', '서술형 · 탐구'], ['hard', '🔥', '고난도 문제', '최상위 변별'], ['road', '🗺️', '선행 로드맵', '차학년 · 차차학년']];
+  const TABS = [['deep', '🧠', '심화 사고력', '서술형 · 탐구'], ['hard', '🔥', '고난도 문제', '최상위 변별'], ['method', '🎯', '최상위 공부법', '메타인지 · 복습']];
   function page(a) {
     const kid = MS().kid(), u = ui();
     const tab = TABS.some(t => t[0] === a[2]) ? a[2] : (TABS.some(t => t[0] === u.tab) ? u.tab : 'deep');
     u.tab = tab;
-    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">상위권을 위한 전 과목 심화·고난도·선행 학습이에요.</div></div></div>
+    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">최상위권 학생들의 공부 방식으로 전 과목 심화·고난도 문제를 풀어요.</div></div></div>
       <div class="top-tabs t3">${TABS.map(([k, ic, n, d]) => `<a class="top-tab ${k} ${tab === k ? 'on' : ''}" href="#study/top/${k}"><span class="tt-ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></a>`).join('')}</div>`;
-    const body = tab === 'road' ? roadView(kid, a) : listView(kid, a, tab);
+    const body = tab === 'method' ? (window.MethodApp ? MethodApp.view(kid, a) : '') : listView(kid, a, tab);
     return MS().layout('study', `<div class="top-page">${head}${body}</div>`);
   }
 
@@ -92,13 +92,6 @@
   }
 
   /* ---------- 사교육 최상위 ---------- */
-  function curRate(kid) {
-    const subs = ['kor', 'math', 'eng', 'sci', 'soc', 'his'];
-    let ok = 0, tot = 0;
-    subs.forEach(k => unitsFor(k, kid.grade).forEach(u => { const r = H().unitStat(u); if (r && r.rate != null && r.n) { ok += r.rate * r.n; tot += r.n; } }));
-    return tot ? Math.round(ok / tot) : null;
-  }
-
   function hardBody(u) {
     const items = DATA.hard[u.id];
     if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항은 준비 중이에요.</div>';
@@ -108,28 +101,6 @@
         <div class="hq-opts">${x.o.map((o, j) => `<button class="lp-opt" data-ta="hans" data-j="${j}"><span class="lp-on">${'①②③④'[j]}</span><span>${esc(o)}</span></button>`).join('')}</div>
         <div class="hq-e" hidden></div>
       </div>`).join('')}<div class="hq-res small muted"></div></div>`;
-  }
-
-  function roadView(kid, a) {
-    const u = ui(), g = kid.grade;
-    const targets = [g + 1, g + 2].filter(x => x <= 9);
-    if (!targets.length) return `<div class="card mt16"><div class="empty">중3은 고등 과정 선행 로드맵을 준비 중이에요.<br>지금은 공교육 심화와 고난도 수학을 활용해 주세요.</div></div>`;
-    let tg = +(u.rg || targets[0]); if (!targets.includes(tg)) tg = targets[0];
-    const subs = subjsFor(tg);
-    let k = u.rk && subs.includes(u.rk) ? u.rk : (subs.includes('math') ? 'math' : subs[0]);
-    const list = unitsFor(k, tg);
-    const S = SKx(listKey(k, tg));
-    let doneN = 0;
-    const rows = list.map((x, i) => {
-      const s = H().unitStat(x); const fin = s.total && s.done >= s.total; if (fin) doneN++;
-      return `<a class="road-row ${fin ? 'fin' : ''}" href="#study/u/${x.id}" style="--sc:${S.c}"><span class="rr-no">${i + 1}</span><span class="rr-t"><span class="xs muted">${x.sem}학기 ${x.no}단원</span><b>${esc(x.title)}</b></span><span class="rr-p">${fin ? '✓ 완료' : s.done ? `${s.done}/${s.total}차시` : '시작 ›'}</span></a>`;
-    }).join('');
-    const rate = curRate(kid);
-    const ready = rate == null ? '현 학년 확인 문제를 먼저 풀어 보고 정답률 85% 이상일 때 선행을 시작하면 좋아요.' : rate >= 85 ? `현 학년 확인 문제 정답률 <b>${rate}%</b> — 선행을 시작해도 좋아요.` : `현 학년 확인 문제 정답률 <b>${rate}%</b> — 현 학년을 조금 더 다진 뒤 선행을 권해요.`;
-    return `<div class="card top-info road"><p><b>선행 로드맵</b> · 차학년·차차학년 단원을 교과서 순서대로 이어서 공부해요. 단원을 누르면 개념 → 영상 → 확인 문제로 학습해요.${g === 8 ? ' 중3 다음 고등 과정은 준비 중이에요.' : ''}</p><div class="ti-ready ${rate != null && rate >= 85 ? 'ok' : ''}">${ready}</div></div>
-      <div class="row sp-filter mt16"><div class="chips">${targets.map(x => `<button class="chip ${x === tg ? 'on' : ''}" data-ta="rg" data-g="${x}">${x === g + 1 ? '차학년' : '차차학년'} · ${GS(x)}</button>`).join('')}</div></div>
-      <div class="chips scroll-x mt8">${subs.map(x => { const T = SKx(listKey(x, tg)); return `<button class="chip subj-chip ${x === k ? 'on' : ''}" style="--sc:${T.c}" data-ta="rk" data-k="${x}">${T.ic} ${T.n}</button>`; }).join('')}</div>
-      <div class="card mt16 road"><div class="row between"><b>${GS(tg)} ${S.n} 선행 로드맵</b><span class="small muted">${doneN}/${list.length} 단원 완료</span></div><div class="progress mt8"><i style="width:${list.length ? Math.round(doneN * 100 / list.length) : 0}%;background:${S.c}"></i></div><div class="road-list mt12">${rows || '<div class="empty small">단원이 없어요.</div>'}</div></div>`;
   }
 
   /* ---------- 상호작용 ---------- */
@@ -149,8 +120,6 @@
     const el = e.target.closest('[data-ta]'); if (!el) return;
     const t = el.dataset.ta, u = ui();
     if (t === 'sem') { u[el.dataset.k] = +el.dataset.s; return rerender(); }
-    if (t === 'rg') { u.rg = +el.dataset.g; return rerender(); }
-    if (t === 'rk') { u.rk = el.dataset.k; return rerender(); }
     if (t === 'dshow') { const ans = el.parentElement.querySelector('.dq-ans'); ans.hidden = false; el.remove(); return; }
     if (t === 'dscore') {
       const q = el.closest('.dq'); st().deep[q.dataset.key] = +el.dataset.v; MS().save();
