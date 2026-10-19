@@ -292,6 +292,7 @@
     try { applyObSubj(); } catch (e) { }
     try { stuDecor(a); } catch (e) { }
     if (a[0] === 'ob' || a[0] === 'addkid' || a[0] === 'editkid') obInject(a[0] === 'editkid');
+    try { window.SchoolApp && SchoolApp.after(a); } catch (e) { }
     if (!MS() || !MS().st().kids.length) return;
     try { applyPubOrder(); } catch (e) { }
     if (a[0] === 'home' || !a[0]) weekDecor();
@@ -300,7 +301,7 @@
       const on = row.querySelector('.chip.on, .on'); if (!on || row.scrollWidth <= row.clientWidth) return;
       row.scrollLeft = Math.max(0, on.offsetLeft - row.offsetLeft - (row.clientWidth - on.offsetWidth) / 2);
     });
-    if (a[0] === 'settings') settingsDecor();
+    if (a[0] === 'settings') { settingsDecor(); try { window.SchoolApp && SchoolApp.after(a); } catch (e) { } }
     if (a[0] === 'records') recordsDecor();
     if (a[0] === 'lessons') lessonsDecor();
     if (a[0] === 'sheets') { [...new Set(SU().map(u => u.subj))].forEach(loadQuiz); sheetsDecor(); }
@@ -836,8 +837,9 @@
     const kid = MS().kid(), g = kid.grade;
     const ks = kidSubjs(kid).concat(subjsForGrade(g).map(s => s.k).filter(k => !kidSubjs(kid).includes(k)));
     const items = ks.map(k => ({ s: SK[k], nx: nextFor(k), p: subjProgress(k, g) })).filter(x => x.nx);
-    if (!items.length) return '';
-    return `<div class="card mt16 sp-home"><div class="card-head"><h2>🎒 과목별 이어서 학습</h2><a class="more" href="#study">전체 보기 ›</a></div><div class="sp-home-row">${items.map(({ s, nx, p }) =>
+    const sc = window.SchoolApp ? SchoolApp.homeCard() : '';
+    if (!items.length) return sc;
+    return sc + `<div class="card mt16 sp-home"><div class="card-head"><h2>🎒 과목별 이어서 학습</h2><a class="more" href="#study">전체 보기 ›</a></div><div class="sp-home-row">${items.map(({ s, nx, p }) =>
       `<a class="sp-hcard" style="--sc:${s.c}" href="#learn/${nx.u.id}/${nx.l}"><div class="row between"><span class="sp-hs">${s.ic} ${s.n}</span><span class="xs muted">${p}%</span></div><div class="sp-hl">${esc(nx.u.lessons[nx.l])}</div><div class="xs muted">${esc(nx.u.title)} · ${nx.l + 1}차시</div><div class="progress mt8"><i style="width:${p}%;background:${s.c}"></i></div></a>`).join('')}</div></div>`;
   }
   function kidCard() {
@@ -871,7 +873,7 @@
     page, learn, after, homeCard, kidCard, vsubj, optgroups, subjIn, loadQuiz, hero, subjLine, kidVidUnit, chatToday, chatUnit, pubLine, isStu, stuHome,
     addQuiz(k, data) { QB[k] = Object.assign(QB[k] || {}, data); registerGens(k); },
     SUBJ,
-    _h: { U, unitsOf, SK, gradesOf, isStu, unitStat, subjOf, esc,
+    _h: { U, unitsOf, SK, gradesOf, isStu, unitStat, subjOf, esc, kidSubjs,
       qsFor(u, n) { if (subjOf(u) === 'math') return mathQuiz(u, n); const p = fresh(u, qbOf(u).map((q, i) => ({ q, i })), n); markSeen(u, p); MS().save(); return p.map(x => Object.assign(toProblem(u, x.q, x.i), { id: uid(), unitId: u.id })); },
       qsReady(u) { return loadQuiz(subjOf(u), u.grade >= 7 ? 'm' : 'e'); } },
   };

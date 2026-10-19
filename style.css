@@ -902,3 +902,38 @@ a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.b
 .talk-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%}
 .talk-kpi div{background:#fff;border-radius:10px;padding:6px;text-align:center;display:flex;flex-direction:column}
 .talk-kpi b{font-family:var(--round);font-size:18px;font-weight:400}.talk-kpi span{font-size:11px;color:var(--muted)}
+
+/* ===== 우리 학교 (나이스) ===== */
+.sch-search{position:relative}
+.sch-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;max-height:260px;overflow:auto}
+.sch-item{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--line,#e5e7eb);border-radius:12px;background:var(--card,#fff);font:inherit;cursor:pointer}
+.sch-item:hover{border-color:var(--blue,#4A7DF0);background:#f3f6ff}
+.sch-item small,.sch-pick small{color:var(--muted,#6b7280);font-size:12px}
+.sch-pick{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--blue,#4A7DF0);border-radius:12px;background:#f3f6ff;flex-wrap:wrap}
+.sch-pick .sch-t{display:flex;flex-direction:column;flex:1;min-width:140px}
+.sch-ic{font-size:22px}
+.sch-grid{align-items:start}
+.exam-card{display:flex;gap:14px;align-items:center;margin-bottom:16px;background:linear-gradient(135deg,#fff5f5,#fff);border-color:#fecaca}
+.exam-d{font-size:30px;font-weight:900;color:#E5484D;min-width:92px;text-align:center;letter-spacing:-1px}
+.exam-t{font-weight:800;font-size:16px}
+.meal{margin-bottom:12px}
+.meal-list{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.meal-list li{background:var(--bg2,#f5f6f8);border-radius:999px;padding:5px 11px;font-size:14px;display:inline-flex;align-items:center;gap:5px}
+.meal-al{font-size:11px;color:#b45309;background:#fef3c7;border-radius:999px;padding:1px 6px}
+.tt-periods{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.tt-periods li{display:flex;align-items:center;gap:10px;font-size:15px}
+.tp-n{width:26px;height:26px;border-radius:50%;background:var(--blue,#4A7DF0);color:#fff;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.sch-ev{display:flex;flex-direction:column}
+.sch-ev .ev{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line,#eef0f3);font-size:14px}
+.sch-ev .ev:last-child{border-bottom:0}
+.ev-d{min-width:86px;color:var(--muted,#6b7280);font-variant-numeric:tabular-nums}
+.ev-n{flex:1;font-weight:600}
+.ev.exam .ev-n{color:#E5484D}
+.ev.off .ev-n{color:#16A34A}
+.ev-dd{font-size:12px;color:var(--muted,#6b7280);font-weight:700}
+.sch-home{display:block;margin-top:16px;text-decoration:none;color:inherit;background:linear-gradient(135deg,#eef3ff,#fff)}
+.sch-home.dim{background:var(--card,#fff);border-style:dashed}
+.sch-home-b{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.sch-dd b{color:#E5484D}
+.sch-set .btn{margin:0 4px}
+@media (max-width:640px){.exam-d{font-size:24px;min-width:72px}.sch-pick .row{width:100%}}
