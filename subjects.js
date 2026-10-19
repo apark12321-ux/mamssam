@@ -288,7 +288,7 @@
     }
     document.body.classList.remove('lp-on');
     LP = null;
-    setTimeout(() => { try { window.FunApp && FunApp.after(a); } catch (e) { } }, 0);
+    try { window.FunApp && FunApp.after(a); } catch (e) { }
     try { applyObSubj(); } catch (e) { }
     try { stuDecor(a); } catch (e) { }
     if (a[0] === 'ob' || a[0] === 'addkid' || a[0] === 'editkid') obInject(a[0] === 'editkid');

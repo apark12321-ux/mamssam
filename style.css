@@ -839,7 +839,6 @@ h1,h2,h3,.page-head h1,.brand-name,.hero .h-title,.sp-hero .h-title,#splash .s-t
 a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.btn:active,.lp-opt:active:not([disabled]){transform:scale(.97)}
 @media (hover:hover){.unit-card:hover,a.card:hover,.road-row:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(74,125,240,.14)}}
 .progress i{transition:width .8s cubic-bezier(.2,.9,.3,1)}
-.wrap>*{animation:pageIn .35s ease both}
 @keyframes pageIn{from{opacity:0;transform:translateY(8px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:420px){.fun-pet{width:72px;height:72px}.fun-pet .pet{font-size:40px}.fun-m .m-n{font-size:11px}}
