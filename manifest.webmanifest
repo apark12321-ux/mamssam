@@ -1,0 +1,16 @@
+{
+  "name": "맘쌤 · 엄마표 학습 원스톱",
+  "short_name": "맘쌤",
+  "description": "초등 1~6학년 엄마표 수학 수업 준비, 워크시트, 아이 풀이, 진도 관리",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1452F0",
+  "theme_color": "#1452F0",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
