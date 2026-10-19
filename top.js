@@ -1,6 +1,6 @@
 /* 맘쌤 — 최상위 학습 (공교육 심화 · 사교육 최상위) */
 (function () {
-  const FILES = {"deep":{"eng":["top/d_eng_1.js","top/d_eng_2.js"],"his":["top/d_his_1.js"],"kor":["top/d_kor_1.js","top/d_kor_2.js","top/d_kor_3.js","top/d_kor_4.js","top/d_kor_5.js"],"math":["top/d_math_1.js","top/d_math_2.js","top/d_math_3.js"],"sci":["top/d_sci_1.js","top/d_sci_2.js"],"soc":["top/d_soc_1.js","top/d_soc_2.js"]},"hard":{"eng":["top/h_eng_1.js","top/h_eng_2.js","top/h_eng_3.js"],"his":["top/h_his_1.js"],"kor":["top/h_kor_1.js","top/h_kor_2.js","top/h_kor_3.js","top/h_kor_4.js","top/h_kor_5.js","top/h_kor_6.js","top/h_kor_7.js"],"math":["top/h_math_1.js","top/h_math_2.js","top/h_math_3.js","top/h_math_4.js"],"sci":["top/h_sci_1.js","top/h_sci_2.js","top/h_sci_3.js"],"soc":["top/h_soc_1.js","top/h_soc_2.js","top/h_soc_3.js"]}};
+  const FILES = {"deep":{"eng":["top/d_eng_1.js","top/d_eng_2.js"],"his":["top/d_his_1.js"],"kor":["top/d_kor_1.js","top/d_kor_2.js","top/d_kor_3.js","top/d_kor_4.js","top/d_kor_5.js"],"math":["top/d_math_1.js","top/d_math_2.js","top/d_math_3.js"],"sci":["top/d_sci_1.js","top/d_sci_2.js"],"soc":["top/d_soc_1.js","top/d_soc_2.js"]},"hard":{"eng":["top/h_eng_1.js","top/h_eng_2.js","top/h_eng_3.js"],"fix":["top/h_fix_1.js"],"his":["top/h_his_1.js"],"kor":["top/h_kor_1.js","top/h_kor_2.js","top/h_kor_3.js","top/h_kor_4.js","top/h_kor_5.js","top/h_kor_6.js","top/h_kor_7.js"],"math":["top/h_math_1.js","top/h_math_2.js","top/h_math_3.js","top/h_math_4.js"],"sci":["top/h_sci_1.js","top/h_sci_2.js","top/h_sci_3.js"],"soc":["top/h_soc_1.js","top/h_soc_2.js","top/h_soc_3.js"]}};
   const DATA = { deep: {}, hard: {} };
   const loaded = {};
   const MS = () => window.MS;
@@ -38,7 +38,7 @@
     const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">최상위권 학생들의 공부 방식으로 전 과목 심화·고난도 문제를 풀어요.</div></div></div>
       <div class="top-tabs t3">${TABS.map(([k, ic, n, d]) => `<a class="top-tab ${k} ${tab === k ? 'on' : ''}" href="#study/top/${k}"><span class="tt-ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></a>`).join('')}</div>`;
     const body = tab === 'method' ? (window.MethodApp ? MethodApp.view(kid, a) : '') : listView(kid, a, tab);
-    return MS().layout('study', `<div class="top-page">${head}${body}</div>`);
+    return MS().layout('study/top', `<div class="top-page">${head}${body}</div>`);
   }
 
   /* ---------- 심화 · 고난도 공통 목록 ---------- */
