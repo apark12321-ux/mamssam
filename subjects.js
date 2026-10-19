@@ -110,7 +110,7 @@
   }
   function unitStat(u) {
     const d = doneSet(u), q = sp().q[u.id];
-    return { done: d.size, total: u.lessons.length, rate: q && q.t ? pct(q.ok, q.t) : null };
+    return { done: d.size, total: u.lessons.length, rate: q && q.t ? pct(q.ok, q.t) : null, n: q && q.t ? q.t : 0 };
   }
   function subjProgress(k, g) {
     let a = 0, b = 0; unitsOf(k, g).forEach(u => { const s = unitStat(u); a += Math.min(s.done, s.total); b += s.total; });
@@ -153,6 +153,7 @@
     }).join('') : `<div class="card" style="grid-column:1/-1"><div class="empty"><div class="e-ico">${S.ic}</div>${GS(g)} ${sem}학기 ${S.n} 단원이 없어요.</div></div>`;
     return MS().layout('study', `
       <div class="page-head"><div><h1>과목별 학습</h1><div class="sub">${isStu() ? '단원 개념 → 영상 → 스스로 정리 → 확인 문제 순서로 혼자 공부해요.' : '2022 개정 교육과정 · 단원 개념 → 영상 → 확인 문제를 차시별로 이어서 공부해요.'}</div></div></div>
+      <a class="top-entry" href="#study/top"><span class="te-ic">🏆</span><span class="te-t"><b>최상위 학습</b><small>공교육 심화 · 사교육 최상위(선행·고난도)</small></span><span class="te-go">›</span></a>
       ${subjTabs(k, kid.grade, 'study')}
       ${hero}
       <div class="row sp-filter"><div class="chips">${gs.map(x => `<button class="chip ${x === g ? 'on' : ''}" data-sa="sg" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-sa="ss" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-sa="ss" data-s="2">2학기</button></div></div>
@@ -200,6 +201,7 @@
 
   function page(a) {
     if (a[1] === 'u' && a[2]) return unitPage(a[2]);
+    if (a[1] === 'top' && window.TopApp) return TopApp.page(a);
     return hub(a);
   }
 
@@ -281,6 +283,7 @@
     if (a[0] === 'records') recordsDecor();
     if (a[0] === 'lessons') lessonsDecor();
     if (a[0] === 'sheets') { [...new Set(SU().map(u => u.subj))].forEach(loadQuiz); sheetsDecor(); }
+    if (a[0] === 'study' && a[1] === 'top' && window.TopApp) TopApp.after(a);
   }
 
   function vidsForLP() {
@@ -846,6 +849,7 @@
   window.SubjApp = {
     page, learn, after, homeCard, kidCard, vsubj, optgroups, subjIn, loadQuiz, hero, subjLine, kidVidUnit, chatToday, chatUnit, pubLine, isStu, stuHome,
     addQuiz(k, data) { QB[k] = Object.assign(QB[k] || {}, data); registerGens(k); },
-    SUBJ
+    SUBJ,
+    _h: { U, unitsOf, SK, gradesOf, isStu, unitStat },
   };
 })();
