@@ -235,6 +235,9 @@
     if (t === 'badges') badgeModal();
   });
 
+  const GONE = /^#(books|contents|scraps)(\/|\?|$)/;
+  function sweep() { if (GONE.test(location.hash)) location.replace('#home'); }
+  window.addEventListener('hashchange', sweep); sweep();
   function boot() {
     if (!window.MS) return setTimeout(boot, 200);
     mo.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });

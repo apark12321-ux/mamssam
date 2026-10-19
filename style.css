@@ -874,3 +874,32 @@ a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.b
 .blank-pt{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.5;padding:6px 8px;border-radius:10px;background:#fff;cursor:pointer}
 .blank-pt input{margin-top:4px;width:18px;height:18px;flex:none}
 @media (max-width:420px){.seg4 a{font-size:11.5px}.mth-why>div{grid-template-columns:100px 1fr 20px}}
+
+/* 정리: 사용 빈도 낮은 기능 숨김 */
+[data-act=shareCard],[data-act=vsave],[data-to^=books],[data-to^=contents],[data-to^=scraps]{display:none!important}
+
+/* ===== 듣기 · 말하기 ===== */
+.say-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.say-btn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink2)}
+.say-btn:hover{border-color:var(--blue)}
+.say-btn.on{background:var(--blue-l);border-color:var(--blue);color:var(--blue-d)}
+.say-btn.mic{border-color:#FFB3C8;color:#D9366B}
+.say-btn.rec{background:#D9366B;color:#fff;border-color:#D9366B;animation:recPulse 1.2s infinite}
+@keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,54,107,.45)}50%{box-shadow:0 0 0 8px rgba(217,54,107,0)}}
+.say-res,.talk-res{flex-basis:100%}
+.say-live{margin-top:6px;padding:8px 12px;border-radius:12px;background:var(--pink-l);font-size:14px;color:var(--ink2)}
+.say-out{margin-top:8px;display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:14px;background:var(--bg)}
+.say-out audio{display:block;width:100%;max-width:280px;height:34px;margin-top:8px}
+.say-score{flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--red-l);color:var(--red);font-family:var(--round);font-size:13px}
+.say-score b{font-size:24px;font-weight:400;line-height:1}
+.say-score.ok{background:var(--green-l);color:var(--green)}
+.say-words{font-size:16px;line-height:1.7;font-weight:700}
+.say-words .w-ok{color:var(--green)}.say-words .w-miss{color:var(--red);text-decoration:underline wavy}
+.say-blind{filter:blur(6px);user-select:none;transition:filter .2s}
+.opt-say{margin-left:auto;flex:none;font-size:16px;padding:2px 6px;border-radius:8px;cursor:pointer}
+.opt-say:hover{background:var(--blue-l)}
+.talk-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-2px 0 10px}
+.say-out.talk{flex-direction:column;gap:0}
+.talk-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%}
+.talk-kpi div{background:#fff;border-radius:10px;padding:6px;text-align:center;display:flex;flex-direction:column}
+.talk-kpi b{font-family:var(--round);font-size:18px;font-weight:400}.talk-kpi span{font-size:11px;color:var(--muted)}

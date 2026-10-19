@@ -80,7 +80,7 @@
   function registerGens(k) {
     const MG = window.MathGen; if (!MG || !MG.register) return;
     Object.keys(QB[k] || {}).forEach(id => {
-      MG.register(id, () => { const u = U(id); const bank = QB[k][id] || []; if (!u || !bank.length) return null; const i = Math.floor(Math.random() * bank.length); return toProblem(u, bank[i], i); });
+      let qq = []; MG.register(id, () => { const u = U(id); const bank = QB[k][id] || []; if (!u || !bank.length) return null; if (!qq.length) qq = fresh(u, bank.map((q, i) => ({ q, i })), bank.length); const x = qq.shift(); markSeen(u, [x]); return toProblem(u, x.q, x.i); });
     });
   }
 
@@ -229,7 +229,28 @@
   function mathQuiz(u, n) {
     const MG = window.MathGen;
     if (!MG || !MG.generators[u.id]) return [];
-    return MG.generate(u.id, n, 1).map(p => Object.assign({}, p, { math: true }));
+    const r = sp(); r.seenM = r.seenM || {}; const recent = r.seenM[u.id] || [];
+    const key = (p) => String(p.q || '').replace(/<[^>]*>|\s/g, '') + '|' + (p.opts || []).join('|');
+    const out = [], keys = new Set();
+    for (let tries = 0; tries < 6 && out.length < n; tries++) {
+      MG.generate(u.id, n, 1).forEach(p => { const k = key(p); if (out.length < n && !keys.has(k) && (tries > 3 || !recent.includes(k))) { keys.add(k); out.push(p); } });
+    }
+    r.seenM[u.id] = recent.concat([...keys]).slice(-40);
+    return out.map(p => Object.assign({}, p, { math: true }));
+  }
+  /* 이미 본 문제는 뒤로: 안 본 문제 → 오래전에 본 문제 순으로 출제 (문제 중복 방지) */
+  function fresh(u, list, n) {
+    const seen = (sp().seen || {})[u.id] || [];
+    const uniq = []; const keys = new Set();
+    list.forEach(x => { const k = x.q.q.replace(/\s/g, ''); if (!keys.has(k)) { keys.add(k); uniq.push(x); } });
+    const unseen = shuffle(uniq.filter(x => !seen.includes(x.i)));
+    const old = uniq.filter(x => seen.includes(x.i)).sort((a, b) => seen.indexOf(a.i) - seen.indexOf(b.i));
+    return unseen.concat(old).slice(0, n);
+  }
+  function markSeen(u, picked) {
+    const r = sp(); r.seen = r.seen || {};
+    const cur = (r.seen[u.id] || []).filter(i => !picked.some(x => x.i === i));
+    r.seen[u.id] = cur.concat(picked.map(x => x.i)).slice(-Math.max(qbOf(u).length - 1, 1));
   }
   function buildQs() {
     const { u, l, quizOnly } = LP;
@@ -237,12 +258,12 @@
     const bank = qbOf(u).map((q, i) => ({ q, i }));
     if (!bank.length) return [];
     let pickd;
-    if (quizOnly) pickd = shuffle(bank).slice(0, 10);
+    if (quizOnly) pickd = fresh(u, bank, 10);
     else {
-      const own = shuffle(bank.filter(x => x.q.l === l));
-      const rest = shuffle(bank.filter(x => x.q.l !== l));
-      pickd = own.slice(0, 3).concat(rest).slice(0, 3);
+      const own = fresh(u, bank.filter(x => x.q.l === l), 3);
+      pickd = own.concat(fresh(u, bank.filter(x => x.q.l !== l), 3)).slice(0, 3);
     }
+    markSeen(u, pickd);
     return pickd.map(x => Object.assign(toProblem(u, x.q, x.i), { id: uid(), unitId: u.id }));
   }
   function buildSteps() {
@@ -852,7 +873,7 @@
     addQuiz(k, data) { QB[k] = Object.assign(QB[k] || {}, data); registerGens(k); },
     SUBJ,
     _h: { U, unitsOf, SK, gradesOf, isStu, unitStat, subjOf, esc,
-      qsFor(u, n) { if (subjOf(u) === 'math') return mathQuiz(u, n); return shuffle(qbOf(u).map((q, i) => ({ q, i }))).slice(0, n).map(x => Object.assign(toProblem(u, x.q, x.i), { id: uid(), unitId: u.id })); },
+      qsFor(u, n) { if (subjOf(u) === 'math') return mathQuiz(u, n); const p = fresh(u, qbOf(u).map((q, i) => ({ q, i })), n); markSeen(u, p); MS().save(); return p.map(x => Object.assign(toProblem(u, x.q, x.i), { id: uid(), unitId: u.id })); },
       qsReady(u) { return loadQuiz(subjOf(u), u.grade >= 7 ? 'm' : 'e'); } },
   };
 })();
