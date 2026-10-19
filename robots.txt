@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mamssam.vercel.app/sitemap.xml

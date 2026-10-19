@@ -293,6 +293,7 @@
     try { stuDecor(a); } catch (e) { }
     if (a[0] === 'ob' || a[0] === 'addkid' || a[0] === 'editkid') obInject(a[0] === 'editkid');
     try { window.SchoolApp && SchoolApp.after(a); } catch (e) { }
+    try { window.AdsApp && AdsApp.after(a); } catch (e) { }
     if (!MS() || !MS().st().kids.length) return;
     try { applyPubOrder(); } catch (e) { }
     if (a[0] === 'home' || !a[0]) weekDecor();
