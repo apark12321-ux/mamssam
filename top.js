@@ -1,6 +1,6 @@
 /* 맘쌤 — 최상위 학습 (공교육 심화 · 사교육 최상위) */
 (function () {
-  const FILES = {"deep":{"eng":["top/d_eng_1.js","top/d_eng_2.js"],"his":["top/d_his_1.js"],"kor":["top/d_kor_1.js","top/d_kor_2.js","top/d_kor_3.js","top/d_kor_4.js","top/d_kor_5.js"],"math":["top/d_math_1.js","top/d_math_2.js","top/d_math_3.js"],"sci":["top/d_sci_1.js","top/d_sci_2.js"],"soc":["top/d_soc_1.js","top/d_soc_2.js"]},"hard":{"math":["top/h_math_1.js","top/h_math_2.js","top/h_math_3.js","top/h_math_4.js"]}};
+  const FILES = {"deep":{"eng":["top/d_eng_1.js","top/d_eng_2.js"],"his":["top/d_his_1.js"],"kor":["top/d_kor_1.js","top/d_kor_2.js","top/d_kor_3.js","top/d_kor_4.js","top/d_kor_5.js"],"math":["top/d_math_1.js","top/d_math_2.js","top/d_math_3.js"],"sci":["top/d_sci_1.js","top/d_sci_2.js"],"soc":["top/d_soc_1.js","top/d_soc_2.js"]},"hard":{"eng":["top/h_eng_1.js"],"his":["top/h_his_1.js"],"math":["top/h_math_1.js","top/h_math_2.js","top/h_math_3.js","top/h_math_4.js"]}};
   const DATA = { deep: {}, hard: {} };
   const loaded = {};
   const MS = () => window.MS;
@@ -30,38 +30,33 @@
   function ui() { const s = MS().st(); s._top = s._top || {}; return s._top; }
 
   /* ---------- 페이지 ---------- */
+  const TABS = [['deep', '🧠', '심화 사고력', '서술형 · 탐구'], ['hard', '🔥', '고난도 문제', '최상위 변별'], ['road', '🗺️', '선행 로드맵', '차학년 · 차차학년']];
   function page(a) {
     const kid = MS().kid(), u = ui();
-    const track = a[2] === 'pre' || a[2] === 'pub' ? a[2] : (u.track || 'pub');
-    u.track = track;
-    const stu = H().isStu();
-    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">상위권을 위한 두 가지 길을 나눠 두었어요. ${stu ? '내 목표에 맞는 쪽을 골라 공부해요.' : '아이 상황에 맞는 쪽을 골라 쓰세요.'}</div></div></div>
-      <div class="top-tabs">
-        <a class="top-tab pub ${track === 'pub' ? 'on' : ''}" href="#study/top/pub"><span class="tt-ic">🏫</span><span><b>공교육 심화</b><small>지금 학년 · 깊이</small></span></a>
-        <a class="top-tab pre ${track === 'pre' ? 'on' : ''}" href="#study/top/pre"><span class="tt-ic">🚀</span><span><b>사교육 최상위</b><small>선행 · 고난도</small></span></a>
-      </div>`;
-    const body = track === 'pub' ? pubView(kid, a) : preView(kid, a);
+    const tab = TABS.some(t => t[0] === a[2]) ? a[2] : (TABS.some(t => t[0] === u.tab) ? u.tab : 'deep');
+    u.tab = tab;
+    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">상위권을 위한 전 과목 심화·고난도·선행 학습이에요.</div></div></div>
+      <div class="top-tabs t3">${TABS.map(([k, ic, n, d]) => `<a class="top-tab ${k} ${tab === k ? 'on' : ''}" href="#study/top/${k}"><span class="tt-ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></a>`).join('')}</div>`;
+    const body = tab === 'road' ? roadView(kid, a) : listView(kid, a, tab);
     return MS().layout('study', `<div class="top-page">${head}${body}</div>`);
   }
 
-  /* ---------- 공교육 심화 ---------- */
-  function pubView(kid, a) {
+  /* ---------- 심화 · 고난도 공통 목록 ---------- */
+  function listView(kid, a, kind) {
     const u = ui(), g = kid.grade;
-    const subs = subjsFor(g);
-    let k = a[3] && subs.includes(a[3]) ? a[3] : (u.pubSubj && subs.includes(u.pubSubj) ? u.pubSubj : subs[0]);
-    u.pubSubj = k;
-    let sem = +(u.pubSem || kid.sem); if (sem !== 1 && sem !== 2) sem = 1;
-    const units = unitsFor(k, g, sem);
-    const done = Object.keys(st().deep).length;
-    return `<div class="card top-info pub">
-        <div class="ti-h">🏫 공교육 관점의 최상위</div>
-        <p>${GL(g)} 교육과정 성취기준 <b>안에서</b> 더 깊이 생각하는 문제예요. 학교 서술형·수행평가, 탐구·융합 활동과 같은 방향이고 선행 개념은 쓰지 않아요.</p>
-        <ul class="ti-list"><li>서술형 · 사고력 · 탐구 · 융합 문항 단원별 2개</li><li>내 답을 쓴 뒤 모범 답안과 채점 포인트로 스스로 채점</li></ul>
-        <div class="xs muted">지금까지 채점한 심화 문항 ${done}개</div>
-      </div>
-      <div class="chips scroll-x mt16" id="topSubj">${subs.map(x => { const S = SKx(x); return `<a class="chip subj-chip ${x === k ? 'on' : ''}" style="--sc:${S.c}" href="#study/top/pub/${x}">${S.ic} ${S.n}</a>`; }).join('')}</div>
-      <div class="row sp-filter mt8"><span class="chip on">${GS(g)}</span><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-ta="psem" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-ta="psem" data-s="2">2학기</button></div></div>
-      <div class="top-units mt16" id="topList" data-kind="deep" data-subj="${dataKey(k)}">${units.length ? units.map(x => unitRow(x, 'deep')).join('') : `<div class="card"><div class="empty">${GS(g)} ${sem}학기 단원이 없어요.</div></div>`}</div>`;
+    const subs = subjsFor(g).filter(k => (FILES[kind] || {})[k]);
+    const sk = kind + 'Subj', ss = kind + 'Sem';
+    let k = a[3] && subs.includes(a[3]) ? a[3] : (u[sk] && subs.includes(u[sk]) ? u[sk] : subs[0]);
+    u[sk] = k;
+    let sem = +(u[ss] || kid.sem); if (sem !== 1 && sem !== 2) sem = 1;
+    const units = k ? unitsFor(k, g, sem) : [];
+    const intro = kind === 'deep'
+      ? `<b>심화 사고력</b> · ${GL(g)} 교육과정 안에서 더 깊이 생각하는 서술형·사고력·탐구·융합 문제예요. 답을 써 본 뒤 모범 답안과 채점 포인트로 스스로 채점해요.`
+      : `<b>고난도 문제</b> · 최상위권을 가르는 4지선다 문제예요. ${GL(g)} 내용만으로 풀 수 있지만 여러 단계 추론과 함정이 있어요. 풀고 나면 해설과 최고 기록이 남아요.`;
+    return `<div class="card top-info ${kind}"><p>${intro}</p></div>
+      <div class="chips scroll-x mt16" id="topSubj">${subs.map(x => { const S = SKx(listKey(x, g)); return `<a class="chip subj-chip ${x === k ? 'on' : ''}" style="--sc:${S.c}" href="#study/top/${kind}/${x}">${S.ic} ${S.n}</a>`; }).join('')}</div>
+      <div class="row sp-filter mt8"><span class="chip on">${GS(g)}</span><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-ta="sem" data-k="${ss}" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-ta="sem" data-k="${ss}" data-s="2">2학기</button></div></div>
+      <div class="top-units mt16" id="topList" data-kind="${kind}" data-subj="${dataKey(k || '')}">${units.length ? units.map(x => unitRow(x, kind)).join('') : `<div class="card"><div class="empty">${GS(g)} ${sem}학기 단원이 없어요.</div></div>`}</div>`;
   }
 
   function unitRow(u, kind) {
@@ -104,33 +99,6 @@
     return tot ? Math.round(ok / tot) : null;
   }
 
-  function preView(kid, a) {
-    const u = ui(), g = kid.grade;
-    const sec = a[3] === 'road' ? 'road' : a[3] === 'hard' ? 'hard' : (u.preSec || 'hard');
-    u.preSec = sec;
-    const rate = curRate(kid);
-    const ready = rate == null ? '아직 현 학년 확인 문제 기록이 적어요. 현 학년 단원 문제를 먼저 풀어 보고 85% 이상이면 선행을 권해요.'
-      : rate >= 85 ? `현 학년 확인 문제 정답률 <b>${rate}%</b> — 현행이 탄탄해요. 선행과 고난도에 도전해도 좋아요.`
-        : `현 학년 확인 문제 정답률 <b>${rate}%</b> — 85% 미만이에요. 선행보다 현행 보완이 먼저예요.`;
-    const notice = `<div class="card top-info pre">
-        <div class="ti-h">🚀 사교육 관점의 최상위</div>
-        <p>학원·최상위 문제집에서 흔히 하는 방식이에요. <b>고난도 유형</b>과 <b>차학년·차차학년 선행</b>으로 구성했어요.</p>
-        <div class="ti-warn">⚠️ 공교육은 선행학습을 지양해요. 「공교육 정상화 촉진 및 선행교육 규제에 관한 특별법」은 학교 수업·시험의 선행 출제를 금지하고 학원의 선행학습 유발 광고를 제한해요. 현 학년 개념을 먼저 다지고 ${H().isStu() ? '내' : '아이'} 속도에 맞게 쓰세요.</div>
-        <div class="ti-ready ${rate != null && rate >= 85 ? 'ok' : ''}">${ready}</div>
-      </div>
-      <div class="seg mt16"><a class="${sec === 'hard' ? 'on' : ''}" href="#study/top/pre/hard">🔥 최상위 고난도 수학</a><a class="${sec === 'road' ? 'on' : ''}" href="#study/top/pre/road">🗺️ 선행 로드맵</a></div>`;
-    return notice + (sec === 'hard' ? hardView(kid) : roadView(kid, a));
-  }
-
-  function hardView(kid) {
-    const u = ui(), g = kid.grade;
-    let sem = +(u.hSem || kid.sem); if (sem !== 1 && sem !== 2) sem = 1;
-    const units = unitsFor('math', g, sem);
-    return `<p class="small muted mt16">${GS(g)} 수학 단원마다 최상위 문제집 수준의 고난도 3문항이에요. 현 학년 개념만으로 풀 수 있지만 여러 단계 추론이 필요해요.</p>
-      <div class="row sp-filter"><span class="chip on">${GS(g)}</span><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-ta="hsem" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-ta="hsem" data-s="2">2학기</button></div></div>
-      <div class="top-units mt16" id="topList" data-kind="hard" data-subj="math">${units.map(x => unitRow(x, 'hard')).join('') || '<div class="card"><div class="empty">단원이 없어요.</div></div>'}</div>`;
-  }
-
   function hardBody(u) {
     const items = DATA.hard[u.id];
     if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항은 준비 중이에요.</div>';
@@ -156,8 +124,10 @@
       const s = H().unitStat(x); const fin = s.total && s.done >= s.total; if (fin) doneN++;
       return `<a class="road-row ${fin ? 'fin' : ''}" href="#study/u/${x.id}" style="--sc:${S.c}"><span class="rr-no">${i + 1}</span><span class="rr-t"><span class="xs muted">${x.sem}학기 ${x.no}단원</span><b>${esc(x.title)}</b></span><span class="rr-p">${fin ? '✓ 완료' : s.done ? `${s.done}/${s.total}차시` : '시작 ›'}</span></a>`;
     }).join('');
-    return `<p class="small muted mt16">차학년·차차학년 단원을 교과서 순서대로 이어서 공부해요. 단원을 누르면 개념 → 영상 → 확인 문제로 학습해요.${g === 8 ? ' 중3 다음 고등 과정은 준비 중이에요.' : ''}</p>
-      <div class="row sp-filter"><div class="chips">${targets.map(x => `<button class="chip ${x === tg ? 'on' : ''}" data-ta="rg" data-g="${x}">${x === g + 1 ? '차학년' : '차차학년'} · ${GS(x)}</button>`).join('')}</div></div>
+    const rate = curRate(kid);
+    const ready = rate == null ? '현 학년 확인 문제를 먼저 풀어 보고 정답률 85% 이상일 때 선행을 시작하면 좋아요.' : rate >= 85 ? `현 학년 확인 문제 정답률 <b>${rate}%</b> — 선행을 시작해도 좋아요.` : `현 학년 확인 문제 정답률 <b>${rate}%</b> — 현 학년을 조금 더 다진 뒤 선행을 권해요.`;
+    return `<div class="card top-info road"><p><b>선행 로드맵</b> · 차학년·차차학년 단원을 교과서 순서대로 이어서 공부해요. 단원을 누르면 개념 → 영상 → 확인 문제로 학습해요.${g === 8 ? ' 중3 다음 고등 과정은 준비 중이에요.' : ''}</p><div class="ti-ready ${rate != null && rate >= 85 ? 'ok' : ''}">${ready}</div></div>
+      <div class="row sp-filter mt16"><div class="chips">${targets.map(x => `<button class="chip ${x === tg ? 'on' : ''}" data-ta="rg" data-g="${x}">${x === g + 1 ? '차학년' : '차차학년'} · ${GS(x)}</button>`).join('')}</div></div>
       <div class="chips scroll-x mt8">${subs.map(x => { const T = SKx(listKey(x, tg)); return `<button class="chip subj-chip ${x === k ? 'on' : ''}" style="--sc:${T.c}" data-ta="rk" data-k="${x}">${T.ic} ${T.n}</button>`; }).join('')}</div>
       <div class="card mt16 road"><div class="row between"><b>${GS(tg)} ${S.n} 선행 로드맵</b><span class="small muted">${doneN}/${list.length} 단원 완료</span></div><div class="progress mt8"><i style="width:${list.length ? Math.round(doneN * 100 / list.length) : 0}%;background:${S.c}"></i></div><div class="road-list mt12">${rows || '<div class="empty small">단원이 없어요.</div>'}</div></div>`;
   }
@@ -178,8 +148,7 @@
   document.addEventListener('click', e => {
     const el = e.target.closest('[data-ta]'); if (!el) return;
     const t = el.dataset.ta, u = ui();
-    if (t === 'psem') { u.pubSem = +el.dataset.s; return rerender(); }
-    if (t === 'hsem') { u.hSem = +el.dataset.s; return rerender(); }
+    if (t === 'sem') { u[el.dataset.k] = +el.dataset.s; return rerender(); }
     if (t === 'rg') { u.rg = +el.dataset.g; return rerender(); }
     if (t === 'rk') { u.rk = el.dataset.k; return rerender(); }
     if (t === 'dshow') { const ans = el.parentElement.querySelector('.dq-ans'); ans.hidden = false; el.remove(); return; }
