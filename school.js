@@ -27,12 +27,13 @@
   function sb(path, opt) { return fetch(SB_URL + path, Object.assign({ headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Prefer: (opt && opt.prefer) || '' } }, opt)).then(r => r.ok ? r.json().catch(() => []) : []).catch(() => []); }
   const kidSchool = (kid) => (kid || MS().kid()).school || null;
   const schoolKind = (s) => s.kind || (/중학교/.test(s.name) ? '중' : '초');
+  const hpUrl = (h) => { h = String(h || '').trim(); if (!h) return ''; return /^https?:\/\//i.test(h) ? h : 'https://' + h.replace(/^\/+/, ''); };
   const subjOfName = (n) => { const m = SUBJ_MAP.find(([k, re]) => re.test(n)); return m ? m[0] : null; };
 
   /* ---------- 학교 검색 ---------- */
   function search(q, kind) {
     const p = { SCHUL_NM: q, pSize: 30 }; if (kind) p.SCHUL_KND_SC_NM = kind;
-    return neis('schoolInfo', p, 0).then(rows => rows.filter(r => /초등학교|중학교/.test(r.SCHUL_KND_SC_NM)).map(r => ({ code: r.SD_SCHUL_CODE, atpt: r.ATPT_OFCDC_SC_CODE, name: r.SCHUL_NM, kind: r.SCHUL_KND_SC_NM === '중학교' ? '중' : '초', addr: (r.ORG_RDNMA || '').replace(/\s*\(.*$/, ''), hp: r.HMPG_ADRES || '', region: r.LCTN_SC_NM || '' })));
+    return neis('schoolInfo', p, 0).then(rows => rows.filter(r => /초등학교|중학교/.test(r.SCHUL_KND_SC_NM)).map(r => ({ code: r.SD_SCHUL_CODE, atpt: r.ATPT_OFCDC_SC_CODE, name: r.SCHUL_NM, kind: r.SCHUL_KND_SC_NM === '중학교' ? '중' : '초', addr: (r.ORG_RDNMA || '').replace(/\s*\(.*$/, ''), hp: (r.HMPG_ADRES || '').trim(), region: r.LCTN_SC_NM || '' })));
   }
 
   /* ---------- 출판사 공유 ---------- */
@@ -131,7 +132,7 @@
     if (!s) return MS().layout('school', `<div class="page-head"><div><h1>🏫 우리 학교</h1><div class="sub">학교를 등록하면 급식, 학사일정, 시험 D-day, 학급 시간표를 볼 수 있어요.</div></div></div>
       <div class="card"><div class="empty"><div class="e-ico">🏫</div>아직 학교를 등록하지 않았어요.<div class="mt12"><a class="btn btn-primary" href="#editkid">학교 등록하기</a></div></div></div>`);
     const today = ymd(new Date());
-    const html = `<div class="page-head"><div><h1>🏫 ${esc(s.name)}</h1><div class="sub">${esc(s.addr || s.region)} · ${gradeTag(kid.grade)}${kid.cls ? ` ${esc(kid.cls)}반` : ''} ${s.hp ? `· <a href="${esc(s.hp)}" target="_blank" rel="noopener">홈페이지 ↗</a>` : ''} <a href="#editkid" class="xs">학교·반 바꾸기</a></div></div></div>
+    const html = `<div class="page-head"><div><h1>🏫 ${esc(s.name)}</h1><div class="sub">${esc(s.addr || s.region)} · ${gradeTag(kid.grade)}${kid.cls ? ` ${esc(kid.cls)}반` : ''} ${s.hp ? `· <a href="${esc(hpUrl(s.hp))}" target="_blank" rel="noopener">홈페이지 ↗</a>` : ''} <a href="#editkid" class="xs">학교·반 바꾸기</a></div></div></div>
       <div id="schExam"></div>
       <div class="grid g2 sch-grid">
         <div class="card" id="schMeal"><div class="card-head"><h2>🍱 오늘 급식</h2><button class="btn btn-sm" data-sch="week">이번 주</button></div><div class="empty small">불러오는 중…</div></div>
