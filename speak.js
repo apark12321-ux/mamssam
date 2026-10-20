@@ -1,4 +1,4 @@
-/* 맘쌤 — 영어 듣기(TTS) · 따라 말하기(발음 분석) · 말로 설명하기(녹음·분석) */
+/* 올배움 — 영어 듣기(TTS) · 따라 말하기(발음 분석) · 말로 설명하기(녹음·분석) */
 (function () {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const hasTTS = 'speechSynthesis' in window;

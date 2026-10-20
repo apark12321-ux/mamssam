@@ -1016,3 +1016,5 @@ a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.b
 .hi-types{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.hi-type{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:12px;background:var(--bg,#F5F7FB);font-size:13.5px}.hi-type b{color:#1F2A44}
 .hi-adv{background:linear-gradient(135deg,#FFF9E8,#FFF);border-color:#FFE5A3}
 @media (max-width:640px){.hi-hero .h-title{font-size:40px}.hi-types{grid-template-columns:1fr}.hi-mock-in{grid-template-columns:repeat(2,minmax(0,1fr))}.hi-q small{font-size:10px}.hi-mock-sum{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+
+.lv-tag{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:700;color:#1F2A44}

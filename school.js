@@ -1,4 +1,4 @@
-/* 맘쌤 — 우리 학교: 나이스 Open API(학교 검색·급식·학사일정·시간표) + 학교별 출판사 공유(Supabase) */
+/* 올배움 — 우리 학교: 나이스 Open API(학교 검색·급식·학사일정·시간표) + 학교별 출판사 공유(Supabase) */
 (function () {
   const NEIS_KEY = '793dbcd23885402bb542cc25cc91877f';
   const NEIS = 'https://open.neis.go.kr/hub/';
