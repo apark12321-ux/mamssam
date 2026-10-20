@@ -127,7 +127,13 @@
       ['에듀넷·티-클리어 (KERIS)', 'https://www.edunet.net', '교과 학습 자료, 디지털 교과서'],
       ['한국과학창의재단', 'https://www.kofac.re.kr', '과학·수학 탐구, 영재 교육, 창의 활동'],
       ['사이언스올', 'https://www.scienceall.com', '과학 교양·탐구 보고서 소재'],
-      ['RISS 학술연구정보서비스 (KERIS)', 'https://www.riss.kr', '세특·탐구 보고서용 논문 검색'] ] }
+      ['RISS 학술연구정보서비스 (KERIS)', 'https://www.riss.kr', '세특·탐구 보고서용 논문 검색'],
+      ['독서로 (독서교육종합지원시스템)', 'https://reading.go.kr', '독서 기록·독후 활동, 학교 연계'],
+      ['국가교육과정정보센터', 'https://ncic.re.kr', '2022 개정 교육과정 원문·성취기준'] ] },
+    { g: '학교 · 성적 · 행정', items: [
+      ['학교알리미', 'https://www.schoolinfo.go.kr', '고교 공시 정보(교육과정 편성, 선택과목, 진학 현황)'],
+      ['나이스 대국민서비스', 'https://www.neis.go.kr', '성적·학생부 열람, 증명서 발급'],
+      ['한국대학교육협의회 대입전형 기본사항', 'https://www.kcue.or.kr', '학년도별 수시·정시 일정 원문'] ] }
   ];
 
   /* ---------- 고등: 저장 ---------- */
@@ -142,7 +148,7 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['high/consult', '🤝', '컨설팅'], ['settings', '⚙️', '설정']];
+  const NAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['high/consult', '🎓', '맞춤 컨설팅'], ['settings', '⚙️', '설정']];
   const BNAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
@@ -162,7 +168,8 @@
     return layout('home', `
       <div class="page-head"><div><h1>${esc(kid.name)}의 수능 플랜</h1><div class="sub">${GL(kid.grade)} · ${ROAD[kid.grade].t}</div></div></div>
       ${hero(kid)}
-      <div class="hi-quick">${[['high/pin', '🎯', '쪽집게', `${pinDone}/${pinAll}`], ['high/plan', '📅', '플래너', `오늘 ${doneN}/${today.length}`], ['high/mock', '📈', '모의고사', last ? `${last.name.slice(0, 6)}` : '기록 없음'], ['high/res', '📚', '자료실', '공식 링크']].map(([h, i, n, s]) => `<a class="hi-q" href="#${h}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(s)}</small></a>`).join('')}</div>
+      ${window.ConsultApp ? ConsultApp.stageCard(kid) : ''}
+      <div class="hi-quick">${[['high/pin', '🎯', '쪽집게', `${pinDone}/${pinAll}`], ['high/plan', '📅', '플래너', `오늘 ${doneN}/${today.length}`], ['high/mock', '📈', '모의고사', last ? `${last.name.slice(0, 6)}` : '기록 없음'], ['high/consult', '🎓', '컨설팅', '맞춤 리포트']].map(([h, i, n, s]) => `<a class="hi-q" href="#${h}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(s)}</small></a>`).join('')}</div>
       <div class="card mt12"><div class="card-head"><h2>오늘 할 일</h2><a class="more" href="#high/plan">플래너 ›</a></div>
         ${today.length ? `<div class="hi-todo">${today.map(p => `<label class="hi-td ${p.done ? 'done' : ''}"><input type="checkbox" data-act="hiDone" data-id="${p.id}" ${p.done ? 'checked' : ''}><span class="hi-td-s" style="--sc:${(SUBJ_H.find(s => s.k === p.subj) || {}).c || '#666'}">${esc((SUBJ_H.find(s => s.k === p.subj) || { n: '기타' }).n)}</span><span class="hi-td-t">${esc(p.title)}</span></label>`).join('')}</div>` : `<div class="empty small"><div class="e-ico">📝</div>오늘 계획이 비어 있어요. 과목·할 일을 30초 안에 등록해 보세요.<div class="mt8"><button class="btn btn-sm btn-primary" data-act="hiAdd">+ 오늘 할 일</button></div></div>`}
         ${upcoming.length ? `<div class="xs muted mt8">다음: ${upcoming.map(p => `${p.date.slice(5).replace('-', '/')} ${esc(p.title)}`).join(' · ')}</div>` : ''}
@@ -250,10 +257,10 @@
   }
   function page(a) {
     if (!isHigh()) return home();
-    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'consult': return consult(); default: return home(); }
+    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['high/consult', '🤝', '컨설팅 · 학원', '고르기 체크리스트 · 광고 문의'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['high/consult', '🎓', '맞춤 컨설팅', '지금 단계 · 전형 적합도 · 지원 전략 리포트'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */
@@ -350,5 +357,5 @@
     else { hi().pin[b.dataset.k] = b.checked; save(); b.closest('.hi-pin') && b.closest('.hi-pin').classList.toggle('on', b.checked); }
   });
 
-  window.HighApp = { isHigh, lvOf, gradesFor, picker, obLeft, page, home, more, after, NAV, BNAV, suneungDate, legal, LV, title };
+  window.HighApp = { isHigh, lvOf, gradesFor, picker, obLeft, page, home, more, after, NAV, BNAV, suneungDate, examYear, SUBJ_H, legal, LV, title };
 })();
