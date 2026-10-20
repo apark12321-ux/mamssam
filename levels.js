@@ -1,4 +1,4 @@
-/* 맘쌤 — 학교급(초·중·고) 진입, 고등 수능·대입 모드, 초등 모바일 압축 홈 */
+/* 올배움 — 학교급(초·중·고) 진입, 고등 수능·대입 모드, 초등 모바일 압축 홈 */
 (function () {
   'use strict';
   const MS = () => window.MS;
@@ -21,9 +21,10 @@
   function picker(adding) {
     const st = MS().st();
     return `<div class="lv-wrap">
-      <div class="lv-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">맘</div><div class="brand-name">맘쌤</div></div>
-        <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '초등 · 중등 · 고등<br>어디서 시작할까요?'}</h1>
-        <p class="muted">학교급마다 화면과 기능이 달라져요. 나중에 설정에서 바꿀 수 있어요.</p></div>
+      <div class="lv-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">올</div><div class="brand-name">올배움</div></div>
+        <div class="lv-tag">초등은 엄마표 · 중등은 자기주도 · 고등은 수능·대입 쪽집게</div>
+        <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '아이의 12년 공부,<br>한 앱에서 이어 갑니다'}</h1>
+        <p class="muted">학교급마다 화면과 기능이 달라져요. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
       <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기 ›</span></button>`; }).join('')}</div>
       ${adding ? '<p class="center mt16"><a class="btn btn-ghost btn-sm" href="#settings">← 설정으로</a></p>' : ''}
       <p class="xs muted center mt16">입력한 정보는 이 기기의 브라우저에만 저장됩니다. · <a href="#legal">저작권·광고·개인정보 안내</a></p>
@@ -31,7 +32,7 @@
   }
   function obLeft(lv) {
     const L = LV[lv] || LV.e;
-    return `<div class="brand" style="padding:0"><div class="brand-mark" style="background:#fff;color:${L.c}">맘</div><div class="brand-name">맘쌤</div></div>
+    return `<div class="brand" style="padding:0"><div class="brand-mark" style="background:#fff;color:${L.c}">올</div><div class="brand-name">올배움</div></div>
       <div class="ob-lv"><span>${L.ic}</span> ${L.n} · ${L.t}</div>
       <h1>${lv === 'h' ? '수능까지, 흔들리지 않게<br>한 곳에서 관리해요' : '스스로 계획하고<br>스스로 확인하는 공부'}</h1>
       <p class="ob-sub">${L.d}</p>
@@ -180,7 +181,7 @@
         <div class="hi-struct"><div class="c-t">출제 구조</div>${esc(nw ? s.nxt : s.cur)}${nw ? `<div class="xs muted mt4">현행(~2027학년도): ${esc(s.cur)}</div>` : `<div class="xs muted mt4">2028학년도부터: ${esc(s.nxt)}</div>`}</div>
         <div class="hi-pins">${s.pts.map((p, i) => `<label class="hi-pin ${h.pin[s.k + i] ? 'on' : ''}"><input type="checkbox" data-act="hiPin" data-k="${s.k + i}" ${h.pin[s.k + i] ? 'checked' : ''}><span>${esc(p)}</span></label>`).join('')}</div>
         <div class="row mt12" style="gap:8px"><button class="btn btn-sm" data-act="hiAdd" data-subj="${s.k}">📅 이 과목 할 일 추가</button><a class="btn btn-sm btn-ghost" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi ↗</a><a class="btn btn-sm btn-ghost" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 기출 ↗</a></div></div>`).join('')}
-      <p class="xs muted mt12">출제 구조는 한국교육과정평가원 시행 기본계획과 교육부 2028학년도 대입제도 개편안을 바탕으로 정리했고, 체크리스트는 맘쌤이 작성한 학습 전략입니다. 기출문제·교재 원문은 저작권이 각 기관에 있어 링크로만 안내합니다.</p>`);
+      <p class="xs muted mt12">출제 구조는 한국교육과정평가원 시행 기본계획과 교육부 2028학년도 대입제도 개편안을 바탕으로 정리했고, 체크리스트는 올배움이 작성한 학습 전략입니다. 기출문제·교재 원문은 저작권이 각 기관에 있어 링크로만 안내합니다.</p>`);
   }
   function plan() {
     const h = hi(), t = todayStr(); const st = MS().st();
@@ -211,7 +212,7 @@
       <div class="card mt12"><div class="card-head"><h2>기록 ${rows.length}회</h2></div>
         ${rows.length ? `<div class="hi-mock-tbl"><table><thead><tr><th>시험</th>${ks.map(k => `<th>${S(k).n.slice(0, 2)}</th>`).join('')}<th></th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td><b>${esc(r.name)}</b><br><small class="muted">${r.date}</small></td>${ks.map(k => `<td>${r.g[k] || '–'}</td>`).join('')}<td><button class="btn btn-sm btn-ghost" data-act="hiMockDel" data-id="${r.id}">✕</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty small"><div class="e-ico">📈</div>아직 기록이 없어요. 3·6·9·11월 학력평가와 6·9월 모의평가를 적어 보세요.</div>'}
       </div>
-      <div class="card mt12"><div class="card-head"><h2>등급컷·해설은 어디서?</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 저작권이 각 기관에 있어 맘쌤은 링크만 제공합니다.</p></div>`);
+      <div class="card mt12"><div class="card-head"><h2>등급컷·해설은 어디서?</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 저작권이 각 기관에 있어 올배움은 링크만 제공합니다.</p></div>`);
   }
   function road() {
     const kid = MS().kid(); const st = MS().st(); const g = +(st._hiRoadG || kid.grade);
@@ -229,7 +230,7 @@
     return layout('high/res', `
       <div class="page-head"><div><h1>공식 자료실</h1><div class="sub">평가원·EBS·교육청·대교협 등 공공 기관의 자료로 바로 연결합니다.</div></div></div>
       ${RES.map(G => `<div class="card mt12"><div class="card-head"><h2>${G.g}</h2></div><div class="list">${G.items.map(([n, u, d]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🔗</div><div class="li-main"><div class="li-t">${esc(n)}</div><div class="li-s">${esc(d)}</div></div><span class="muted">↗</span></a>`).join('')}</div></div>`).join('')}
-      <p class="xs muted mt12">각 사이트의 자료 저작권은 해당 기관에 있습니다. 맘쌤은 자료를 복제하지 않고 공식 페이지로 연결만 합니다. 링크는 기관 사정에 따라 바뀔 수 있어요.</p>`);
+      <p class="xs muted mt12">각 사이트의 자료 저작권은 해당 기관에 있습니다. 올배움은 자료를 복제하지 않고 공식 페이지로 연결만 합니다. 링크는 기관 사정에 따라 바뀔 수 있어요.</p>`);
   }
   function consult() {
     return layout('high/consult', `
@@ -237,15 +238,15 @@
       <div class="hi-consult-anchor"></div>
       <div class="card mt12"><div class="card-head"><h2>컨설팅·학원 고르기 체크리스트</h2></div><ul class="warn-list">${['학원·교습소 등록번호가 있는지(학원법에 따라 유료 진학 상담도 등록 대상). 교육청 "학원 정보 공개"에서 조회 가능', '"합격 보장", "100% 합격" 같은 표현은 표시·광고법상 허위·과장 광고 소지. 이런 문구를 쓰는 곳은 피하기', '계약서에 환불 규정, 상담 횟수·시간, 담당자가 명시되어 있는지', '학생부 대필·허위 기재를 권하는 곳은 즉시 거절(입학 취소 사유)', '공공 상담(교육청 진로진학센터, 어디가 상담)을 먼저 받아 보고 비교하기'].map(t => `<li>${t}</li>`).join('')}</ul></div>
       <div class="card mt12"><div class="card-head"><h2>무료 공공 상담</h2></div><div class="list">${[['서울특별시교육청 진로진학정보센터', 'https://www.jinhak.or.kr', '대입 상담 예약, 설명회'], ['대입정보포털 어디가 상담', 'https://www.adiga.kr', '대학 입학사정관·교사 온라인 상담']].map(([n, u, d]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🏛️</div><div class="li-main"><div class="li-t">${n}</div><div class="li-s">${d}</div></div><span class="muted">↗</span></a>`).join('')}</div></div>
-      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 맘쌤은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div>`);
+      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 올배움은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div>`);
   }
   function legal() {
     return MS().layout('settings', `
-      <div class="page-head"><div><h1>저작권 · 광고 · 개인정보 안내</h1><div class="sub">맘쌤을 안전하게 운영하기 위한 기준</div></div></div>
-      <div class="card"><h2>저작권</h2><p class="small mt8">수업 카드·체크리스트·문제는 맘쌤이 직접 작성한 자료입니다. 평가원·EBS·교육청·대교협·KERIS·한국과학창의재단 등 외부 기관의 자료(기출문제, 교재, 영상, 통계)는 복제하지 않고 공식 페이지로 연결만 하며, 그 저작권은 각 기관에 있습니다. 유튜브 영상은 각 채널의 저작물로 유튜브 공식 플레이어를 통해 재생합니다. 교육과정 정보는 교육부 고시를 바탕으로 요약했습니다.</p></div>
-      <div class="card mt12"><h2>광고</h2><p class="small mt8">광고는 콘텐츠와 구분되도록 "AD" 표시를 붙여 노출합니다. 맘쌤은 광고주의 서비스를 보증하지 않으며, 유료 입시 상담·학원은 학원법상 등록 대상이므로 이용 전 등록 여부를 확인하시기 바랍니다. "합격 보장" 등 표시·광고법에 어긋나는 문구의 광고는 게재하지 않습니다. 중학생 본인 모드에는 광고를 싣지 않습니다.</p></div>
+      <div class="page-head"><div><h1>저작권 · 광고 · 개인정보 안내</h1><div class="sub">올배움을 안전하게 운영하기 위한 기준</div></div></div>
+      <div class="card"><h2>저작권</h2><p class="small mt8">수업 카드·체크리스트·문제는 올배움이 직접 작성한 자료입니다. 평가원·EBS·교육청·대교협·KERIS·한국과학창의재단 등 외부 기관의 자료(기출문제, 교재, 영상, 통계)는 복제하지 않고 공식 페이지로 연결만 하며, 그 저작권은 각 기관에 있습니다. 유튜브 영상은 각 채널의 저작물로 유튜브 공식 플레이어를 통해 재생합니다. 교육과정 정보는 교육부 고시를 바탕으로 요약했습니다.</p></div>
+      <div class="card mt12"><h2>광고</h2><p class="small mt8">광고는 콘텐츠와 구분되도록 "AD" 표시를 붙여 노출합니다. 올배움은 광고주의 서비스를 보증하지 않으며, 유료 입시 상담·학원은 학원법상 등록 대상이므로 이용 전 등록 여부를 확인하시기 바랍니다. "합격 보장" 등 표시·광고법에 어긋나는 문구의 광고는 게재하지 않습니다. 중학생 본인 모드에는 광고를 싣지 않습니다.</p></div>
       <div class="card mt12"><h2>개인정보</h2><p class="small mt8">학습 기록·이름·학년은 이 기기의 브라우저에만 저장되며 서버로 전송되지 않습니다. 광고 문의 폼으로 보내 주신 연락처는 문의 응대 목적으로만 사용하고, 응대 완료 후 1년 이내 파기합니다. 우리 학교 기능은 나이스 교육정보 개방 포털의 공개 정보(급식·학사일정)를 사용합니다.</p></div>
-      <div class="card mt12"><h2>면책</h2><p class="small mt8">대입 일정·전형 정보는 일반적인 내용을 정리한 것으로, 정확한 내용은 평가원·대교협·각 대학의 공식 공지를 기준으로 합니다. 맘쌤은 입시 결과에 대해 책임지지 않습니다.</p></div>`);
+      <div class="card mt12"><h2>면책</h2><p class="small mt8">대입 일정·전형 정보는 일반적인 내용을 정리한 것으로, 정확한 내용은 평가원·대교협·각 대학의 공식 공지를 기준으로 합니다. 올배움은 입시 결과에 대해 책임지지 않습니다.</p></div>`);
   }
   function page(a) {
     if (!isHigh()) return home();
@@ -309,15 +310,17 @@
   }
 
   /* ---------- 공통 후처리 ---------- */
+  const LVSUB = { e: '초등 엄마표 학습', m: '중등 자기주도 학습', h: '고등 수능·대입 쪽집게' };
+  function curLv() { try { return MS().st().kids.length ? lvOf(MS().kid().grade) : null; } catch (e) { return null; } }
+  function title() { const lv = curLv(); return '올배움 · ' + (lv ? LVSUB[lv] : '초·중·고 공부 원스톱'); }
   function after(a) {
     const high = isHigh();
     document.body.classList.toggle('is-high', high);
+    const lv = curLv(); if (lv) document.querySelectorAll('.brand-sub').forEach(x => x.textContent = LVSUB[lv]);
     if (a[0] === 'ob') { const lv = MS().st()._lv; document.body.dataset.lv = lv || ''; const left = document.querySelector('.ob-left'); if (left && lv === 'e' && !left.querySelector('[data-act="pickLv"]')) left.insertAdjacentHTML('beforeend', '<button class="btn btn-ghost btn-sm" data-act="pickLv" data-lv="" style="color:#fff;align-self:flex-start;margin-top:auto">← 학교급 다시 고르기</button>'); if (lv === 'h' || lv === 'm') { const f = document.querySelector('#obForm'); if (f) { const h2 = f.querySelector('h2'); if (h2 && /아이 정보를/.test(h2.textContent)) h2.textContent = lv === 'h' ? '학생 정보를 알려 주세요' : '내 정보를 알려 주세요'; f.querySelectorAll('label').forEach(l => { if (/아이 이름/.test(l.textContent)) l.textContent = lv === 'h' ? '학생 이름 또는 별명' : '이름 또는 별명'; if (/수업 요일/.test(l.textContent)) l.textContent = '공부하는 요일'; if (/수업 시간/.test(l.textContent)) l.textContent = '하루 공부 시간'; if (/출판사/.test(l.textContent) && lv === 'h') l.closest('.field').style.display = 'none'; }); } } return; }
     if (high) {
-      document.querySelectorAll('.brand-sub').forEach(x => x.textContent = '수능·대입 쪽집게');
       const ok = ['home', 'high', 'school', 'settings', 'editkid', 'addkid', 'ads', 'legal', 'guide'];
       if (!ok.includes(a[0])) { setTimeout(() => MS().go('home'), 0); return; }
-      document.title = '맘쌤 · 수능·대입 쪽집게';
     }
     compactHome(a);
   }
@@ -347,5 +350,5 @@
     else { hi().pin[b.dataset.k] = b.checked; save(); b.closest('.hi-pin') && b.closest('.hi-pin').classList.toggle('on', b.checked); }
   });
 
-  window.HighApp = { isHigh, lvOf, gradesFor, picker, obLeft, page, home, more, after, NAV, BNAV, suneungDate, legal, LV };
+  window.HighApp = { isHigh, lvOf, gradesFor, picker, obLeft, page, home, more, after, NAV, BNAV, suneungDate, legal, LV, title };
 })();

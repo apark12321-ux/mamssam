@@ -1,4 +1,4 @@
-/* 맘쌤 — 재미 요소: 학습 캐릭터 · XP/레벨 · 배지 · 오늘의 미션 · 정답 효과 */
+/* 올배움 — 재미 요소: 학습 캐릭터 · XP/레벨 · 배지 · 오늘의 미션 · 정답 효과 */
 (function () {
   const MS = () => window.MS;
   const ready = () => { try { return MS() && MS().st().kids && MS().st().kids.length && MS().kid(); } catch (e) { return false; } };
