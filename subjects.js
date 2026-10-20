@@ -37,10 +37,42 @@
   const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
-  /* ---------- 썸네일 실패 처리 ---------- */
+  /* ---------- 썸네일 실패·자리표시 처리 ---------- */
+  // 내려간 영상은 404 대신 120×90 회색 이미지를 200으로 돌려주므로 onload에서 크기로도 판별한다.
+  const vtFallback = (img) => { const p = img.parentNode; if (p) { p.classList.add('noimg'); if (!p.title) p.title = '미리보기 이미지를 불러오지 못했어요'; } img.remove(); };
   window.vtErr = function (img) {
-    if (!img.dataset.f) { img.dataset.f = '1'; img.src = img.src.replace('i.ytimg.com', 'img.youtube.com'); return; }
-    const p = img.parentNode; if (p) p.classList.add('noimg'); img.remove();
+    if (!img.dataset.f) { img.dataset.f = '1'; img.src = (img.getAttribute('src') || '').replace('i.ytimg.com', 'img.youtube.com'); return; }
+    vtFallback(img);
+  };
+  window.vtOk = function (img) { if (img.naturalWidth && img.naturalWidth <= 120) vtFallback(img); else img.classList.add('ok'); };
+
+  /* ---------- 차시 ↔ 영상 관련도 ---------- */
+  // 차시 제목의 핵심 낱말(단원 제목과 겹치는 낱말·'알아보기' 같은 일반어 제외)이 영상 제목에 얼마나 들어 있는지로 점수를 매긴다.
+  const V_GEN = /(하기|해보기|해봐요|해볼까요|알아보기|알아볼까요|알기|구하기|나타내기|읽기|쓰기|비교하기|익히기|배우기|살펴보기|만들기|찾기|말하기|듣기|표현하기|활용)$/;
+  const vNorm = (s) => String(s || '').replace(/[\[\]()【】\-_|★☆♥•·,.:;!?~'"“”‘’/\\①②③④⑤⑥⑦⑧⑨⑩⑪⑫×÷+=]/g, ' ').replace(/\s+/g, ' ').trim();
+  function vToks(s, skip) {
+    const out = new Set();
+    const add = (x) => { if (x && x.length >= 2 && !(skip && skip.has(x))) out.add(x); };
+    vNorm(s).split(' ').filter(Boolean).forEach(t => {
+      add(t); const b = t.replace(V_GEN, ''); if (b !== t) add(b);
+      const c = b.replace(/(의|과|와|을|를|이|가|은|는|에|로|으로|에서)$/, ''); if (c !== b) add(c);
+    });
+    return out;
+  }
+  window.vScore = function (u, l, v) {
+    const lesson = u && u.lessons && u.lessons[l]; if (!lesson || !v) return 0;
+    const skip = vToks(u.title), lt = [...vToks(lesson, skip)], full = vNorm(lesson).replace(/\s+/g, '');
+    const T = vNorm(v.t).replace(/\s+/g, '');
+    let s = 0; lt.forEach(t => { if (T.includes(t)) s += t.length >= 3 ? 3 : 2; });
+    if (full.length >= 3 && T.includes(full)) s += 6;
+    if (v.k === '개념') s += 1;
+    return s;
+  };
+  // 관련도 높은 순으로 정렬(동점이면 원래 순서 유지). min을 주면 그 점수 미만은 뺀다.
+  window.vRank = function (u, l, vids, min) {
+    if (!vids || !vids.length) return [];
+    const rows = vids.map((v, i) => ({ v, i, s: window.vScore(u, l, v) })).filter(x => min == null || x.s >= min);
+    return rows.sort((a, b) => b.s - a.s || a.i - b.i).map(x => x.v);
   };
 
   /* ---------- 업로드 시 깨진 영상 메타 보정 ---------- */
@@ -126,7 +158,7 @@
     }).join('')}</div></div>`;
   }
   const vlist = (id) => (MS() ? MS().vids(id) : []);
-  const lessonVids = (u, l) => vlist(u.id).filter(v => v.l.includes(l));
+  const lessonVids = (u, l) => window.vRank(u, l, vlist(u.id).filter(v => v.l.includes(l)));
   const ovVids = (u) => vlist(u.id).filter(v => !v.l.length);
   function vcard(u, v) {
     const seen = MS().st().vw && MS().st().vw[v.i];
@@ -156,7 +188,7 @@
       ${subjTabs(k, kid.grade, 'study')}
       ${hero}
       <div class="row sp-filter"><div class="chips">${gs.map(x => `<button class="chip ${x === g ? 'on' : ''}" data-sa="sg" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-sa="ss" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-sa="ss" data-s="2">2학기</button></div></div>
-      <div class="grid g3 mt16">${cards}</div>
+      <div class="grid g3 sp-ulist mt16">${cards}</div>
       ${k === 'math' ? '<p class="small muted mt16">수학은 단원별 엄마 설명 대본·자동 출제 워크시트도 함께 쓸 수 있어요. <a href="#lessons">수학 수업 준비 ›</a></p>' : ''}
       ${(isStu() ? meta.pubNoteM : meta.pubNote) ? `<p class="xs muted mt16">※ ${esc(isStu() ? meta.pubNoteM : meta.pubNote)}</p>` : ''}`);
   }
@@ -312,7 +344,9 @@
   function vidsForLP() {
     const { u, l } = LP;
     const lv = lessonVids(u, l), ov = ovVids(u);
-    return lv.concat(ov.filter(v => !lv.includes(v))).slice(0, 4);
+    // 차시 태그 영상이 적으면 단원 정리 영상 중 차시 제목과 맞는 것을 먼저, 나머지는 뒤에 붙인다.
+    const ovR = window.vRank(u, l, ov.filter(v => !lv.includes(v)));
+    return lv.concat(ovR).slice(0, 4);
   }
   function stepHTML(name) {
     const { u, l } = LP;

@@ -533,7 +533,19 @@ body{background:#fff;font-size:12.5pt}
 }
 .noimg{background:linear-gradient(135deg,#1D4ED8,#60A5FA)!important}
 .vthumb.noimg:before{content:'\25B6';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font-size:20px;opacity:.92}
+.vthumb.noimg:after{content:'YouTube';position:absolute;left:8px;top:6px;color:rgba(255,255,255,.85);font-size:10px;font-weight:700;letter-spacing:.02em}
 .vp.noimg{aspect-ratio:16/9}
+.vp.noimg:after{content:'미리보기 이미지가 없는 영상이에요 · 재생은 가능합니다';position:absolute;left:12px;bottom:10px;color:rgba(255,255,255,.9);font-size:12px;font-weight:600}
+.vp img,.vthumb img{opacity:0;transition:opacity .25s}.vp img.ok,.vthumb img.ok{opacity:1}
+/* 모바일: 단원 카드를 한 줄짜리 목록으로 */
+@media (max-width:640px){
+ .g3:has(>.unit-card),.sp-ulist{grid-template-columns:1fr!important;gap:10px}
+ .g3>.unit-card,.sp-ulist>.unit-card{padding:12px 14px;border-radius:16px}
+ .g3>.unit-card .u-ico{width:42px;height:42px;font-size:21px;border-radius:12px}
+ .g3>.unit-card .u-title{font-size:15px;line-height:1.3}
+ .g3>.unit-card .u-no{font-size:12px}
+ .g3>.unit-card .progress{margin-top:8px}
+}
 
 .subj-tabs{margin:0 0 14px}.subj-chip{white-space:nowrap}.subj-chip.on{background:var(--sc,var(--blue));border-color:var(--sc,var(--blue));color:#fff}.subj-chip.dim{opacity:.5}
 .sp-hero{background:linear-gradient(135deg,var(--sc,var(--blue)) 0%,color-mix(in srgb,var(--sc,var(--blue)) 70%,#fff) 100%);color:#fff;border:none}
