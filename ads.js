@@ -13,7 +13,7 @@
   const MS = () => window.MS;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const SLOTS = {
-    home_top: { name: '홈 상단 배너', size: '가로 전체 × 100', where: '앱을 열면 가장 먼저 보이는 학부모 홈 화면 상단' },
+    home_top: { name: '홈 상단 배너', size: '가로 전체 × 100', where: '앱을 열면 가장 먼저 보이는 학부모 홈 화면, 오늘 수업 카드 바로 아래' },
     home_mid: { name: '홈 중간 카드', size: '카드형 (제목·설명·버튼)', where: '오늘 수업·우리 학교 카드 사이, 콘텐츠처럼 보이는 네이티브 지면' },
     school: { name: '우리 학교 페이지', size: '가로 전체 × 100', where: '급식·학사일정·시간표를 매일 확인하는 화면 하단' },
     records: { name: '학습 기록 페이지', size: '카드형', where: '정답률·오답 노트를 보는 화면 — 학습지·문제집·학원 광고와 궁합' },
@@ -72,7 +72,7 @@
     if (MS() && MS().st && MS().st().kids.length && window.SubjApp && SubjApp.isStu && SubjApp.isStu()) return; // 중학생 본인 모드: 광고 없음
     slots.forEach(slot => {
       const el = slotEl(slot); let anchor = null;
-      if (slot === 'home_top') anchor = app.querySelector('.page-head');
+      if (slot === 'home_top') anchor = app.querySelector('.tt-hero') || app.querySelector('.page-head');
       else if (slot === 'home_mid') anchor = app.querySelector('.sch-home') || app.querySelector('.sp-home');
       else if (slot === 'school') anchor = app.querySelector('#schCal');
       else if (slot === 'records') anchor = app.querySelector('.page-head');
