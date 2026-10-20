@@ -26,14 +26,17 @@
   }
   function sb(path, opt) { return fetch(SB_URL + path, Object.assign({ headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Prefer: (opt && opt.prefer) || '' } }, opt)).then(r => r.ok ? r.json().catch(() => []) : []).catch(() => []); }
   const kidSchool = (kid) => (kid || MS().kid()).school || null;
-  const schoolKind = (s) => s.kind || (/중학교/.test(s.name) ? '중' : '초');
+  const schoolKind = (s) => s.kind || (/고등학교/.test(s.name) ? '고' : /중학교/.test(s.name) ? '중' : '초');
   const hpUrl = (h) => { h = String(h || '').trim(); if (!h) return ''; return /^https?:\/\//i.test(h) ? h : 'https://' + h.replace(/^\/+/, ''); };
   const subjOfName = (n) => { const m = SUBJ_MAP.find(([k, re]) => re.test(n)); return m ? m[0] : null; };
 
   /* ---------- 학교 검색 ---------- */
   function search(q, kind) {
-    const p = { SCHUL_NM: q, pSize: 30 }; if (kind) p.SCHUL_KND_SC_NM = kind;
-    return neis('schoolInfo', p, 0).then(rows => rows.filter(r => /초등학교|중학교/.test(r.SCHUL_KND_SC_NM)).map(r => ({ code: r.SD_SCHUL_CODE, atpt: r.ATPT_OFCDC_SC_CODE, name: r.SCHUL_NM, kind: r.SCHUL_KND_SC_NM === '중학교' ? '중' : '초', addr: (r.ORG_RDNMA || '').replace(/\s*\(.*$/, ''), hp: (r.HMPG_ADRES || '').trim(), region: r.LCTN_SC_NM || '' })));
+    const p = { SCHUL_NM: q, pSize: 50 }; if (kind) p.SCHUL_KND_SC_NM = kind;
+    // 가입 화면에서 고른 학년에 맞는 학교급을 먼저 보여 준다(초 1~6 · 중 7~9 · 고 10~12)
+    const gEl = document.getElementById('obGrade'); const g = gEl ? +gEl.value : (MS() && MS().st().kids.length ? MS().kid().grade : 0);
+    const want = g >= 10 ? '고등학교' : g >= 7 ? '중학교' : g >= 1 ? '초등학교' : '';
+    return neis('schoolInfo', p, 0).then(rows => rows.filter(r => /초등학교|중학교|고등학교/.test(r.SCHUL_KND_SC_NM)).sort((a, b) => (b.SCHUL_KND_SC_NM === want) - (a.SCHUL_KND_SC_NM === want)).map(r => ({ code: r.SD_SCHUL_CODE, atpt: r.ATPT_OFCDC_SC_CODE, name: r.SCHUL_NM, kind: r.SCHUL_KND_SC_NM === '고등학교' ? '고' : r.SCHUL_KND_SC_NM === '중학교' ? '중' : '초', addr: (r.ORG_RDNMA || '').replace(/\s*\(.*$/, ''), hp: (r.HMPG_ADRES || '').trim(), region: r.LCTN_SC_NM || '' })));
   }
 
   /* ---------- 출판사 공유 ---------- */
@@ -63,7 +66,7 @@
     const draw = () => {
       field.innerHTML = `<label>학교 <span class="xs muted">(선택 · 급식·학사일정·시간표·우리 학교 출판사를 보여 드려요)</span></label>
         ${sel ? `<div class="sch-pick"><span class="sch-ic">🏫</span><span class="sch-t"><b>${esc(sel.name)}</b><small>${esc(sel.addr || sel.region)}</small></span><span class="row" style="gap:6px;align-items:center"><input class="input sch-cls" type="number" min="1" max="30" inputmode="numeric" placeholder="반" value="${esc(window._obSchool.cls)}" style="width:64px"><span class="small">반</span><button type="button" class="btn btn-sm" data-sch="clear">바꾸기</button></span></div><div class="sch-pubnote xs muted mt8" id="schPubNote"></div>`
-          : `<div class="sch-search"><input class="input" id="schQ" placeholder="학교 이름 검색 (예: 대치초, 서초중)" autocomplete="off"><div class="sch-list" id="schList"></div></div>`}`;
+          : `<div class="sch-search"><input class="input" id="schQ" placeholder="학교 이름 검색 (예: 대치초, 서초중, 대광여고)" autocomplete="off"><div class="sch-list" id="schList"></div></div>`}`;
     };
     draw();
     anchor.closest('.field').insertAdjacentElement('afterend', field);
@@ -89,7 +92,7 @@
         const ks = Object.keys(best); let applied = 0;
         ks.forEach(k => { const s = f.querySelector(`select[data-obpub="${k}"]`); if (s && [...s.options].some(o => o.value === best[k].pub)) { if (s.value === '선택 안 함') { s.value = best[k].pub; s.dispatchEvent(new Event('change', { bubbles: true })); applied++; } } });
         const n = field.querySelector('#schPubNote'); if (!n) return;
-        n.innerHTML = ks.length ? `✅ 이 학교 ${g <= 6 ? g + '학년' : '중' + (g - 6)} 학부모들이 알려 준 출판사 ${ks.length}과목을 ${applied ? '아래에 채워 넣었어요' : '확인했어요'} (${ks.map(k => `${(H().SK[k] || {}).n || k} ${best[k].pub} · ${best[k].votes}명`).join(', ')}). 다르면 고쳐 주세요.` : '아직 이 학교 출판사 정보가 없어요. 아래에 입력해 주시면 같은 학교 학부모에게 공유돼요 🙏';
+        n.innerHTML = ks.length ? `✅ 이 학교 ${g <= 6 ? g + '학년' : g <= 9 ? '중' + (g - 6) : '고' + (g - 9)} 학부모들이 알려 준 출판사 ${ks.length}과목을 ${applied ? '아래에 채워 넣었어요' : '확인했어요'} (${ks.map(k => `${(H().SK[k] || {}).n || k} ${best[k].pub} · ${best[k].votes}명`).join(', ')}). 다르면 고쳐 주세요.` : '아직 이 학교 출판사 정보가 없어요. 아래에 입력해 주시면 같은 학교 학부모에게 공유돼요 🙏';
       });
     }
     if (sel) setTimeout(prefill, 400);
@@ -108,7 +111,7 @@
   /* ---------- 데이터 ---------- */
   function meals(s, from, to) { return neis('mealServiceDietInfo', { ATPT_OFCDC_SC_CODE: s.atpt, SD_SCHUL_CODE: s.code, MLSV_FROM_YMD: from, MLSV_TO_YMD: to }, 6 * 3600e3); }
   function schedule(s, from, to) { return neis('SchoolSchedule', { ATPT_OFCDC_SC_CODE: s.atpt, SD_SCHUL_CODE: s.code, AA_FROM_YMD: from, AA_TO_YMD: to, pSize: 300 }, 12 * 3600e3); }
-  function timetable(s, grade, cls, from, to) { const g = grade >= 7 ? grade - 6 : grade; return neis(schoolKind(s) === '중' ? 'misTimetable' : 'elsTimetable', { ATPT_OFCDC_SC_CODE: s.atpt, SD_SCHUL_CODE: s.code, GRADE: g, CLASS_NM: cls, TI_FROM_YMD: from, TI_TO_YMD: to, pSize: 200 }, 6 * 3600e3); }
+  function timetable(s, grade, cls, from, to) { const g = grade >= 10 ? grade - 9 : grade >= 7 ? grade - 6 : grade; const k = schoolKind(s); return neis(k === '고' ? 'hisTimetable' : k === '중' ? 'misTimetable' : 'elsTimetable', { ATPT_OFCDC_SC_CODE: s.atpt, SD_SCHUL_CODE: s.code, GRADE: g, CLASS_NM: cls, TI_FROM_YMD: from, TI_TO_YMD: to, pSize: 200 }, 6 * 3600e3); }
   const gradeTag = (g) => g >= 7 ? `${g - 6}학년` : `${g}학년`;
   function eventFor(ev, g) {
     const n = ev.EVENT_NM || ''; if (/토요휴업/.test(n)) return false;
