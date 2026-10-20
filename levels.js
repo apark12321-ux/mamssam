@@ -141,7 +141,7 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['high/consult', '🤝', '컨설팅'], ['settings', '⚙️', '설정']];
+  const NAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['high/consult', '🤝', '컨설팅'], ['settings', '⚙️', '설정']];
   const BNAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
@@ -252,7 +252,7 @@
     switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'consult': return consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['high/consult', '🤝', '컨설팅 · 학원', '고르기 체크리스트 · 광고 문의'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['high/consult', '🤝', '컨설팅 · 학원', '고르기 체크리스트 · 광고 문의'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */
@@ -315,7 +315,7 @@
     if (a[0] === 'ob') { const lv = MS().st()._lv; document.body.dataset.lv = lv || ''; const left = document.querySelector('.ob-left'); if (left && lv === 'e' && !left.querySelector('[data-act="pickLv"]')) left.insertAdjacentHTML('beforeend', '<button class="btn btn-ghost btn-sm" data-act="pickLv" data-lv="" style="color:#fff;align-self:flex-start;margin-top:auto">← 학교급 다시 고르기</button>'); if (lv === 'h' || lv === 'm') { const f = document.querySelector('#obForm'); if (f) { const h2 = f.querySelector('h2'); if (h2 && /아이 정보를/.test(h2.textContent)) h2.textContent = lv === 'h' ? '학생 정보를 알려 주세요' : '내 정보를 알려 주세요'; f.querySelectorAll('label').forEach(l => { if (/아이 이름/.test(l.textContent)) l.textContent = lv === 'h' ? '학생 이름 또는 별명' : '이름 또는 별명'; if (/수업 요일/.test(l.textContent)) l.textContent = '공부하는 요일'; if (/수업 시간/.test(l.textContent)) l.textContent = '하루 공부 시간'; if (/출판사/.test(l.textContent) && lv === 'h') l.closest('.field').style.display = 'none'; }); } } return; }
     if (high) {
       document.querySelectorAll('.brand-sub').forEach(x => x.textContent = '수능·대입 쪽집게');
-      const ok = ['home', 'high', 'settings', 'editkid', 'addkid', 'ads', 'legal', 'guide'];
+      const ok = ['home', 'high', 'school', 'settings', 'editkid', 'addkid', 'ads', 'legal', 'guide'];
       if (!ok.includes(a[0])) { setTimeout(() => MS().go('home'), 0); return; }
       document.title = '맘쌤 · 수능·대입 쪽집게';
     }
