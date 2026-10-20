@@ -17,9 +17,11 @@
     home_mid: { name: '홈 중간 카드', size: '카드형 (제목·설명·버튼)', where: '오늘 수업·우리 학교 카드 사이, 콘텐츠처럼 보이는 네이티브 지면' },
     school: { name: '우리 학교 페이지', size: '가로 전체 × 100', where: '급식·학사일정·시간표를 매일 확인하는 화면 하단' },
     records: { name: '학습 기록 페이지', size: '카드형', where: '정답률·오답 노트를 보는 화면 — 학습지·문제집·학원 광고와 궁합' },
+    high_top: { name: '고등 홈 상단 배너', size: '가로 전체 × 100', where: '수능 D-day·플래너를 매일 여는 고등 홈 상단 — 인강·교재·학원' },
+    high_consult: { name: '대입 컨설팅 카드', size: '카드형 (제목·설명·버튼)', where: '고등 홈·컨설팅 페이지의 네이티브 카드 — 입시 컨설팅·학원·과외 플랫폼' },
     guide: { name: '학습 가이드 (검색 유입)', size: '본문 중간 + 하단', where: '구글·네이버 검색으로 들어오는 단원별 학습 가이드 페이지' }
   };
-  const PAGES = { home: ['home_top', 'home_mid'], school: ['school'], records: ['records'] };
+  const PAGES = { home: ['home_top', 'home_mid'], school: ['school'], records: ['records'], high: ['high_top', 'high_consult'] };
 
   function sb(path, opt) { return fetch(SB_URL + path, Object.assign({ headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Prefer: (opt && opt.prefer) || '' } }, opt)).then(r => r.ok ? r.json().catch(() => []) : []).catch(() => []); }
   let direct = null, directAt = 0;
@@ -32,15 +34,15 @@
 
   /* ---------- 지면 렌더 ---------- */
   function directHTML(ad, slot) {
-    const card = /mid|records/.test(slot);
+    const card = /mid|records|consult/.test(slot);
     return `<a class="ad ad-direct ${card ? 'ad-card' : 'ad-bar'}" href="${esc(ad.link)}" target="_blank" rel="noopener sponsored" data-ad="${ad.id}" data-slot="${slot}">
       ${ad.img ? `<img src="${esc(ad.img)}" alt="" loading="lazy">` : ''}
       <span class="ad-t"><b>${esc(ad.title)}</b>${ad.body ? `<small>${esc(ad.body)}</small>` : ''}</span>
       <span class="ad-cta">${esc(ad.cta || '자세히 보기')}</span><span class="ad-tag">AD</span></a>`;
   }
   function houseHTML(slot) {
-    const S = SLOTS[slot] || SLOTS.home_top; const card = /mid|records/.test(slot);
-    return `<a class="ad ad-house ${card ? 'ad-card' : 'ad-bar'}" href="#ads"><span class="ad-t"><b>📣 이 자리에 우리 브랜드를 알려 보세요</b><small>${esc(S.name)} · 학습지·교재·에듀테크 광고주를 위한 지면</small></span><span class="ad-cta">광고 안내</span></a>`;
+    const S = SLOTS[slot] || SLOTS.home_top; const card = /mid|records|consult/.test(slot);
+    return `<a class="ad ad-house ${card ? 'ad-card' : 'ad-bar'}" href="#ads"><span class="ad-t"><b>📣 이 자리에 우리 브랜드를 알려 보세요</b><small>${esc(S.name)} · ${/high/.test(slot) ? '인강·교재·입시 컨설팅·학원 광고주를 위한 지면' : '학습지·교재·에듀테크 광고주를 위한 지면'}</small></span><span class="ad-cta">광고 안내</span></a>`;
   }
   function networkHTML(slot) {
     if (CFG.adsense) return `<ins class="adsbygoogle ad-net" style="display:block" data-ad-client="${CFG.adsense}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
@@ -65,17 +67,20 @@
   }
   function slotEl(slot) { const d = document.createElement('div'); d.className = 'ad-slot ad-' + slot; d.dataset.slot = slot; return d; }
   function mount(a) {
-    const page = a[0] || 'home'; const slots = PAGES[page]; if (!slots) return;
+    const isHi = !!(window.HighApp && HighApp.isHigh());
+    const page = isHi ? (a[0] === 'home' || a[0] === 'high' ? 'high' : a[0]) : (a[0] || 'home'); const slots = PAGES[page]; if (!slots) return;
     const app = document.getElementById('app'); if (!app) return;
     app.querySelectorAll('.ad-slot').forEach(s => { if (!s.firstElementChild && !s.dataset.pending) s.remove(); });
     if (app.querySelector('.ad-slot')) return;
-    if (MS() && MS().st && MS().st().kids.length && window.SubjApp && SubjApp.isStu && SubjApp.isStu()) return; // 중학생 본인 모드: 광고 없음
+    if (!isHi && MS() && MS().st && MS().st().kids.length && window.SubjApp && SubjApp.isStu && SubjApp.isStu()) return; // 중학생 본인 모드: 광고 없음
     slots.forEach(slot => {
       const el = slotEl(slot); let anchor = null;
       if (slot === 'home_top') anchor = app.querySelector('.tt-hero') || app.querySelector('.page-head');
       else if (slot === 'home_mid') anchor = app.querySelector('.sch-home') || app.querySelector('.sp-home');
       else if (slot === 'school') anchor = app.querySelector('#schCal');
       else if (slot === 'records') anchor = app.querySelector('.page-head');
+      else if (slot === 'high_top') anchor = app.querySelector('.hi-hero') || (app.querySelector('.hi-consult-anchor') ? null : app.querySelector('.page-head'));
+      else if (slot === 'high_consult') anchor = app.querySelector('.hi-consult-anchor');
       if (!anchor) return;
       anchor.insertAdjacentElement('afterend', el); render(el, slot);
     });
@@ -108,7 +113,7 @@
             <div class="field"><label>담당자</label><input class="input" name="contact" required maxlength="60"></div>
             <div class="field"><label>이메일</label><input class="input" name="email" type="email" required maxlength="120"></div>
             <div class="field"><label>연락처 <span class="xs muted">(선택)</span></label><input class="input" name="phone" maxlength="30" inputmode="tel"></div>
-            <div class="field"><label>관심 지면</label><select class="input" name="slot"><option value="">아직 모르겠어요</option>${Object.entries(SLOTS).map(([k, S]) => `<option value="${k}">${S.name}</option>`).join('')}<option value="all">전체 패키지</option></select></div>
+            <div class="field"><label>관심 지면</label><select class="input" name="slot"><option value="">아직 모르겠어요</option>${Object.entries(SLOTS).map(([k, S]) => `<option value="${k}" ${k === new URLSearchParams(location.hash.split('?')[1] || '').get('slot') ? 'selected' : ''}>${S.name}</option>`).join('')}<option value="all">전체 패키지</option></select></div>
             <div class="field"><label>월 예산</label><select class="input" name="budget"><option value="">미정</option><option>30만 원 이하</option><option>30~100만 원</option><option>100~300만 원</option><option>300만 원 이상</option><option>성과 기준(CPA) 희망</option></select></div>
           </div>
           <div class="field"><label>내용</label><textarea class="input" name="message" rows="4" maxlength="2000" placeholder="광고하려는 상품·서비스, 희망 기간, 타겟 학년 등을 적어 주세요"></textarea></div>

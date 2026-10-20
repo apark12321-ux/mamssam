@@ -1,8 +1,8 @@
 /* 맘쌤 — 전과목 학습 (과목 허브 · 단원 · 학습 플레이어) */
 (function () {
   'use strict';
-  window.GL = (g) => g > 6 ? `중학교 ${g - 6}학년` : `초등 ${g}학년`;
-  window.GS = (g) => g > 6 ? `중${g - 6}` : `${g}학년`;
+  window.GL = (g) => g > 9 ? `고등학교 ${g - 9}학년` : g > 6 ? `중학교 ${g - 6}학년` : `초등 ${g}학년`;
+  window.GS = (g) => g > 9 ? `고${g - 9}` : g > 6 ? `중${g - 6}` : `${g}학년`;
   const SUBJ = [
     { k: 'kor', n: '국어', ic: '📖', c: '#E5484D' },
     { k: 'math', n: '수학', ic: '🔢', c: '#4A7DF0' },
@@ -698,13 +698,14 @@
     field.addEventListener('change', e => { const k = e.target.dataset.obpub; if (k) pubs[k] = e.target.value; });
     const oldPub = f.querySelector('select[name=publisher]'); if (oldPub) oldPub.closest('.field').style.display = 'none';
     const stuForm = () => {
-      const g = +gEl.value, stu = g >= 7;
+      const g = +gEl.value, stu = g >= 7, hs = g >= 10;
+      field.style.display = hs ? 'none' : '';
       const lab = (sel, a, b) => { const el = f.querySelector(sel); const l = el && el.closest('.field') && el.closest('.field').querySelector('label'); if (l) l.firstChild.textContent = stu ? a : b; };
       lab('input[name=name]', '이름', '아이 이름 또는 애칭');
       lab('#obDays', '공부 요일', '엄마표 수업 요일');
       lab('#obMin', '하루 공부 시간', '하루 수업 시간');
-      const h = f.querySelector('h2'); if (h && !kid) h.textContent = stu ? '나의 정보를 입력해 주세요' : '아이 정보를 알려 주세요';
-      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = stu ? '중학생은 혼자서도<br>충분히 할 수 있어요' : lh.dataset.o; }
+      const h = f.querySelector('h2'); if (h && !kid) h.textContent = hs ? '학생 정보를 입력해 주세요' : stu ? '나의 정보를 입력해 주세요' : '아이 정보를 알려 주세요';
+      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = hs ? '수능까지, 흔들리지 않게<br>한 곳에서 관리해요' : stu ? '중학생은 혼자서도<br>충분히 할 수 있어요' : lh.dataset.o; }
       const uSel = document.getElementById('obUnit');
       if (uSel && stu) { const m = (MS() ? MS().units : []).filter(u => u.grade === 6); const fb = (kid && U(kid.unitId) && U(kid.unitId).grade <= 6 ? U(kid.unitId) : m[m.length - 1]); if (fb) uSel.innerHTML = `<option value="${fb.id}" selected>${fb.id}</option>`; }
     };
