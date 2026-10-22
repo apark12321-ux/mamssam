@@ -269,8 +269,8 @@
     opt = opt || {};
     MS().modal(`<h2>할 일 추가</h2><form id="hiAddForm" class="stack" style="gap:10px">
       <div class="field"><label>과목</label><div class="chips" id="hiSubj">${SUBJ_H.map(s => `<button type="button" class="chip ${s.k === (opt.subj || 'kor') ? 'on' : ''}" data-k="${s.k}" style="--sc:${s.c}">${s.ic} ${s.n}</button>`).join('')}<button type="button" class="chip ${opt.subj === 'etc' ? 'on' : ''}" data-k="etc">기타</button></div></div>
-      <div class="field"><label>할 일</label><input class="input" name="title" required maxlength="40" placeholder="예: 수학 4점 문항 10개" value="${esc(opt.q || '')}"></div>
-      <div class="form-grid"><div class="field"><label>날짜</label><input class="input" type="date" name="date" value="${opt.date || todayStr()}"></div><div class="field"><label>예상 시간(분)</label><input class="input" type="number" name="min" min="5" max="300" step="5" placeholder="30"></div></div>
+      <div class="field"><label>할 일</label><input class="input" name="title" required maxlength="40" placeholder="입력하거나 아래에서 고르기" data-suggest="hiTask" value="${esc(opt.q || '')}"></div>
+      <div class="form-grid"><div class="field"><label>날짜</label><input class="input" type="date" name="date" data-chips="@date" value="${opt.date || todayStr()}"></div><div class="field"><label>예상 시간(분)</label><input class="input" type="number" name="min" min="5" max="300" step="5" placeholder="30" value="30" data-chips="10|20|30|45|60|90|120"></div></div>
       <div class="modal-actions"><button class="btn btn-ghost" type="button" data-act="hiClose">취소</button><button class="btn btn-primary" type="submit">추가</button></div></form>`, (m) => {
       m.querySelector('#hiSubj').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; m.querySelectorAll('#hiSubj .chip').forEach(c => c.classList.remove('on')); b.classList.add('on'); });
       m.querySelector('#hiAddForm').addEventListener('submit', e => {
@@ -283,7 +283,7 @@
   function mockModal() {
     const ks = ['kor', 'math', 'eng', 'his', 'soc', 'sci'];
     MS().modal(`<h2>모의고사 기록</h2><form id="hiMockForm" class="stack" style="gap:10px">
-      <div class="form-grid"><div class="field"><label>시험 이름</label><input class="input" name="name" required maxlength="20" placeholder="예: 9월 모의평가"></div><div class="field"><label>날짜</label><input class="input" type="date" name="date" value="${todayStr()}"></div></div>
+      <div class="form-grid"><div class="field"><label>시험 이름</label><input class="input" name="name" required maxlength="20" placeholder="고르거나 입력" data-suggest="exam" data-chips="3월 학력평가|6월 모의평가|9월 모의평가|10월 학력평가|11월 학력평가|대학수학능력시험"></div><div class="field"><label>날짜</label><input class="input" type="date" name="date" value="${todayStr()}"></div></div>
       <div class="hi-mock-in">${ks.map(k => { const s = SUBJ_H.find(x => x.k === k); return `<div class="field"><label>${s.ic} ${s.n}</label><select class="input" name="${k}"><option value="">–</option>${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(g => `<option value="${g}">${g}등급</option>`).join('')}</select></div>`; }).join('')}</div>
       <div class="modal-actions"><button class="btn btn-ghost" type="button" data-act="hiClose">취소</button><button class="btn btn-primary" type="submit">저장</button></div></form>`, (m) => {
       m.querySelector('#hiMockForm').addEventListener('submit', e => {
