@@ -1,6 +1,10 @@
 /* 올배움 — 학교급(초·중·고) 진입, 고등 수능·대입 모드, 초등 모바일 압축 홈 */
 (function () {
   'use strict';
+  // 지난번에 고른 학교급(_lv)이 저장돼 남아 있으면 첫 화면(초·중·고 선택)을 건너뛰고 그 학교급 학년만 보이므로,
+  // 앱을 열 때와 아이 추가·수정 화면으로 들어갈 때 비운다
+  try { const k = 'mamssam_v1', d = JSON.parse(localStorage.getItem(k) || 'null'); if (d && d._lv) { delete d._lv; localStorage.setItem(k, JSON.stringify(d)); } } catch (e) { }
+  window.addEventListener('hashchange', () => { if (/^#(addkid|editkid)/.test(location.hash) && window.MS) MS().st()._lv = null; });
   const MS = () => window.MS;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = (n) => String(n).padStart(2, '0');
