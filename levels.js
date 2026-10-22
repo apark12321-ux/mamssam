@@ -148,8 +148,8 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
-  const BNAV = [['home', '🏠', '홈'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게']];
+  const NAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '공부 타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
+  const BNAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/ipsi', '📌', '대입 족집게']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
     const s = suneungDate(), d = dday(s, new Date()), ey = examYear(kid);
@@ -158,26 +158,27 @@
   };
   function home() {
     const kid = MS().kid(), h = hi(), t = todayStr();
+    const E = window.EdgeApp;
     const today = h.plan.filter(p => p.date === t);
     const doneN = today.filter(p => p.done).length;
-    const upcoming = h.plan.filter(p => !p.done && p.date > t).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3);
     const m = new Date().getMonth() + 1;
     const cal = CAL.filter(c => c.g.includes(kid.grade) && (c.m >= m)).slice(0, 2).concat(CAL.filter(c => c.g.includes(kid.grade) && c.m < m)).slice(0, 2);
-    const last = h.mock.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
     const pinDone = Object.values(h.pin).filter(Boolean).length, pinAll = SUBJ_H.reduce((n, s) => n + s.pts.length, 0);
+    const tuDone = window.TutorApp ? TutorApp.C.filter(c => (h.tutor || {})[c.id] && h.tutor[c.id].ok).length : 0;
+    const trend = E ? E.trendSVG(E.store()) : '';
     return layout('home', `
-      <div class="page-head"><div><h1>${esc(kid.name)}의 수능·대입 족집게</h1><div class="sub">${GL(kid.grade)} · ${ROAD[kid.grade].t}</div></div></div>
-      ${hero(kid)}
-      ${window.ConsultApp ? ConsultApp.stageCard(kid) : ''}
-      <div class="hi-quick">${[['high/tutor', '👩‍🏫', '개념 과외', window.TutorApp ? `${TutorApp.C.filter(c => (h.tutor || {})[c.id] && h.tutor[c.id].ok).length}/${TutorApp.C.length}` : ''], ['high/pin', '🎯', '수능 족집게', `${pinDone}/${pinAll}`], ['high/ipsi', '📌', '대입 족집게', '최저·면접·정시'], ['high/consult', '🎓', '컨설팅', '대치동식 리포트']].map(([h, i, n, s]) => `<a class="hi-q" href="#${h}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(s)}</small></a>`).join('')}</div>
-      ${window.TutorApp ? TutorApp.homeCard() : ''}
-      <div class="card mt12"><div class="card-head"><h2>오늘 할 일</h2><a class="more" href="#high/plan">플래너 ›</a></div>
-        ${today.length ? `<div class="hi-todo">${today.map(p => `<label class="hi-td ${p.done ? 'done' : ''}"><input type="checkbox" data-act="hiDone" data-id="${p.id}" ${p.done ? 'checked' : ''}><span class="hi-td-s" style="--sc:${(SUBJ_H.find(s => s.k === p.subj) || {}).c || '#666'}">${esc((SUBJ_H.find(s => s.k === p.subj) || { n: '기타' }).n)}</span><span class="hi-td-t">${esc(p.title)}</span></label>`).join('')}</div>` : `<div class="empty small"><div class="e-ico">📝</div>오늘 계획이 비어 있어요. 과목·할 일을 30초 안에 등록해 보세요.<div class="mt8"><button class="btn btn-sm btn-primary" data-act="hiAdd">+ 오늘 할 일</button></div></div>`}
-        ${upcoming.length ? `<div class="xs muted mt8">다음: ${upcoming.map(p => `${p.date.slice(5).replace('-', '/')} ${esc(p.title)}`).join(' · ')}</div>` : ''}
-      </div>
+      <div class="page-head ed-head"><div><h1>${esc(kid.name)}의 수능·대입</h1><div class="sub">${GL(kid.grade)} · ${ROAD[kid.grade].t}</div></div></div>
+      ${E ? E.dash(kid) : hero(kid)}
+      ${E ? E.top3(kid) : ''}
+      ${E ? E.timerCard(false) : ''}
+      <div class="hi-quick">${[['high/tutor', '👩‍🏫', '개념 과외', window.TutorApp ? `${tuDone}/${TutorApp.C.length}` : ''], ['high/pin', '🎯', '수능 족집게', `${pinDone}/${pinAll}`], ['high/ipsi', '📌', '대입 족집게', '최저·면접·정시'], ['high/consult', '🎓', '맞춤 컨설팅', '전형 진단']].map(([hh, i, n, sub]) => `<a class="hi-q" href="#${hh}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(sub)}</small></a>`).join('')}</div>
+      ${window.ConsultApp ? `<div class="ed-stage">${ConsultApp.stageCard(kid)}</div>` : ''}
+      <div class="card mt12"><div class="card-head"><h2>📈 등급 추이</h2><button class="more" data-act="hiMockAdd" style="border:0;background:none;cursor:pointer">+ 기록</button></div>${trend || '<div class="empty small"><div class="e-ico">📈</div>모의고사 등급을 기록하면 과목별 추이와 목표선이 그래프로 보여요.<div class="mt8"><button class="btn btn-sm btn-primary" data-act="hiMockAdd">+ 등급 기록</button></div></div>'}</div>
       <div class="hi-consult-anchor"></div>
-      <div class="card mt12"><div class="card-head"><h2>다가오는 대입 일정</h2><a class="more" href="#high/road">캘린더 ›</a></div><div class="hi-cal">${cal.map(c => `<div class="hi-cal-r"><b>${c.m}월</b><span>${esc(c.t)}<small>${esc(c.who)}</small></span></div>`).join('')}</div><p class="xs muted mt8">일반적인 시기이며 정확한 날짜는 주관 기관 공지로 확정됩니다.</p></div>
-      <div class="card mt12 hi-tip"><b>💡 ${['모의고사 등급은 숫자보다 "틀린 이유"가 자산이에요. 오늘 오답 3개만 원인을 적어 두세요.', '수능은 11월 셋째 목요일. 매주 같은 요일·같은 시간에 모의고사 1회분을 풀면 몸이 시험 시간을 기억합니다.', '수시 6장·정시 3장. 지원 카드는 숫자가 정해져 있으니 "가고 싶은 곳"과 "갈 수 있는 곳"을 나눠 적어 보세요.', 'EBS 연계는 지문 암기가 아니라 소재·주제 익히기예요. 낯선 지문처럼 다시 읽는 훈련이 점수를 만듭니다.'][new Date().getDate() % 4]}</b></div>`);
+      <div class="card mt12"><div class="card-head"><h2>오늘 계획 ${today.length ? `${doneN}/${today.length}` : ''}</h2><a class="more" href="#high/plan">플래너 ›</a></div>
+        ${today.length ? `<div class="hi-todo">${today.map(p => `<label class="hi-td ${p.done ? 'done' : ''}"><input type="checkbox" data-act="hiDone" data-id="${p.id}" ${p.done ? 'checked' : ''}><span class="hi-td-s" style="--sc:${(SUBJ_H.find(s => s.k === p.subj) || {}).c || '#666'}">${esc((SUBJ_H.find(s => s.k === p.subj) || { n: '기타' }).n)}</span><span class="hi-td-t">${esc(p.title)}</span></label>`).join('')}</div>` : `<div class="row" style="gap:8px;align-items:center"><span class="small muted" style="flex:1">오늘 계획이 비어 있어요.</span><button class="btn btn-sm btn-primary" data-act="hiAdd">+ 할 일</button></div>`}
+      </div>
+      <div class="card mt12"><div class="card-head"><h2>다가오는 대입 일정</h2><a class="more" href="#high/road">캘린더 ›</a></div><div class="hi-cal">${cal.map(c => `<div class="hi-cal-r"><b>${c.m}월</b><span>${esc(c.t)}<small>${esc(c.who)}</small></span></div>`).join('')}</div></div>`);
   }
   function pin() {
     const kid = MS().kid(), h = hi(), nw = newSystem(kid);
@@ -216,6 +217,7 @@
     const last = rows[rows.length - 1], prev = rows[rows.length - 2];
     return layout('high/mock', `
       <div class="page-head"><div><h1>모의고사 기록</h1><div class="sub">등급을 적어 두면 추이가 보여요. 오답 원인은 플래너에 할 일로 남기세요.</div></div><button class="btn btn-primary" data-act="hiMockAdd">+ 기록</button></div>
+      ${window.EdgeApp && rows.length ? `<div class="card"><div class="card-head"><h2>등급 추이</h2><button class="more" data-act="edGoal" style="border:0;background:none;cursor:pointer">목표선 ›</button></div>${EdgeApp.trendSVG(EdgeApp.store())}</div>` : ''}
       ${last ? `<div class="grid g3 hi-mock-sum">${ks.filter(k => last.g[k]).map(k => { const d = prev && prev.g[k] ? last.g[k] - prev.g[k] : 0; return `<div class="tile" style="--sc:${S(k).c}"><div class="t-label">${S(k).ic} ${S(k).n}</div><div class="t-val">${last.g[k]}<small>등급</small></div><div class="xs ${d < 0 ? 'up' : d > 0 ? 'down' : 'muted'}">${d < 0 ? `▲ ${-d}등급 상승` : d > 0 ? `▼ ${d}등급 하락` : prev ? '유지' : '첫 기록'}</div></div>`; }).join('')}</div>` : ''}
       <div class="card mt12"><div class="card-head"><h2>기록 ${rows.length}회</h2></div>
         ${rows.length ? `<div class="hi-mock-tbl"><table><thead><tr><th>시험</th>${ks.map(k => `<th>${S(k).n.slice(0, 2)}</th>`).join('')}<th></th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td><b>${esc(r.name)}</b><br><small class="muted">${r.date}</small></td>${ks.map(k => `<td>${r.g[k] || '–'}</td>`).join('')}<td><button class="btn btn-sm btn-ghost" data-act="hiMockDel" data-id="${r.id}">✕</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty small"><div class="e-ico">📈</div>아직 기록이 없어요. 3·6·9·11월 학력평가와 6·9월 모의평가를 적어 보세요.</div>'}
@@ -258,10 +260,10 @@
   }
   function page(a) {
     if (!isHigh()) return home();
-    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
+    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'timer': return window.EdgeApp ? EdgeApp.timerPage() : home(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/pin', '🎯', '수능 족집게', '과목별 출제 구조 · 꼭 지킬 전략'], ['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */

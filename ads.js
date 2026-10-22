@@ -79,7 +79,7 @@
       else if (slot === 'home_mid') anchor = app.querySelector('.sch-home') || app.querySelector('.sp-home');
       else if (slot === 'school') anchor = app.querySelector('#schCal');
       else if (slot === 'records') anchor = app.querySelector('.page-head');
-      else if (slot === 'high_top') anchor = app.querySelector('.hi-hero') || (app.querySelector('.hi-consult-anchor') ? null : app.querySelector('.page-head'));
+      else if (slot === 'high_top') anchor = app.querySelector('.ed-timer') || app.querySelector('.hi-hero') || (app.querySelector('.hi-consult-anchor') ? null : app.querySelector('.page-head'));
       else if (slot === 'high_consult') anchor = app.querySelector('.hi-consult-anchor');
       if (!anchor) return;
       anchor.insertAdjacentElement('afterend', el); render(el, slot);
