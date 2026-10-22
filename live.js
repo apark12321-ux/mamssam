@@ -1,21 +1,20 @@
 /* 쌤픽 초등 — 엄마 폰 + 아이 폰 '함께 보기'
    같은 수업 화면을 두 기기에서 동시에 보되, 엄마에게는 진행판(대본·아이 반응·버튼),
    아이에게는 큰 개념 카드(강조·질문·손들기·스티커)가 보인다.
-   · 연결: 엄마 폰의 8자리 코드를 아이 폰에 입력하거나, 링크(#live/코드)를 열면 끝
+   · 연결: 엄마 폰의 숫자 6자리 코드를 아이 폰에 입력하거나, 링크(#live/코드)를 열면 끝
    · 전달: 메시지를 코드에서 만든 키로 암호화(AES-GCM)해 공개 중계(ntfy.sh)와 같은 기기 탭 사이(BroadcastChannel)로 보낸다
    · 이름 등 개인정보는 보내지 않는다. 연결은 앱을 닫으면 끝난다 */
 (function () {
   'use strict';
   const MS = () => window.MS;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const RELAY = 'https://ntfy.sh/';
-  const AB = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const RELAY = window.SSP_RELAY || 'https://ntfy.sh/'; // 시험용으로 바꿀 수 있음
   const me = Math.random().toString(36).slice(2, 10);
   const enc = new TextEncoder(), dec = new TextDecoder();
   const b64 = (u8) => btoa(String.fromCharCode(...u8)), unb64 = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
   const hex = (buf) => [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, '0')).join('');
-  const fmt = (c) => c.slice(0, 4) + '-' + c.slice(4);
-  const clean = (c) => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  const fmt = (c) => c.slice(0, 3) + ' ' + c.slice(3); // 아이가 치기 쉽게 숫자 6자리
+  const clean = (c) => String(c || '').replace(/\D/g, '').slice(0, 6);
 
   /* ---------- 전달 통로 ---------- */
   function Bus(code, onMsg) {
@@ -26,8 +25,13 @@
       try { bc = new BroadcastChannel(topic); bc.onmessage = (e) => recv(e.data); } catch (e) { }
       try { es = new EventSource(RELAY + topic + '/sse'); es.onmessage = (e) => { try { const j = JSON.parse(e.data); if (j.event === 'message' && j.message) recv(j.message); } catch (x) { } }; } catch (e) { }
     })();
+    const parts = {};
     async function recv(cipher) {
       if (closed) return;
+      if (/^P\|/.test(cipher)) { // 나눠 온 조각: P|묶음id|번호|전체|내용
+        const [, gid, i, n, body] = cipher.split('|'); const g = parts[gid] = parts[gid] || []; g[+i] = body;
+        if (g.filter(x => x != null).length < +n) return; delete parts[gid]; cipher = g.join('');
+      }
       try { const raw = unb64(cipher); const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, key, raw.slice(12)); const m = JSON.parse(dec.decode(pt)); if (m.from === me || seen.has(m.id)) return; seen.add(m.id); onMsg(m); } catch (e) { /* 다른 코드의 메시지 등은 무시 */ }
     }
     async function send(m) {
@@ -35,7 +39,9 @@
       const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(m))));
       const all = new Uint8Array(12 + ct.length); all.set(iv); all.set(ct, 12); const c = b64(all);
       try { bc && bc.postMessage(c); } catch (e) { }
-      fetch(RELAY + topic, { method: 'POST', body: c }).catch(() => { });
+      const MAX = 3000, out = [];
+      if (c.length <= MAX) out.push(c); else { const gid = m.id, n = Math.ceil(c.length / MAX); for (let k = 0; k < n; k++) out.push(`P|${gid}|${k}|${n}|${c.slice(k * MAX, (k + 1) * MAX)}`); }
+      for (const x of out) await fetch(RELAY + topic, { method: 'POST', body: x }).catch(() => { });
     }
     return { send, ready, close() { closed = true; try { bc && bc.close(); } catch (e) { } try { es && es.close(); } catch (e) { } } };
   }
@@ -46,8 +52,8 @@
     if (!window.InfoCard) return;
     const d = InfoCard.data(uid, l); if (!d) return MS().toast('이 단원은 함께 보기를 만들 수 없어요');
     if (H) H.bus.close();
-    const code = Array.from(crypto.getRandomValues(new Uint8Array(8)), x => AB[x % AB.length]).join('');
-    const card = Object.assign({}, d); delete card.u; delete card.script;
+    const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
+    const card = Object.assign({}, d); delete card.u; delete card.script; card.concept = ((d.concept || '').match(/\d+\s*\/\s*\d+/g) || []).slice(0, 2).join(' '); // 분수 그림에 필요한 것만
     H = { code, script: d.script, st: { card, hi: -1, mode: 'card', sticker: '', seq: 0 }, kidOn: false, log: [] };
     H.bus = Bus(code, (m) => {
       if (m.t === 'hello') { H.kidOn = true; push(); drawHost(); }
@@ -102,15 +108,19 @@
     return `<div class="lv-kid ${mini ? 'mini' : ''} ${s.hi >= 0 && s.mode === 'card' ? 'hi hi' + s.hi : ''}">${cardHTML}${extra}${mini || s.mode !== 'card' ? '' : '<button class="lv-hand" data-lk="hand">✋ 손들기</button>'}</div>`;
   }
   function join(code) {
-    code = clean(code); if (code.length !== 8) return MS().toast('코드 8자리를 확인해 주세요');
+    code = clean(code); if (code.length !== 6) return MS().toast('숫자 6자리를 확인해 주세요');
     if (K) K.bus.close();
     K = { code, st: null };
     K.bus = Bus(code, (m) => { if (m.t === 'state') { if (!K.st || m.s.seq >= K.st.seq) { K.st = m.s; drawKid(); } } else if (m.t === 'end') { drawKid(true); } });
     drawKid(); K.bus.ready.then(() => K.bus.send({ t: 'hello' }));
     // 엄마 폰이 늦게 켜져도 붙도록 연결 전까지 몇 번 인사
-    let n = 0; const iv = setInterval(() => { if (!K || K.st || ++n > 20) return clearInterval(iv); K.bus.send({ t: 'hello' }); }, 3000);
+    let n = 0; const iv = setInterval(() => { if (!K || K.st || ++n > 40) return clearInterval(iv); K.bus.send({ t: 'hello' }); if (n === 4 && !K.st) { K.slow = true; drawKid(); } }, 3000);
   }
   function drawKid(ended) {
+    if (!ended && K && !K.st && K.slow) { // 12초 넘게 연결이 안 되면 코드를 다시 확인하게
+      const o0 = document.getElementById('lvKid');
+      if (o0) { o0.innerHTML = `<button class="lv-x" data-lk="close" aria-label="나가기">✕</button><div class="lv-wait"><div class="lv-spin"></div><b>엄마 폰을 찾고 있어요</b><small>넣은 코드: <b>${fmt(K.code)}</b><br>엄마 폰의 코드와 같은지 봐 주세요.<br>엄마 폰에 코드 화면이 켜져 있어야 해요.</small><button class="btn btn-primary mt12" data-lk="re">코드 다시 넣기</button></div>`; return; }
+    }
     let o = document.getElementById('lvKid');
     if (!o) { o = document.createElement('div'); o.id = 'lvKid'; o.className = 'lv-over lv-kidover'; o.setAttribute('data-keep-emoji', ''); document.body.appendChild(o); document.body.style.overflow = 'hidden'; o.addEventListener('click', kidClick); }
     o.innerHTML = ended ? `<div class="lv-wait"><b>오늘 함께 보기가 끝났어요</b><small>수고했어요!</small><button class="btn btn-primary mt12" data-lk="close">닫기</button></div>`
@@ -118,6 +128,7 @@
   }
   function kidClick(e) {
     const b = e.target.closest('[data-lk]'); if (!b) return; const a = b.dataset.lk;
+    if (a === 're') { K && K.bus.close(); K = null; const o = document.getElementById('lvKid'); o && o.remove(); document.body.style.overflow = ''; return joinPrompt(); }
     if (a === 'close') { if (!K || confirm('함께 보기를 나갈까요?')) { K && K.bus.send({ t: 'bye' }); K && K.bus.close(); K = null; const o = document.getElementById('lvKid'); o && o.remove(); document.body.style.overflow = ''; if (/^#live\//.test(location.hash)) location.hash = ''; } return; }
     if (['ok', 'again', 'hand', 'seen'].includes(a)) {
       K.bus.send({ t: 'react', r: a }); b.classList.add('sent');
@@ -128,11 +139,11 @@
   function joinPrompt() {
     const o = document.createElement('div'); o.className = 'sw-over'; o.setAttribute('data-keep-emoji', '');
     o.innerHTML = `<div class="sw-box"><div class="lvg-ic">📱</div><h2>엄마 폰에 나온<br>코드를 써 주세요</h2>
-      <input class="input lv-in" maxlength="9" placeholder="ABCD-1234" autocapitalize="characters" autocomplete="off"><button class="sw-go">연결하기</button>
+      <input class="input lv-in" maxlength="7" placeholder="123 456" inputmode="numeric" pattern="[0-9 ]*" autocomplete="off"><button class="sw-go">연결하기</button>
       <button class="sw-back" data-g="1">코드가 어디 있어요?</button><button class="sw-back">취소</button></div>`;
     document.body.appendChild(o); const i = o.querySelector('input'); setTimeout(() => i.focus(), 50);
-    i.addEventListener('input', () => { const c = clean(i.value); i.value = c.length > 4 ? fmt(c) : c; });
-    o.querySelector('.sw-go').addEventListener('click', () => { const c = clean(i.value); if (c.length !== 8) return MS().toast('코드 8자리를 확인해 주세요'); o.remove(); join(c); });
+    i.addEventListener('input', () => { const c = clean(i.value); i.value = c.length > 3 ? fmt(c) : c; });
+    o.querySelector('.sw-go').addEventListener('click', () => { const c = clean(i.value); if (c.length !== 6) return MS().toast('숫자 6자리를 확인해 주세요'); o.remove(); join(c); });
     o.querySelectorAll('.sw-back').forEach(b => b.addEventListener('click', () => { o.remove(); if (b.dataset.g) guide('kid'); }));
   }
 
@@ -142,8 +153,8 @@
   const STEPS = [
     { t: '폰 두 대로 같이 공부해요', d: '엄마가 설명하면, 아이 폰에 그림이 크게 나와요', art: `<div class="eg-two">${PH('엄마', '<i class="eg-bar"></i><i class="eg-bar s"></i><i class="eg-btn">누르기</i>')}<span class="eg-arr">→</span>${PH('아이', '<i class="eg-big">½</i>')}</div>` },
     { t: '엄마 폰에서 이 버튼을 눌러요', d: '초등 홈 맨 위에 있어요', art: PH('엄마', '<i class="eg-bar"></i><i class="eg-btn hot">📱 아이 폰과 함께 보기</i><i class="eg-bar s"></i>') },
-    { t: '코드가 나와요', d: '글자와 숫자 8개예요', art: PH('엄마', '<i class="eg-code">AB12-CD34</i>') },
-    { t: '아이 폰에 그 코드를 써요', d: '아이 폰: 쌤픽 → 초등 → 코드 넣기', art: PH('아이', '<i class="eg-in">AB12-CD34</i><i class="eg-btn hot">연결하기</i>') },
+    { t: '코드가 나와요', d: '숫자 6개예요', art: PH('엄마', '<i class="eg-code">382 615</i>') },
+    { t: '아이 폰에 그 코드를 써요', d: '아이 폰: 쌤픽 → 초등 → 코드 넣기', art: PH('아이', '<i class="eg-in">382 615</i><i class="eg-btn hot">연결하기</i>') },
     { t: '끝! 이제 같이 봐요', d: '엄마가 누르는 대로 아이 폰이 바뀌어요', art: `<div class="eg-two">${PH('엄마', '<i class="eg-btn hot">1번 짚기</i>')}<span class="eg-arr">→</span>${PH('아이', '<i class="eg-big">½</i><i class="eg-hl"></i>')}</div>` }
   ];
   // who: 'mom'(엄마 폰에서 처음 누를 때) / 'kid'(아이 폰) / ''(그냥 보기)
@@ -173,7 +184,7 @@
   }
 
   /* ---------- 진입점 ---------- */
-  function fromURL() { const m = (location.hash || '').match(/^#live\/([A-Za-z0-9-]{8,9})/); if (m) join(m[1]); }
+  function fromURL() { const m = (location.hash || '').match(/^#live\/(\d{3}(?:%20|\s|-)?\d{3})/); if (m) join(m[1]); }
   // 아이 폰 연결은 초등을 고른 뒤(초등 가입 화면)에만 보여 준다
   function addJoinLink() {
     if (!window.MS || MS().st()._lv !== 'e') return;

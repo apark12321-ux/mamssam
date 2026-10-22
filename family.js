@@ -102,22 +102,36 @@
     if (!MS() || !MS().st || !MS().st().kids.length || !isElem()) return;
     const h = location.hash || '#home';
     if ((h === '#home' || h === '#') && !(window.SubjApp && SubjApp.isStu && SubjApp.isStu())) {
-      const wrap = document.querySelector('#app .wrap'); if (!wrap || wrap.querySelector('.fam-card')) return;
+      const wrap = document.querySelector('#app .wrap'); if (!wrap) return;
+      if (wrap.querySelector('.fam-card')) return tidyMom(wrap);
       const head = wrap.querySelector('.page-head');
       const box = document.createElement('div'); box.innerHTML = momCard();
       // 엄마가 가장 먼저 봐야 하는 '오늘의 3단계'를 제목 바로 아래(큰 배너보다 위)에
       if (head) head.insertAdjacentElement('afterend', box.firstElementChild); else wrap.insertAdjacentElement('afterbegin', box.firstElementChild);
       // 홈 상단 광고는 3단계 카드 아래로
-      const ad = wrap.querySelector('.ad-home_top'); const hero = wrap.querySelector('.tt-hero, .card.hero'); if (ad && hero && hero.nextElementSibling !== ad) hero.insertAdjacentElement('afterend', ad);
+      tidyMom(wrap);
     } else if (h === '#kid') {
       const body = document.querySelector('#app .kid-body'); if (!body) return;
-      const have = body.querySelector('.kp-card'); if (have) { if (body.firstElementChild !== have) body.insertAdjacentElement('afterbegin', have); return; } // 학습 알 카드보다 항상 위
+      const have = body.querySelector('.kp-card'); if (have) { if (body.firstElementChild !== have) body.insertAdjacentElement('afterbegin', have); return tidyKid(body); } // 학습 알 카드보다 항상 위
       if (ensureSheet()) { MS().render(); return; }
       const box = document.createElement('div'); box.innerHTML = kidPath(); body.insertAdjacentElement('afterbegin', box.firstElementChild);
       // 과목 고르기는 '다른 과목도 해 볼래?' 아래로 접기
       const grid = [...body.children].find(e => e !== body.firstElementChild && /오늘 공부할 과목/.test(e.textContent || '') && e.matches('.kid-card, .sp-kid, div'));
       if (grid && !grid.closest('details')) { const d = document.createElement('details'); d.className = 'kp-more'; d.innerHTML = '<summary>다른 과목도 해 볼래?</summary>'; grid.insertAdjacentElement('beforebegin', d); d.appendChild(grid); }
+      tidyKid(body);
     }
+  }
+  // 엄마 홈: '오늘의 3단계'와 겹치는 큰 배너·과목별 이어서·더 보기·중간 광고·빈 떠 있는 버튼은 뺀다(메뉴에서 모두 갈 수 있음)
+  function tidyMom(wrap) {
+    wrap.querySelectorAll(':scope > .tt-hero, :scope > .card.hero, .sp-home, .home-more, .ad-home_mid').forEach(e => e.remove());
+    const fab = document.querySelector('.fab'); if (fab) fab.remove();
+    const q = wrap.querySelector('.home-quick'), f = wrap.querySelector('.fam-card'), ad = wrap.querySelector('.ad-home_top');
+    if (q && f && f.nextElementSibling !== q) f.insertAdjacentElement('afterend', q);
+    if (ad && (q || f) && (q || f).nextElementSibling !== ad) (q || f).insertAdjacentElement('afterend', ad);
+  }
+  // 아이 화면: '오늘의 길'과 겹치는 '오늘 풀 문제'·'오늘 배울 개념 영상' 카드는 뺀다(오늘의 길 1·2단계로 들어감)
+  function tidyKid(body) {
+    [...body.children].forEach(e => { if (e.matches('.kid-card:not(.kp-card)') && /(오늘 풀 문제|오늘 배울 개념 영상)/.test((e.textContent || '').trim().slice(0, 30))) e.remove(); });
   }
   function boot() { const mo = new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; after(); }); }); const r = document.getElementById('app'); if (r) mo.observe(r, { childList: true, subtree: true }); window.addEventListener('hashchange', () => setTimeout(after, 30)); after(); }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
