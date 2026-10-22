@@ -1,4 +1,4 @@
-/* 쌤픽 — 고등 1:1 온라인 개념 과외 · 대입 족집게 · 대치동식 전략 도구
+/* 쌤픽 — 고등 1:1 온라인 개념 과외 · 대입 족집게 · 입시 전략 도구
    모든 개념 정리·문제·해설은 쌤픽이 직접 작성한 학습 자료입니다(기출·교재 원문 미사용). */
 (function () {
   'use strict';
@@ -322,7 +322,7 @@
     const J = h.jeong; const verdict = J.map(x => x.v || ''); const nUp = verdict.filter(v => v === 'up').length, nSafe = verdict.filter(v => v === 'safe').length, filled = verdict.filter(Boolean).length;
     const jWarn = filled < 3 ? '세 군을 모두 채우면 배치 진단이 나와요.' : !nSafe ? '⚠️ 안정 카드가 없어요. 세 곳 모두 떨어지면 재수 또는 추가 모집뿐입니다. 한 군은 안정으로 두세요.' : nSafe === 3 ? '⚠️ 세 곳 모두 안정이에요. 점수를 낮춰 쓰는 손해가 큽니다. 한 군은 적정 이상으로 올려 보세요.' : nUp === 3 ? '⚠️ 세 곳 모두 상향이에요. 최소 한 곳은 안정으로 두는 것이 원칙입니다.' : '✅ 상향·적정·안정이 섞인 균형 잡힌 배치예요. 군별 모집 인원과 작년 추가 합격 규모를 확인하세요.';
     return layout('high/ipsi', `
-      <div class="page-head"><div><h1>대입 족집게</h1><div class="sub">${HA().examYear(kid)}학년도 기준 · 꼭 알아야 할 변화, 놓치면 손해 보는 규칙, 대치동 컨설팅에서 쓰는 전략 도구</div></div></div>
+      <div class="page-head"><div><h1>대입 족집게</h1><div class="sub">${HA().examYear(kid)}학년도 기준 · 꼭 알아야 할 변화, 놓치면 손해 보는 규칙, 입시 상담에서 실제로 쓰는 4가지 도구를 무료로</div></div></div>
       ${window.ConsultApp && kid.grade === 12 ? ConsultApp.stageCard(kid) : ''}
       <div class="card mt12"><div class="card-head"><h2>📰 ${HA().examYear(kid) <= 2027 ? '2027학년도' : '이번 대입'} 핵심 변화</h2></div><div class="tu-news">${NEWS.map(([t, d, s]) => `<div class="tu-new"><b>${t}</b><p>${d}</p><small>출처: ${s}</small></div>`).join('')}</div></div>
       ${K && kid.grade === 12 ? `<div class="card mt12"><div class="card-head"><h2>⏱ 수능 직후 72시간 플랜</h2></div><ol class="steps">${[['수능 당일 밤', 'EBSi·평가원 정답으로 가채점. 영역별 원점수·예상 등급을 기록해 두기'], ['다음 날', '가채점 등급으로 수시 대학별 최저 충족 여부 확인(아래 계산기). 미충족이 확실한 대학의 논술·면접은 정리'], ['이틀째', '수능을 예상보다 잘 봤다면 "수시 합격 시 정시 불가" 규칙을 떠올리고, 수능 후 대학별고사 응시를 다시 판단'], ['사흘째', '정시 가능선을 대략 잡고, 남은 면접·논술 준비에 집중. 확정은 ' + (K.score ? K.score.slice(5).replace('-', '/') : '12월') + ' 성적표로']].map(([a, b]) => `<li><span><b>${a}</b> · ${b}</span></li>`).join('')}</ol></div>` : ''}

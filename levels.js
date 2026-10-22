@@ -16,7 +16,7 @@
   const LV = {
     e: { n: '초등', t: '엄마표 개념 과외', ic: '🧒', c: '#4A7DF0', d: '엄마가 오늘 30분, 꼭 필요한 개념만 콕 집어 가르쳐요', pts: ['오늘의 개념 과외 대본(설명 순서·질문·예시)', '단원별 개념 정리와 개념 영상', '확인 문제 자동 출제·채점, 오답 다시 풀기', '"분수는 어떻게 설명해요?" 엄마 도우미'] },
     m: { n: '중등', t: '개념 정리 · 자기주도', ic: '🎒', c: '#12A150', d: '교과서 핵심 개념을 스스로 정리하고, 문제로 확인해요', pts: ['과목별 단원 개념 정리 → 개념 영상 → 확인 문제', '내가 쓰는 개념 정리 노트와 오답 다시 풀기', '주간 시간표와 연속 공부 기록', '최상위 공부법(메타인지·간격 복습)'] },
-    h: { n: '고등', t: '수능·대입 족집게', ic: '🎯', c: '#1F2A44', d: '1:1 온라인 개념 과외부터 수능 족집게, 대입 족집게, 대치동식 맞춤 컨설팅까지', pts: ['1:1 개념 과외: 수능 빈출 개념 정리 → 족집게 → 확인 문제', '수능 족집게: 과목별 출제 구조와 꼭 지킬 전략', '대입 족집게: 핵심 변화 · 최저 계산기 · 면접 예상 질문', '대치동식 맞춤 컨설팅: 전형 적합도 · 수시 6장 · 정시 3장'] }
+    h: { n: '고등', t: '수능·대입 족집게', ic: '🎯', c: '#1F2A44', d: '1:1 온라인 개념 과외부터 수능 족집게, 대입 족집게, 전형별 1:1 대입 진단까지', pts: ['1:1 개념 과외: 수능 빈출 개념 정리 → 족집게 → 확인 문제', '수능 족집게: 과목별 출제 구조와 꼭 지킬 전략', '대입 족집게: 핵심 변화 · 최저 계산기 · 면접 예상 질문', '1:1 대입 진단: 전형 적합도 · 수시 6장 · 정시 3장'] }
   };
   function picker(adding) {
     const st = MS().st();
@@ -25,7 +25,7 @@
         <div class="lv-tag">초·중·고 공부주치의 · 개념 정리 · 족집게 · 온라인 과외</div>
         <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '꼭 필요한 개념만,<br>콕 집어 주는 쌤'}</h1>
         <p class="muted">개념 정리 · 족집게 · 온라인 과외를 학교급에 맞게. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
-      <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기 ›</span></button>`; }).join('')}</div>
+      <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기</span></button>`; }).join('')}</div>
       ${adding ? '<p class="center mt16"><a class="btn btn-ghost btn-sm" href="#settings">← 설정으로</a></p>' : ''}
       <p class="xs muted center mt16">입력한 정보는 이 기기의 브라우저에만 저장됩니다. · <a href="#legal">저작권·광고·개인정보 안내</a></p>
     </div>`;
@@ -148,7 +148,7 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '공부 타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/gachae', '📝', '가채점'], ['high/chance', '📊', '합격 가늠'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
+  const NAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '공부 타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/gachae', '📝', '가채점'], ['high/chance', '📊', '합격 가늠'], ['high/consult', '🎓', '1:1 대입 진단'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
   const BNAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/ipsi', '📌', '대입 족집게']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
@@ -171,7 +171,7 @@
       ${E ? E.dash(kid) : hero(kid)}
       ${E ? E.top3(kid) : ''}
       ${E ? E.timerCard(false) : ''}
-      <div class="hi-quick">${[['high/tutor', '👩‍🏫', '개념 과외', window.TutorApp ? `${tuDone}/${TutorApp.C.length}` : ''], ['high/pin', '🎯', '수능 족집게', `${pinDone}/${pinAll}`], ['high/ipsi', '📌', '대입 족집게', '최저·면접·정시'], ['high/consult', '🎓', '맞춤 컨설팅', '전형 진단']].map(([hh, i, n, sub]) => `<a class="hi-q" href="#${hh}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(sub)}</small></a>`).join('')}</div>
+      <div class="hi-quick">${[['high/tutor', '👩‍🏫', '개념 과외', window.TutorApp ? `${tuDone}/${TutorApp.C.length}` : ''], ['high/pin', '🎯', '수능 족집게', `${pinDone}/${pinAll}`], ['high/ipsi', '📌', '대입 족집게', '최저·면접·정시'], ['high/consult', '🎓', '대입 진단', '전형별 1:1']].map(([hh, i, n, sub]) => `<a class="hi-q" href="#${hh}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(sub)}</small></a>`).join('')}</div>
       ${window.ConsultApp ? `<div class="ed-stage">${ConsultApp.stageCard(kid)}</div>` : ''}
       <div class="card mt12"><div class="card-head"><h2>📈 등급 추이</h2><button class="more" data-act="hiMockAdd" style="border:0;background:none;cursor:pointer">+ 기록</button></div>${trend || '<div class="empty small"><div class="e-ico">📈</div>모의고사 등급을 기록하면 과목별 추이와 목표선이 그래프로 보여요.<div class="mt8"><button class="btn btn-sm btn-primary" data-act="hiMockAdd">+ 등급 기록</button></div></div>'}</div>
       <div class="hi-consult-anchor"></div>
@@ -263,7 +263,7 @@
     switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'gachae': return window.ScoreApp ? ScoreApp.gcPage() : home(); case 'chance': return window.ScoreApp ? ScoreApp.chancePage() : home(); case 'timer': return window.EdgeApp ? EdgeApp.timerPage() : home(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/gachae', '📝', '가채점', '원점수 → 등급 → 최저 확인'], ['high/chance', '📊', '합격 가늠', '작년 입결과 내 성적 비교'], ['high/pin', '🎯', '수능 족집게', '과목별 출제 구조 · 꼭 지킬 전략'], ['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/gachae', '📝', '가채점', '원점수 → 등급 → 최저 확인'], ['high/chance', '📊', '합격 가늠', '작년 입결과 내 성적 비교'], ['high/pin', '🎯', '수능 족집게', '과목별 출제 구조 · 꼭 지킬 전략'], ['high/consult', '🎓', '1:1 대입 진단', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */

@@ -6,32 +6,50 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="format-detection" content="telephone=no">
-  <link rel="manifest" href="/manifest.webmanifest?v=2">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="manifest" href="/manifest.webmanifest?v=3">
+  <link rel="apple-touch-icon" href="/icons/icon-180.png?v=2">
   <title>쌤픽 · 초·중·고 공부주치의 | 개념 정리 · 족집게 · 온라인 과외</title>
-  <meta name="description" content="꼭 필요한 개념만 콕 집어 주는 초·중·고 공부주치의 쌤픽. 개념 정리, 1:1 온라인 개념 과외, 수능 족집게, 대입 족집게(최저 계산기·면접 예상 질문·정시 배치), 대치동식 맞춤 입시 컨설팅까지 무료로.">
+  <meta name="description" content="꼭 필요한 개념만 콕 집어 주는 초·중·고 공부주치의 쌤픽. 개념 정리, 1:1 온라인 개념 과외, 수능 족집게, 대입 족집게(최저 계산기·면접 예상 질문·정시 배치), 수시 6장·정시 3장 배치와 수능 최저 계산까지 무료 대입 진단.">
   <meta name="theme-color" content="#4A7DF0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="쌤픽">
   <meta property="og:title" content="쌤픽 · 초·중·고 공부주치의">
-  <meta property="og:description" content="개념 정리 · 족집게 · 온라인 과외. 초등 엄마표 개념 과외, 중등 개념 정리, 고등 수능·대입 족집게와 대치동식 컨설팅.">
+  <meta property="og:description" content="개념 정리 · 족집게 · 온라인 과외. 초등 엄마표 개념 과외, 중등 개념 정리, 고등 수능·대입 족집게와 1:1 대입 진단.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234A7DF0'/%3E%3Ctext x='32' y='43' font-size='30' font-weight='800' text-anchor='middle' fill='white' font-family='sans-serif'%3E%ED%94%BD%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="/icons/icon-192.png?v=2">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Do+Hyeon&family=Noto+Serif+KR:wght@600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap">
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Gowun+Batang:wght@400;700&family=Do+Hyeon&family=Noto+Serif+KR:wght@600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap">
+  <link rel="stylesheet" href="style.css?v=26">
+  <link rel="stylesheet" href="classic.css?v=1">
+  <link rel="stylesheet" href="sky.css?v=1">
 </head>
 <body>
   <div id="splash" aria-hidden="true">
     <div class="s-sun"></div><div class="s-cloud c1"></div><div class="s-cloud c2"></div><div class="s-cloud c3"></div>
     <div class="s-title">쌤픽</div>
     <div class="s-sub">초·중·고 공부주치의</div><div class="s-sub2">개념 정리 · 족집게 · 온라인 과외</div>
+    <div class="s-prog"><i></i></div>
+    <button class="s-skip" type="button" onclick="window.SplashCtl&&SplashCtl.hide()">건너뛰기</button>
+    <div class="s-ad" id="splashAd" aria-label="광고 영역"></div>
     <div class="s-logo">
       <svg height="34" viewBox="0 0 66 40" xmlns="http://www.w3.org/2000/svg" aria-label="PYJ"><g fill="#fff" font-family="'Playfair Display', 'Bodoni 72', 'Didot', Georgia, 'Times New Roman', serif" font-weight="700"><text x="3" y="30" font-size="30">P</text><text x="19" y="33" font-size="33" font-style="italic">Y</text><text x="40" y="30" font-size="30">J</text></g><line x1="4" y1="37" x2="62" y2="37" stroke="#fff" stroke-width="1" opacity=".6"/></svg>
     </div>
   </div>
+  <script>
+  /* 첫 화면: 처음 열 때 약 4.5초(아래 광고 영역 노출 시간 확보), 같은 세션에서 다시 열면 1.2초. 건너뛰기 가능 */
+  (function () {
+    var el = document.getElementById('splash'), t0 = Date.now(), seen = false, ready = false, done = false;
+    try { seen = sessionStorage.getItem('splashSeen') === '1'; sessionStorage.setItem('splashSeen', '1'); } catch (e) {}
+    var min = seen ? 1200 : 4500;
+    el.style.setProperty('--sd', min + 'ms');
+    function hide() { if (done || !el) return; done = true; el.classList.add('out'); setTimeout(function () { el.remove(); }, 500); }
+    function check() { if (ready && Date.now() - t0 >= min) hide(); }
+    window.SplashCtl = { ready: function () { ready = true; setTimeout(check, Math.max(0, min - (Date.now() - t0))); }, hide: hide, min: min };
+    setTimeout(function () { ready = true; check(); }, min + 3000); // 앱 준비 신호가 없더라도 최대 시간 뒤에는 닫기
+  })();
+  </script>
   <div id="app"></div>
   <div id="print-root"></div>
   <script src="data.js?v=8"></script>
@@ -94,18 +112,19 @@
   <script src="subjects.js?v=20"></script>
   <script src="top.js?v=4"></script>
   <script src="method.js?v=1"></script>
-  <script src="levels.js?v=11"></script>
-  <script src="consult.js?v=4"></script>
-  <script src="tutor.js?v=3"></script>
+  <script src="levels.js?v=13"></script>
+  <script src="consult.js?v=5"></script>
+  <script src="tutor.js?v=4"></script>
   <script src="edge.js?v=3"></script>
   <script src="score.js?v=1"></script>
-  <script src="app.js?v=22"></script>
+  <script src="app.js?v=23"></script>
   <script src="fun.js?v=5"></script>
   <script src="speak.js?v=3"></script>
   <script src="school.js?v=4"></script>
-  <script src="ads.js?v=6"></script>
+  <script src="ads.js?v=7"></script>
   <script src="install.js?v=1"></script>
   <script src="pick.js?v=1"></script>
-  <script src="ux.js?v=1"></script>
+  <script src="ux.js?v=2"></script>
+  <script src="icons.js?v=1"></script>
 </body>
 </html>

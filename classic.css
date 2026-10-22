@@ -1,0 +1,201 @@
+/* =====================================================================
+   쌤픽 클래식 테마 — 종이·잉크·괘선의 편집 디자인
+   종이색 배경, 잉크 남색 본문, 한 가지 강조색(인주 빨강), 각진 모서리,
+   그림자 대신 괘선, 이모지 대신 선 아이콘, 알약 칩 대신 밑줄 탭
+   ===================================================================== */
+:root{
+  --paper:#F6F3EC;--card:#FFFFFF;--ink:#1E2328;--ink2:#3A4048;--muted:#6F6A60;--line:#DED7C9;--line2:#C9C0AE;
+  --blue:#1F3A5F;--blue-d:#152A47;--blue-l:#E7ECF2;--blue-ll:#F1F3F6;
+  --seal:#A3302A;--seal-l:#F6E7E4;
+  --orange:#A3302A;--orange-l:#F6E7E4;--yellow:#B8912F;--yellow-l:#F5EEDB;--green:#2F6B4F;--green-l:#E4EEE8;--red:#A3302A;--red-l:#F6E7E4;--pink:#8E4E6B;--pink-l:#F2E8EC;
+  --bg:var(--paper);--radius:4px;--shadow:none;--sky1:#1F3A5F;--sky2:#1F3A5F;
+  --serif:'Noto Serif KR','Nanum Myeongjo','AppleMyungjo',serif;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --round:var(--serif);
+}
+body{background:var(--paper)!important;background-image:none!important;color:var(--ink);font-family:var(--sans);letter-spacing:-.005em}
+body.fl-e{--round:'Gowun Batang',var(--serif);font-family:var(--sans)}
+body.fl-m{--round:'Do Hyeon',var(--sans)}
+body.fl-h{--round:var(--serif)}
+::selection{background:#E9DFC9}
+a{color:var(--blue)}
+
+/* ---------- 제목·괘선 ---------- */
+h1,h2,h3,.page-head h1{font-family:var(--round);letter-spacing:-.01em;color:var(--ink)}
+body.fl-e h1,body.fl-e h2,body.fl-e h3,body.fl-h h1,body.fl-h h2,body.fl-h h3,body:not(.fl-m) .page-head h1{font-weight:700}
+.page-head{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:18px!important;align-items:flex-end}
+.page-head h1{font-size:26px;line-height:1.25}
+.page-head .sub{color:var(--muted);font-size:13.5px;margin-top:4px}
+.card-head{border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:12px!important}
+.card-head h2{font-size:17px}
+.card-head .more,.card-head a.more{font-size:12.5px;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line2)}
+.muted,.xs.muted,.small.muted{color:var(--muted)!important}
+
+/* ---------- 카드·면 ---------- */
+.card,.tile,.hi-q,.ch-row,.ch-sum div,.sc-e,.tu-new,.lv-card,.unit-card,.sp-lesson,.kid-switch,.li,.hi-type,.empty{border-radius:var(--radius)!important;box-shadow:none!important}
+.card{background:var(--card);border:1px solid var(--line)!important;padding:18px 18px 16px}
+.card+.card,.mt12{margin-top:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc,var(--ink))}
+.empty{border:1px dashed var(--line2)!important;background:transparent!important}
+hr,.rule{border:0;border-top:1px solid var(--line)}
+
+/* 히어로: 평면 남색 띠, 장식 제거 */
+.hero,.hi-hero,.tt-hero,.sp-hero,.ed-dash{background:var(--blue)!important;border-radius:var(--radius)!important;box-shadow:none!important;border:0!important;color:#fff}
+.hero::before,.hero::after,.tt-hero::before,.tt-hero::after,.sp-hero::before,.sp-hero::after{display:none!important}
+.hero .h-title,.ed-dash .h-title{font-family:var(--serif);font-weight:900;letter-spacing:-.02em}
+.hero .badge,.hi-hero .badge{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff}
+.ed-k{background:transparent!important;border:1px solid rgba(255,255,255,.28);border-radius:2px!important}
+.ed-goal{border-radius:2px!important;background:transparent!important}
+.ed-bar em{background:#E9C46A!important}
+
+/* ---------- 버튼·칩·탭 ---------- */
+.btn{border-radius:3px!important;border:1px solid var(--line2)!important;background:#fff;color:var(--ink);font-weight:600;box-shadow:none!important;transform:none!important}
+.btn:hover{background:var(--blue-ll)}
+.btn-primary{background:var(--blue)!important;border-color:var(--blue)!important;color:#fff!important}
+.btn-primary:hover{background:var(--blue-d)!important}
+.btn-orange{background:var(--seal)!important;border-color:var(--seal)!important;color:#fff!important}
+.btn-ghost{background:transparent!important;border-color:transparent!important;color:var(--ink2)!important;text-decoration:underline;text-underline-offset:3px}
+.chip,.pk-chip,.sc-g{border-radius:2px!important;border:1px solid var(--line2)!important;background:#fff;color:var(--ink2);font-weight:500;min-height:32px;padding:5px 11px;box-shadow:none!important}
+.chip.on,.pk-chip.on,.sc-g.on{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
+.chip[style*="--sc"].on{background:var(--ink)!important;border-color:var(--ink)!important}
+/* 가로 탭 줄은 밑줄 탭으로 */
+.hi-sub,.sp-tabs,.top-tabs{gap:0!important;border-bottom:1px solid var(--line2);flex-wrap:nowrap}
+.hi-sub .chip,.sp-tabs button,.top-tabs .top-tab{border:0!important;border-bottom:3px solid transparent!important;background:transparent!important;color:var(--muted)!important;border-radius:0!important;padding:8px 12px!important;min-height:0;font-weight:600}
+.hi-sub .chip.on,.sp-tabs button.on,.top-tabs .top-tab.on{border-bottom-color:var(--seal)!important;color:var(--ink)!important;background:transparent!important}
+.badge{border-radius:2px!important;font-weight:600;letter-spacing:0}
+input.input,select.input,textarea.input,.input{border-radius:3px!important;border:1px solid var(--line2)!important;background:#fff;box-shadow:none!important}
+.input:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:var(--blue)!important}
+
+/* ---------- 목록 ---------- */
+.list .li{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:12px 2px;background:transparent}
+.list .li:last-child{border-bottom:0!important}
+.li-ico{background:transparent!important;border:1px solid var(--line);border-radius:2px!important;color:var(--blue)}
+.steps li::before,.ed-n{border-radius:2px!important;background:var(--ink)!important}
+
+/* ---------- 데스크톱: 사이드바 → 상단 머리글(두 줄) ---------- */
+@media (min-width:641px){
+  .layout{display:block}
+  .sidebar{position:sticky!important;top:0;left:auto;right:auto;bottom:auto;width:auto!important;height:auto;z-index:40;display:grid!important;grid-template-columns:auto 1fr auto;grid-template-areas:"brand . kid" "nav nav nav";align-items:center;column-gap:16px;padding:12px max(24px,calc((100% - 1160px)/2)) 0!important;background:var(--paper);border-right:0!important;border-bottom:2px solid var(--ink);overflow:visible!important}
+  .sidebar .brand{grid-area:brand;padding:0!important;margin:0!important}
+  .sidebar .brand-sub{display:block!important;font-size:11.5px;color:var(--muted)}
+  .sidebar .nav{grid-area:nav;display:flex!important;flex-direction:row!important;flex-wrap:wrap;gap:0 2px;margin:10px 0 0!important;border-top:1px solid var(--line)}
+  .sidebar .nav a{flex-direction:row!important;min-height:0!important;padding:10px 12px 9px!important;font-size:14px!important;font-weight:600;color:var(--ink2);border-radius:0!important;border-bottom:3px solid transparent;background:transparent!important;box-shadow:none!important;text-align:left;gap:6px!important;margin-bottom:-2px}
+  .sidebar .nav a .ico{display:none}
+  .sidebar .nav a.on{color:var(--ink);border-bottom-color:var(--seal)}
+  .sidebar .nav a:hover{color:var(--ink);background:transparent!important}
+  .sidebar .side-kid{grid-area:kid;display:flex!important;flex-direction:row;align-items:center;gap:8px;margin:0!important;padding:0!important;border:0!important}
+  .sidebar .side-kid .kid-switch{padding:6px 10px!important;border:1px solid var(--line2)!important;background:#fff;width:auto}
+  .sidebar .side-kid .btn{width:auto!important;padding:8px 12px}
+  .sidebar .side-foot{display:none!important}
+  .main{margin-left:0!important}
+  .wrap{max-width:1160px!important;padding:28px 24px 80px!important}
+}
+/* 상단·하단 모바일 바 */
+.topbar{background:var(--paper)!important;backdrop-filter:none!important;border-bottom:2px solid var(--ink)!important}
+.topbar .chip{border-radius:2px!important}
+.bottomnav{background:#FFFDF8!important;backdrop-filter:none!important;border-top:1px solid var(--ink)!important}
+.bottomnav a,.bottomnav button{color:var(--muted);font-weight:600;border-radius:0!important;position:relative}
+.bottomnav a.on,.bottomnav button.on{color:var(--ink);background:transparent!important}
+.bottomnav a.on::before,.bottomnav button.on::before{content:'';position:absolute;top:-7px;left:28%;right:28%;height:3px;background:var(--seal)}
+.bottomnav .ico{display:flex;justify-content:center}
+.fab{background:var(--blue)!important;border-radius:4px!important;box-shadow:0 2px 0 var(--blue-d)!important}
+
+/* 브랜드 표기: 아이콘 사각형 대신 글자 로고 + 인장 */
+.brand-mark{background:var(--seal)!important;border-radius:2px!important;box-shadow:none!important;width:30px!important;height:30px!important;font-size:14px!important;color:#fff!important}
+.brand-name{font-family:'Jua',var(--sans)!important;font-size:22px!important;color:var(--ink)!important;letter-spacing:-.02em}
+
+/* ---------- 첫 화면(학교급 선택) ---------- */
+.lv-wrap{background:var(--paper)}
+.lv-head h1{font-family:var(--serif)!important;font-weight:700}
+.lv-tag{border-radius:2px!important;border:1px solid var(--ink)!important;background:transparent!important}
+.lv-card{background:#fff!important;border:1px solid var(--line2)!important;border-top:4px solid var(--sc)!important;text-align:left}
+.lv-card.lv-h{background:#fff!important;color:var(--ink)!important;border-color:var(--line2)!important;border-top-color:var(--blue)!important}
+.lv-card.lv-h .lv-d,.lv-card.lv-h .lv-pts{color:var(--ink2)!important}
+.lv-card.lv-h .lv-t,.lv-card.lv-h .lv-go{color:var(--blue)!important}
+.lv-ic{display:none!important}
+.lv-go{text-decoration:underline;text-underline-offset:3px}
+.onboard .ob-left{background:var(--blue)!important}
+.onboard .ob-left::before,.onboard .ob-left::after{display:none!important}
+
+/* ---------- 고등 구성요소 ---------- */
+.hi-q{background:#fff!important;border:1px solid var(--line)!important;border-top:3px solid var(--ink)!important}
+.hi-q-i{color:var(--blue)}
+.ed-todo a,.ed-todo button{background:#fff!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:12px 2px!important}
+.ed-todo li:last-child a,.ed-todo li:last-child button{border-bottom:0!important}
+.ed-timer{border-top:3px solid var(--ink)!important}
+.ed-timer.on{background:#fff!important}
+.ed-clock{color:var(--ink)!important;font-family:var(--serif);font-weight:700}
+.ed-subj .chip.on{background:var(--ink)!important;border-color:var(--ink)!important}
+.st-card{border-left:0!important;border-top:3px solid var(--seal)!important}
+.st-flag{border-radius:2px!important}
+.st-left{border-radius:2px!important;background:var(--blue-ll)!important}
+.tu-m{border-radius:2px!important;background:#FBF9F4!important;border:1px solid var(--line)}
+.tu-b.me .tu-m{background:var(--blue-l)!important}
+.tu-av{border-radius:2px!important;background:var(--ink)!important;color:#fff!important;font-size:12px!important;font-weight:700;width:30px;height:30px;flex-basis:30px!important}
+.tu-o{border-radius:2px!important}
+.tu-hot{border-radius:2px!important;background:var(--seal-l)!important;color:var(--seal)!important}
+.tu-bar,.tu-bar i,.ed-col,.ed-col em,.ed-stack{border-radius:0!important}
+.tu-bar i{background:var(--ink)!important}
+.ed-col em{background:var(--blue)!important}
+.ch-tag{border-radius:2px!important}
+.pk-box{border-radius:3px!important;box-shadow:0 6px 18px rgba(30,35,40,.12)!important}
+
+/* ---------- 광고 지면: 점선·주황 제거 ---------- */
+.ad-slot>*{border-radius:var(--radius)!important;box-shadow:none!important}
+.ad-house{background:#FBF8F1!important;border:1px solid var(--line)!important}
+.ad-house .btn,.ad-slot .btn{background:#fff!important;color:var(--ink)!important;border:1px solid var(--line2)!important}
+
+/* ---------- 팝업·알림 ---------- */
+.modal{border-radius:4px!important;box-shadow:0 18px 50px rgba(20,24,30,.25)!important}
+.toast{border-radius:3px!important;background:var(--ink)!important}
+.ins-bar{border-radius:4px!important;background:var(--ink)!important}
+.ins-card{border-radius:6px 6px 0 0!important}
+.ins-go{background:#E9C46A!important;border-radius:2px!important}
+
+/* ---------- 첫 구동 화면 ---------- */
+#splash{background:var(--blue)!important}
+#splash .s-sun,#splash .s-cloud{display:none!important}
+#splash .s-title{font-family:'Jua',var(--sans)!important;font-size:58px!important;text-shadow:none!important;animation:none!important;letter-spacing:-.02em}
+#splash .s-title::after{content:'';display:block;width:56px;height:3px;background:#E9C46A;margin:14px auto 0}
+#splash .s-sub{font-family:var(--serif);font-weight:600!important;margin-top:18px!important}
+#splash .s-sub2{opacity:.75}
+#splash .s-skip{border-radius:2px!important}
+
+/* ---------- 움직임 줄이기: 튀는 애니메이션 제거 ---------- */
+.card,.btn,.chip,.lv-card,.hi-q{transition:background .15s,border-color .15s!important;animation:none!important}
+
+/* ---------- 선 아이콘 ---------- */
+.ci{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;flex:none}
+.bottomnav .ci{width:22px;height:22px}
+.hi-q-i .ci{width:24px;height:24px}
+.li-ico .ci{width:18px;height:18px}
+.e-ico .ci{width:28px;height:28px;color:var(--line2)}
+
+@media (max-width:640px){
+  .page-head h1{font-size:22px}
+  .card{padding:15px 14px 14px}
+  .wrap{padding-top:16px!important}
+}
+
+.brand-mark{display:none!important}
+
+/* ---------- 초등 오늘 카드 · 학습 알 · 광고 막대 정리 ---------- */
+.tt-row{background:#fff!important;border:1px solid rgba(255,255,255,.0)!important;border-radius:2px!important;box-shadow:none!important}
+.tt-ic{display:none!important}
+.tt-go{background:var(--ink)!important;color:#fff!important;border-radius:2px!important;box-shadow:none!important;border:0!important}
+.tt-s{color:var(--seal)!important}
+.btn-white{background:#fff!important;color:var(--ink)!important;border-color:#fff!important}
+.h-actions .btn:not(.btn-white){background:transparent!important;color:#fff!important;border-color:rgba(255,255,255,.55)!important}
+.fun-card{background:#fff!important;border:1px solid var(--line)!important;border-top:3px solid var(--yellow)!important;border-radius:var(--radius)!important;box-shadow:none!important}
+.fun-card::before,.fun-card::after{display:none!important}
+.fun-pet,.fun-pet .pet{box-shadow:none!important;background:#FBF6E9!important;border:1px solid var(--line)!important}
+.fun-bar{border-radius:0!important;background:var(--line)!important}.fun-bar i,.fun-bar>*{border-radius:0!important;background:var(--yellow)!important}
+.fun-say{border-radius:2px!important;background:#FBF9F4!important;border:1px solid var(--line)!important;box-shadow:none!important}
+.fun-ms{background:transparent!important;border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;padding:12px 0 0!important}
+.fun-m{border:1px solid var(--line)!important;border-radius:2px!important;background:#fff!important}
+.m-ic{display:none!important}
+.fun-snd{border-radius:2px!important;box-shadow:none!important;background:transparent!important;border:1px solid var(--line)!important}
+.ad-house{border-radius:var(--radius)!important}
+.ad-cta{background:transparent!important;color:var(--ink)!important;border:1px solid var(--ink)!important;border-radius:2px!important;box-shadow:none!important}
+.ad-t{color:var(--muted)!important}
+.sch-home,.sp-home{border-style:solid!important}

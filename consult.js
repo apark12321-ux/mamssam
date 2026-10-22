@@ -158,7 +158,7 @@
     const ready = !!(p.track && (p.naesin || d.mockS != null));
     const exams = p.exams.slice().sort((a, b) => a.date.localeCompare(b.date));
     return MS().layout('high/consult', `<div class="hi">
-      <div class="page-head"><div><h1>대치동식 맞춤 컨설팅</h1><div class="sub">지금 단계 체크리스트 · 전형 적합도 진단 · 지원 전략 · 과목 보완 · 리포트</div></div></div>
+      <div class="page-head"><div><h1>1:1 대입 진단</h1><div class="sub">지금 단계 체크리스트 · 전형 적합도 진단 · 지원 전략 · 과목 보완 · 리포트</div></div></div>
       <div class="card st-card"><div class="card-head"><h2>📍 ${esc(s.title)}</h2><span class="xs muted">${kid.grade === 12 ? HA().examYear(kid) + '학년도' : GL(kid.grade)}</span></div>
         <div class="st-lefts">${s.left.map(([n, dt]) => { const k = dday(dt); return `<div class="st-left"><b>${k === 0 ? 'D-DAY' : k > 0 ? 'D-' + k : 'D+' + (-k)}</b><span>${esc(n)}<small>${md(dt)} (${DAYN[D(dt).getDay()]})</small></span></div>`; }).join('')}</div>
         <div class="small bold mt8">이 단계에서 꼭 할 것</div><ul class="st-do">${s.do.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
@@ -167,7 +167,7 @@
         <div class="row mt8"><button class="btn btn-sm" data-act="cnPlanStage">📅 이 단계 할 일을 플래너에 담기</button></div>
         <p class="xs muted mt8">${s.K.exact ? s.K.src + ' 기준' : '관례 기준 예상 일정'} · 수능 ${md(s.K.suneung)} · 성적 발표 ${md(s.K.score)} · 수시 발표 ~${md(s.K.susiAnnounce)} · 정시 접수 ${md(s.K.jsApply[0])}~${md(s.K.jsApply[1])} · 정시 발표 ~${md(s.K.jsAnnounce)}</p></div>
       ${kid.grade === 12 ? milestoneTable(s.K) : ''}
-      <div class="card mt12 cn-premium"><div class="card-head"><h2>🎓 대치동식 1:1 맞춤 컨설팅 리포트</h2><span class="badge b-orange">참고용 자가 진단</span></div>
+      <div class="card mt12 cn-premium"><div class="card-head"><h2>🎓 나만의 대입 전략 리포트</h2><span class="badge b-orange">참고용 자가 진단</span></div>
         ${ready ? `<div class="cn-sum"><div class="cn-type">${esc(d.type)}</div><div class="small">${d.fits.length ? `가장 맞는 전형: <b>${esc(d.fits[0].k)}</b> (${d.fits[0].s}점)` : ''}${d.realism ? ` · 목표 ${esc(p.tier)}권 ${d.realism === 'ok' ? '현실적' : d.realism === 'stretch' ? '도전권' : '격차 큼'}` : ''}</div></div>
           <div class="cn-fits">${d.fits.map(f => `<div class="cn-fit"><span>${esc(f.k)}</span>${bar(f.s)}<b>${f.s}</b></div>`).join('')}</div>
           <div class="row mt12" style="gap:8px;flex-wrap:wrap"><a class="btn btn-primary" href="#high/consult/report">리포트 전체 보기</a><a class="btn" href="#high/consult/profile">입력값 수정</a></div>`

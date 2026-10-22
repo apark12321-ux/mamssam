@@ -9,7 +9,10 @@
   'use strict';
   const app = () => document.getElementById('app');
   const key = () => location.hash || '#home';
-  const headerH = () => { const h = document.querySelector('.topbar, .mtop, header'); return h && getComputedStyle(h).position.match(/fixed|sticky/) ? h.offsetHeight : 0; };
+  // 고정 머리글 높이: 모바일은 .topbar, 데스크톱은 상단으로 옮긴 .sidebar
+  const headerH = () => { let m = 0; document.querySelectorAll('.topbar, .sidebar, .mtop').forEach(h => { const cs = getComputedStyle(h); if (cs.display !== 'none' && /fixed|sticky/.test(cs.position) && h.getBoundingClientRect().top <= 1 && h.offsetWidth > innerWidth * 0.6) m = Math.max(m, h.offsetHeight); }); return m; };
+  const syncPad = () => { document.documentElement.style.scrollPaddingTop = (headerH() + 12) + 'px'; };
+  window.addEventListener('resize', syncPad);
   const bottomH = () => { const b = document.querySelector('.bottomnav'); return b && getComputedStyle(b).display !== 'none' ? b.offsetHeight : 0; };
 
   /* ---------- 1. 뒤로·앞으로 이동 시 위치 복원 ---------- */
@@ -25,6 +28,12 @@
     entered = true;
   });
 
+  // 지금 화면의 메뉴를 다시 누르면 맨 위로(앱 공통 관례)
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.nav a[href^="#"], .bottomnav a[href^="#"]'); if (!a) return;
+    if (a.getAttribute('href') === key() || (key() === '#home' && a.getAttribute('href') === '#home')) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  }, true);
+
   /* ---------- 2. 가로 줄: 선택 항목 가운데 ---------- */
   const ROW = '.scroll-x, .hi-sub, .sp-tabs, .week, .chips.scroll-x, .top-tabs, .lp-dots, .tu-list-tabs';
   const ACTIVE = '.on, .sel, .today, .cur, .current, [aria-current="true"], [aria-selected="true"]';
@@ -39,7 +48,7 @@
 
   /* ---------- 3. 목록 화면: 지금 할 곳으로 ---------- */
   // 우선순위대로. 화면 아래쪽(보이지 않는 곳)에 있을 때만 이동한다.
-  const FOCUS = ['.sp-lesson.cur', '.unit-card.current', '.tu-list .li[data-next]', '.hi-cal-r.now', '[data-scroll-default]'];
+  const FOCUS = ['.sp-lesson.cur', '.unit-card.current', '.tu-list .li[data-next]', '[data-scroll-default]'];
   function focusDefault(root) {
     if (window.scrollY > 40) return; // 사용자가 이미 움직였거나 복원된 경우
     for (const sel of FOCUS) {
@@ -97,7 +106,7 @@
   let entered = true, pend = false;
   function after() {
     const root = app(); if (!root) return;
-    centerRows(document);
+    syncPad(); centerRows(document);
     tutorFollow(root);
     if (entered) { entered = false; if (!cameBack) focusDefault(root); cameBack = false; }
     document.querySelectorAll('.modal-bg').forEach(onModal);
@@ -110,6 +119,6 @@
   s.textContent = `${ROW}{overscroll-behavior-x:contain;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
   .ux-drag{cursor:grabbing;scroll-behavior:auto!important;user-select:none}
   .modal-bg,.modal{overscroll-behavior:contain}
-  html{scroll-padding-top:72px;scroll-padding-bottom:84px}`;
+  html{scroll-padding-bottom:84px}`;
   document.head.appendChild(s);
 })();
