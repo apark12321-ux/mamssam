@@ -10,7 +10,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const today = () => (MS().today ? MS().today() : new Date().toISOString().slice(0, 10));
   const isElem = () => { try { const k = MS().st().kids.length && MS().kid(); return !!(k && k.grade <= 6); } catch (e) { return false; } };
-  const PRAISE = ['오늘도 최고야!', '끝까지 해낸 거 멋져!', '틀려도 괜찮아, 다시 보면 돼', '내일도 같이 하자', '사랑해 ♥'];
+  const STICK = [['👍', '잘했어'], ['⭐', '최고야'], ['❤️', '사랑해']];
 
   function fam() {
     const st = MS().st(), kid = MS().kid(); st.fam = st.fam || {};
@@ -55,7 +55,7 @@
       <div class="card-head"><h2>오늘의 엄마표 3단계</h2><span class="xs muted">${[s1, s2, s3].filter(Boolean).length}/3</span></div>
       ${d.brag && !s3 ? `<div class="fm-brag">${name}가 "오늘 공부 다 했어요!" 하고 알려 왔어요. 결과를 보고 칭찬해 주세요.</div>` : ''}
       <ol class="fm-steps">
-        ${step(1, s1, '함께 10분 · 개념 설명', '설명 대본을 보며 오늘 개념을 같이 읽어요', s1 ? '' : `<span class="fm-acts"><a class="btn btn-sm btn-primary" href="${learnHref}">대본 보기</a><button class="btn btn-sm" data-act="fmTogether">했어요</button></span>`)}
+        ${step(1, s1, '함께 10분 · 개념 설명', '한 장 개념 카드를 보여 주며 설명해요', s1 ? '' : `<span class="fm-acts"><button class="btn btn-sm btn-primary" data-act="fmCard" data-u="${u.id}" data-l="${u.l || 0}">개념 카드</button><button class="btn btn-sm" data-act="fmLive" data-u="${u.id}" data-l="${u.l || 0}">아이 폰과 함께 보기</button><button class="btn btn-sm" data-act="fmTogether">했어요</button></span>`)}
         ${step(2, s2, `혼자 15분 · ${name} 차례`, s2 ? `문제 ${tot.n}개 중 ${tot.ok}개 맞혔어요` : '휴대폰을 건네면 영상 → 문제 순서로 안내해요', s2 ? '' : `<span class="fm-acts"><button class="btn btn-sm btn-primary" data-act="fmHandoff">아이에게 넘기기</button></span>`)}
         ${step(3, s3, '확인 3분 · 칭찬하기', s2 ? (tot.wrong.length ? `틀린 문제 ${tot.wrong.length}개를 같이 보고 칭찬 한마디` : '모두 맞혔어요. 칭찬 한마디만 보내 주세요') : '아이가 끝내면 여기서 결과를 볼 수 있어요', '')}
       </ol>
@@ -63,7 +63,7 @@
         <div class="fm-score"><b>${tot.n ? Math.round(tot.ok / tot.n * 100) : 0}<small>점</small></b><span>${tot.ok}/${tot.n} 정답</span></div>
         ${tot.wrong.length ? `<div class="fm-wrong"><div class="xs muted">같이 다시 볼 문제</div><ul>${tot.wrong.slice(0, 4).map(p => `<li>${esc(qText(p) || '문제')}</li>`).join('')}</ul></div>` : '<div class="fm-wrong"><b>모두 맞혔어요</b></div>'}
       </div>
-      <div class="fm-praise"><div class="xs muted">칭찬 보내기 · 아이 화면에 바로 떠요</div><div class="chips">${PRAISE.map(t => `<button class="chip" data-act="fmPraise" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div></div>` : ''}
+      <div class="fm-praise" data-keep-emoji><div class="xs muted">칭찬 스티커 · 한 번 누르면 아이 화면에 떠요</div><div class="fm-stk">${STICK.map(([e, t]) => `<button class="fm-st" data-act="fmPraise" data-t="${e} ${t}"><span>${e}</span>${t}</button>`).join('')}</div></div>` : ''}
     </div>`;
   }
 
@@ -76,19 +76,18 @@
     const steps = [
       ['영상 보기', '오늘 배울 걸 먼저 봐요', '#kid/v', watched, '🎬'],
       ['문제 풀기', sh ? `${sh.problems.length}문제 · 맞히면 코인!` : solved ? '다 풀었어요!' : '문제를 준비하고 있어요', sh ? `#kid/s/${sh.id}` : '#kid', solved, '✏️'],
-      ['엄마에게 자랑하기', '다 하면 엄마한테 알려요', '', !!d.brag, '💌']
     ];
+    if (solved && !d.brag) { d.brag = true; save(); } // 문제를 다 풀면 자동으로 엄마에게 알림
     const cur = steps.findIndex(s => !s[3]);
     return `<div class="kid-card kp-card" data-keep-emoji>
-      ${unread.length ? `<div class="kp-praise"><span>엄마</span><b>${esc(unread[unread.length - 1].t)}</b><button data-act="kpSeen" aria-label="확인">확인</button></div>` : ''}
+      ${unread.length ? `<div class="kp-praise"><span class="kp-stk">${esc(unread[unread.length - 1].t.split(' ')[0])}</span><div><small>엄마가 보낸 스티커</small><b>${esc(unread[unread.length - 1].t.split(' ').slice(1).join(' '))}</b></div><button data-act="kpSeen" aria-label="확인">고마워요</button></div>` : ''}
       <div class="kp-head"><h2>${name}의 오늘의 길</h2><button class="kp-say" data-act="kpSay" aria-label="읽어 주기">🔊 읽어 줘</button></div>
       <ol class="kp-steps">${steps.map(([t, s, href, ok, ic], i) => {
         const inner = `<span class="kp-ic">${ok ? '⭐' : ic}</span><span class="kp-t"><b>${i + 1}. ${t}</b><small>${s}</small></span><span class="kp-go">${ok ? '완료' : i === cur ? '지금!' : ''}</span>`;
         const cls = `kp-step ${ok ? 'ok' : ''} ${i === cur ? 'cur' : ''}`;
-        if (i === 2) return `<li><button class="${cls}" data-act="kpBrag" ${cur !== 2 && !ok ? 'disabled' : ''}>${inner}</button></li>`;
         return `<li><a class="${cls}" href="${href}">${inner}</a></li>`;
       }).join('')}</ol>
-      ${cur === -1 ? '<div class="kp-done">오늘 할 일을 모두 했어요! 엄마가 칭찬을 보내 줄 거예요.</div>' : ''}
+      ${cur === -1 ? `<div class="kp-done">다 했어요! 엄마에게 알렸어요.<small>받은 스티커 ${f.praise.length}개</small></div>` : ''}
     </div>`;
   }
 
@@ -126,14 +125,41 @@
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-act]'); if (!b) return; const act = b.dataset.act; const H = {
       fmTogether() { fam().days[today()].together = true; save(); MS().render(); MS().toast('함께 공부 완료!'); },
-      fmHandoff() { ensureSheet(); fam().days[today()].handoff = true; save(); const k = document.querySelector('[data-act="enterKid"]'); if (k) k.click(); else MS().go('kid'); },
-      fmPraise() { const f = fam(); f.praise.push({ t: b.dataset.t, at: Date.now(), seen: false }); f.days[today()].checked = true; save(); MS().render(); MS().toast('칭찬을 보냈어요. 아이 화면에 떠요'); },
+      fmHandoff() { ensureSheet(); fam().days[today()].handoff = true; save(); handoff(); },
+      fmCard() { if (window.InfoCard) InfoCard.open(b.dataset.u, b.dataset.l); },
+      fmLive() { if (window.LiveApp) LiveApp.host(b.dataset.u, b.dataset.l); },
+      fmPraise() { const f = fam(); f.praise.push({ t: b.dataset.t, at: Date.now(), seen: false }); f.days[today()].checked = true; save(); if (window.LiveApp) LiveApp.sticker(b.dataset.t); MS().render(); MS().toast('스티커를 보냈어요'); },
       kpSeen() { fam().praise.forEach(p => p.seen = true); save(); MS().render(); },
       kpSay() { sayPath(); },
-      kpBrag() { if (b.disabled) return; fam().days[today()].brag = true; save(); MS().render(); MS().toast('엄마에게 알렸어요! ⭐'); }
     };
     if (H[act]) { e.preventDefault(); H[act](); }
   });
 
-  window.FamilyApp = { momCard, kidPath, ensureSheet };
+  /* ---------- 한 대로 쓸 때: 넘기기 화면 · 꾹 눌러 돌아오기 ---------- */
+  let passKid = false, passMom = false;
+  function handoff() {
+    const kid = MS().kid(), name = esc(MS().kname ? MS().kname(kid) : kid.name);
+    const o = document.createElement('div'); o.className = 'sw-over'; o.setAttribute('data-keep-emoji', '');
+    o.innerHTML = `<div class="sw-box"><div class="sw-big">🙌</div><h2>${name}야, 이제 네 차례!</h2><p>엄마가 휴대폰을 건네줬어요</p><button class="sw-go">시작하기</button><button class="sw-back">아직 엄마가 볼게요</button></div>`;
+    document.body.appendChild(o);
+    o.querySelector('.sw-go').addEventListener('click', () => { o.remove(); passKid = true; const k = document.querySelector('[data-act="enterKid"]'); if (k) k.click(); else MS().go('kid'); passKid = false; });
+    o.querySelector('.sw-back').addEventListener('click', () => o.remove());
+  }
+  function holdToMom(btn) {
+    const o = document.createElement('div'); o.className = 'sw-over'; o.setAttribute('data-keep-emoji', '');
+    o.innerHTML = `<div class="sw-box"><h2>엄마 모드로 돌아가기</h2><p>엄마가 아래 버튼을 2초 동안 꾹 눌러 주세요</p><button class="sw-hold"><i></i><span>꾹 누르기</span></button><button class="sw-back">아이 화면 계속</button></div>`;
+    document.body.appendChild(o); const h = o.querySelector('.sw-hold'); let t = null;
+    const start = (e) => { e.preventDefault(); h.classList.add('on'); t = setTimeout(() => { o.remove(); passMom = true; btn.click(); passMom = false; }, 2000); };
+    const stop = () => { h.classList.remove('on'); clearTimeout(t); };
+    h.addEventListener('pointerdown', start); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => h.addEventListener(ev, stop));
+    o.querySelector('.sw-back').addEventListener('click', () => o.remove());
+  }
+  // 초등에서 아이 모드 들어가기·나가기를 가로채 단순한 화면으로(비밀번호를 정한 집은 기존 비밀번호 확인 유지)
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-act="enterKid"], [data-act="exitKid"]'); if (!b || !isElem()) return;
+    if (b.dataset.act === 'enterKid' && !passKid) { e.preventDefault(); e.stopImmediatePropagation(); ensureSheet(); handoff(); }
+    else if (b.dataset.act === 'exitKid' && !passMom && !MS().st().pin) { e.preventDefault(); e.stopImmediatePropagation(); holdToMom(b); }
+  }, true);
+
+  window.FamilyApp = { momCard, kidPath, ensureSheet, handoff };
 })();
