@@ -19,6 +19,7 @@
     records: { name: '학습 기록 페이지', size: '카드형', where: '정답률·오답 노트를 보는 화면 — 학습지·문제집·학원 광고와 궁합' },
     high_top: { name: '고등 홈 상단 배너', size: '가로 전체 × 100', where: '수능 D-day·플래너를 매일 여는 고등 홈 상단 — 인강·교재·학원' },
     high_consult: { name: '대입 컨설팅 카드', size: '카드형 (제목·설명·버튼)', where: '고등 홈·컨설팅 페이지의 네이티브 카드 — 입시 컨설팅·학원·과외 플랫폼' },
+    splash: { name: '앱 첫 화면 하단', size: '가로 전체 × 100', where: '앱을 열 때마다 4~5초 보이는 첫 화면 아래 — 브랜드 인지 광고' },
     guide: { name: '학습 가이드 (검색 유입)', size: '본문 중간 + 하단', where: '구글·네이버 검색으로 들어오는 단원별 학습 가이드 페이지' }
   };
   const PAGES = { home: ['home_top', 'home_mid'], school: ['school'], records: ['records'], high: ['high_top', 'high_consult'] };
@@ -85,6 +86,8 @@
       anchor.insertAdjacentElement('afterend', el); render(el, slot);
     });
   }
+  // 첫 화면 하단: 실제 광고(직접 계약)가 있을 때만 채움. 없으면 빈 채로 둔다
+  (function splashAd() { const el = document.getElementById('splashAd'); if (!el) return; loadDirect().then(list => { const mine = (list || []).filter(a => a.slot === 'splash'); if (!mine.length || !el.isConnected) return; const ad = pick(mine); el.innerHTML = directHTML(ad, 'splash'); hit(ad, 'splash', 'imp'); }).catch(() => {}); })();
   document.addEventListener('click', e => { const a = e.target.closest('.ad-direct'); if (a) hit({ id: +a.dataset.ad }, a.dataset.slot, 'clk'); });
 
   /* ---------- 광고 안내 페이지 (#ads) ---------- */

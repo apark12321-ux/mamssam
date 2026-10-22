@@ -8,26 +8,100 @@
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "any",
   "background_color": "#1452F0",
   "theme_color": "#1452F0",
-  "categories": ["education", "productivity"],
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "prefer_related_applications": false,
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "screenshots": [
-    { "src": "/icons/shot-picker.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "꼭 필요한 개념만 콕 집어 주는 쌤" },
-    { "src": "/icons/shot-high.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "1:1 온라인 개념 과외" },
-    { "src": "/icons/shot-wide.jpg", "sizes": "1280x800", "type": "image/jpeg", "form_factor": "wide", "label": "수능·대입 족집게" }
+    {
+      "src": "/icons/shot-picker.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "꼭 필요한 개념만 콕 집어 주는 쌤"
+    },
+    {
+      "src": "/icons/shot-high.jpg",
+      "sizes": "780x1688",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "1:1 온라인 개념 과외"
+    },
+    {
+      "src": "/icons/shot-wide.jpg",
+      "sizes": "1280x800",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "수능·대입 족집게"
+    }
   ],
   "shortcuts": [
-    { "name": "1:1 개념 과외", "short_name": "개념 과외", "url": "/#high/tutor", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "대입 족집게", "short_name": "대입 족집게", "url": "/#high/ipsi", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "우리 학교", "short_name": "우리 학교", "url": "/#school", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "1:1 개념 과외",
+      "short_name": "개념 과외",
+      "url": "/#high/tutor",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "대입 족집게",
+      "short_name": "대입 족집게",
+      "url": "/#high/ipsi",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "우리 학교",
+      "short_name": "우리 학교",
+      "url": "/#school",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
