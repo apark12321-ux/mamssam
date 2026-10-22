@@ -1,4 +1,4 @@
-/* 올배움 — 광고 지면 · 인바운드 광고 문의 (부모 화면에만 노출, 아이 학습 화면은 광고 없음) */
+/* 쌤픽 — 광고 지면 · 인바운드 광고 문의 (부모 화면에만 노출, 아이 학습 화면은 광고 없음) */
 (function () {
   /* ===== 설정: ID를 채우면 자동으로 해당 네트워크 광고가 붙습니다 ===== */
   const CFG = {
@@ -90,7 +90,7 @@
   /* ---------- 광고 안내 페이지 (#ads) ---------- */
   function page() {
     const rows = Object.entries(SLOTS).map(([k, S]) => `<tr><td><b>${S.name}</b><br><span class="xs muted">${S.where}</span></td><td class="xs">${S.size}</td></tr>`).join('');
-    const html = `<div class="page-head"><div><h1>📣 올배움 광고 안내</h1><div class="sub">초등 학부모, 중학생, 수능·대입을 준비하는 고등학생과 학부모가 매일 여는 앱입니다.</div></div></div>
+    const html = `<div class="page-head"><div><h1>📣 쌤픽 광고 안내</h1><div class="sub">초등 학부모, 중학생, 수능·대입을 준비하는 고등학생과 학부모가 매일 여는 앱입니다.</div></div></div>
       <div class="grid g2">
         <div class="card"><h2>누가 보나요</h2><ul class="ad-ul">
           <li><b>초1~중3 학부모</b> — 아이 학년·과목·교과서 출판사를 등록하고 매일 수업 진도를 관리합니다.</li>
@@ -128,7 +128,7 @@
     const d = {}; new FormData(f).forEach((v, k) => d[k] = String(v).trim()); d.device = (localStorage.getItem('ms_dev') || '');
     sb('mamssam_ad_leads', { method: 'POST', body: JSON.stringify(d), prefer: 'return=minimal' }).then(() => {
       // 알림에는 개인정보(이메일·연락처·내용)를 담지 않고, 상세는 Supabase mamssam_ad_leads 에서 확인
-      try { if (CFG.ntfy) fetch(CFG.ntfy, { method: 'POST', headers: { Title: encodeURIComponent('올배움 광고 문의'), Priority: 'high', Tags: 'moneybag' }, body: `새 광고 문의가 들어왔어요 · 지면: ${d.slot || '-'} · 예산: ${d.budget || '-'}\nSupabase에서 확인하세요.` }).catch(() => { }); } catch (err) { }
+      try { if (CFG.ntfy) fetch(CFG.ntfy, { method: 'POST', headers: { Title: encodeURIComponent('쌤픽 광고 문의'), Priority: 'high', Tags: 'moneybag' }, body: `새 광고 문의가 들어왔어요 · 지면: ${d.slot || '-'} · 예산: ${d.budget || '-'}\nSupabase에서 확인하세요.` }).catch(() => { }); } catch (err) { }
       f.innerHTML = `<div class="empty"><div class="e-ico">✅</div><b>문의를 받았어요</b><p class="small muted mt8">${esc(d.email)}로 1~2일 안에 답변드릴게요. 감사합니다!</p></div>`;
     });
   });

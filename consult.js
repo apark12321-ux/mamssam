@@ -1,4 +1,4 @@
-/* 올배움 — 고등 맞춤 컨설팅: 대입 단계(수시·수능·정시) 판별, 전형 적합도 진단, 지원 전략, 과목 보완, 리포트 */
+/* 쌤픽 — 고등 맞춤 컨설팅: 대입 단계(수시·수능·정시) 판별, 전형 적합도 진단, 지원 전략, 과목 보완, 리포트 */
 (function () {
   'use strict';
   const MS = () => window.MS;
@@ -158,7 +158,7 @@
     const ready = !!(p.track && (p.naesin || d.mockS != null));
     const exams = p.exams.slice().sort((a, b) => a.date.localeCompare(b.date));
     return MS().layout('high/consult', `<div class="hi">
-      <div class="page-head"><div><h1>맞춤 컨설팅</h1><div class="sub">지금 단계 체크리스트 · 전형 적합도 진단 · 지원 전략 · 과목 보완 · 리포트</div></div></div>
+      <div class="page-head"><div><h1>대치동식 맞춤 컨설팅</h1><div class="sub">지금 단계 체크리스트 · 전형 적합도 진단 · 지원 전략 · 과목 보완 · 리포트</div></div></div>
       <div class="card st-card"><div class="card-head"><h2>📍 ${esc(s.title)}</h2><span class="xs muted">${kid.grade === 12 ? HA().examYear(kid) + '학년도' : GL(kid.grade)}</span></div>
         <div class="st-lefts">${s.left.map(([n, dt]) => { const k = dday(dt); return `<div class="st-left"><b>${k === 0 ? 'D-DAY' : k > 0 ? 'D-' + k : 'D+' + (-k)}</b><span>${esc(n)}<small>${md(dt)} (${DAYN[D(dt).getDay()]})</small></span></div>`; }).join('')}</div>
         <div class="small bold mt8">이 단계에서 꼭 할 것</div><ul class="st-do">${s.do.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
@@ -167,7 +167,7 @@
         <div class="row mt8"><button class="btn btn-sm" data-act="cnPlanStage">📅 이 단계 할 일을 플래너에 담기</button></div>
         <p class="xs muted mt8">${s.K.exact ? s.K.src + ' 기준' : '관례 기준 예상 일정'} · 수능 ${md(s.K.suneung)} · 성적 발표 ${md(s.K.score)} · 수시 발표 ~${md(s.K.susiAnnounce)} · 정시 접수 ${md(s.K.jsApply[0])}~${md(s.K.jsApply[1])} · 정시 발표 ~${md(s.K.jsAnnounce)}</p></div>
       ${kid.grade === 12 ? milestoneTable(s.K) : ''}
-      <div class="card mt12 cn-premium"><div class="card-head"><h2>🎓 프리미엄 맞춤 컨설팅 리포트</h2><span class="badge b-orange">참고용 자가 진단</span></div>
+      <div class="card mt12 cn-premium"><div class="card-head"><h2>🎓 대치동식 1:1 맞춤 컨설팅 리포트</h2><span class="badge b-orange">참고용 자가 진단</span></div>
         ${ready ? `<div class="cn-sum"><div class="cn-type">${esc(d.type)}</div><div class="small">${d.fits.length ? `가장 맞는 전형: <b>${esc(d.fits[0].k)}</b> (${d.fits[0].s}점)` : ''}${d.realism ? ` · 목표 ${esc(p.tier)}권 ${d.realism === 'ok' ? '현실적' : d.realism === 'stretch' ? '도전권' : '격차 큼'}` : ''}</div></div>
           <div class="cn-fits">${d.fits.map(f => `<div class="cn-fit"><span>${esc(f.k)}</span>${bar(f.s)}<b>${f.s}</b></div>`).join('')}</div>
           <div class="row mt12" style="gap:8px;flex-wrap:wrap"><a class="btn btn-primary" href="#high/consult/report">리포트 전체 보기</a><a class="btn" href="#high/consult/profile">입력값 수정</a></div>`
@@ -176,7 +176,7 @@
       <div class="hi-consult-anchor"></div>
       <div class="card mt12"><div class="card-head"><h2>컨설팅·학원 고르기 체크리스트</h2></div><ul class="warn-list">${['학원·교습소 등록번호가 있는지(학원법에 따라 유료 진학 상담도 등록 대상). 교육청 "학원 정보 공개"에서 조회 가능', '"합격 보장", "100% 합격" 같은 표현은 표시·광고법상 허위·과장 광고 소지. 이런 문구를 쓰는 곳은 피하기', '계약서에 환불 규정, 상담 횟수·시간, 담당자가 명시되어 있는지', '학생부 대필·허위 기재를 권하는 곳은 즉시 거절(입학 취소 사유)', '공공 상담(교육청 진로진학센터, 어디가 상담)을 먼저 받아 보고 비교하기'].map(t => `<li>${t}</li>`).join('')}</ul></div>
       <div class="card mt12"><div class="card-head"><h2>무료 공공 상담 · 공식 정보</h2></div><div class="list">${[['대입정보포털 어디가', 'https://www.adiga.kr', '대학별 전형·성적 산출·합격 사례 · 입학사정관 온라인 상담'], ['서울특별시교육청 진로진학정보센터', 'https://www.jinhak.or.kr', '대입 상담 예약, 설명회, 학력평가 자료'], ['한국대학교육협의회', 'https://www.kcue.or.kr', '대입전형 기본사항 · 수시·정시 일정 원문'], ['한국교육과정평가원 수능', 'https://www.suneung.re.kr', '시행 기본계획 · 성적 통지 · 기출'], ['한국장학재단', 'https://www.kosaf.go.kr', '국가장학금 1차 신청(11~12월) · 학자금']].map(([n, u, dsc]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🏛️</div><div class="li-main"><div class="li-t">${n}</div><div class="li-s">${dsc}</div></div><span class="muted">↗</span></a>`).join('')}</div><p class="xs muted mt8">우리 지역 교육청 진로진학센터는 각 시·도교육청 홈페이지의 '진로진학' 메뉴에서 찾을 수 있어요.</p></div>
-      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 올배움은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div></div>`);
+      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 쌤픽은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div></div>`);
   }
   function milestoneTable(K) {
     const rows = [['수시 원서접수', K.susiApply.join(' ~ ')], ['수능', K.suneung], ['수능 성적 통지', K.score], ['수시 전형 종료', K.susiEnd], ['수시 합격자 발표', '~ ' + K.susiAnnounce], ['수시 미등록 충원', K.susiExtra.join(' ~ ')], ['수시 충원 등록 마감', K.susiReg], ['정시 원서접수', K.jsApply.join(' ~ ')], ['정시 합격자 발표', '~ ' + K.jsAnnounce], ['정시 미등록 충원', K.jsExtra.join(' ~ ')]];
@@ -214,7 +214,7 @@
     const docs = kid.grade === 12 ? ['수시 지원 대학별 대학별고사 일정·장소·준비물(아래 일정표)', '수능 수험표·신분증, 시험장 동선', '수능 최저 충족 여부(가채점 뒤 재확인)', '정시 지원용: 성적표 표준점수·백분위·등급, 대학별 반영 비율 표', '수시 합격 시 등록 기한, 미등록 충원 연락처', '국가장학금 1차 신청(한국장학재단, 11~12월)'] : ['학생부 교과 성취도·세특 점검(학기 말 담임 상담)', '선택과목 계획(희망 학과 권장 과목 확인: 어디가·대학 입학처)', '모의고사 등급 추이 기록(3·6·9·11월)', '독서·탐구 기록 정리', '희망 대학 3곳 전형 구조 미리 보기(어디가)'];
     return MS().layout('high/consult', `<div class="hi cn-report">
       <div class="row between" style="margin-bottom:6px"><a class="btn btn-ghost btn-sm" href="#high/consult">← 맞춤 컨설팅</a><div class="row" style="gap:6px"><a class="btn btn-sm" href="#high/consult/profile">입력 수정</a><button class="btn btn-sm btn-primary" data-act="cnPrint">🖨 인쇄·PDF</button></div></div>
-      <div class="card cn-cover"><div class="xs" style="opacity:.8">올배움 프리미엄 맞춤 컨설팅 리포트 · ${ymd(today0())}</div><h1>${esc(kid.name)} · ${GL(kid.grade)} · ${esc(d.track)} 계열</h1><div class="cn-type-big">${esc(d.type)}</div><p>${typeDesc[d.type]}</p>${real ? `<p class="cn-real">${real}</p>` : ''}</div>
+      <div class="card cn-cover"><div class="xs" style="opacity:.8">쌤픽 프리미엄 맞춤 컨설팅 리포트 · ${ymd(today0())}</div><h1>${esc(kid.name)} · ${GL(kid.grade)} · ${esc(d.track)} 계열</h1><div class="cn-type-big">${esc(d.type)}</div><p>${typeDesc[d.type]}</p>${real ? `<p class="cn-real">${real}</p>` : ''}</div>
       <div class="card mt12"><div class="card-head"><h2>1. 전형 적합도</h2><span class="xs muted">100점 만점</span></div><div class="cn-fits">${d.fits.map(f => `<div class="cn-fit"><span>${esc(f.k)}</span>${bar(f.s, col[f.k])}<b>${f.s}</b><small>${esc(f.why)}</small></div>`).join('')}</div>
         <div class="grid g3 mt12 cn-tiles"><div class="tile"><div class="t-label">내신</div><div class="t-val">${p.naesin || '–'}<small>등급</small></div><div class="xs muted">${d.naeS != null ? d.naeS + '점' : '미입력'}</div></div><div class="tile"><div class="t-label">모의고사(계열 가중)</div><div class="t-val">${d.mockS != null ? d.mockS : '–'}<small>점</small></div><div class="xs muted">${d.trend ? (d.trend > 0 ? '▲ ' + d.trend + '등급 상승' : '▼ ' + (-d.trend) + '등급 하락') : '추이 없음'}</div></div><div class="tile"><div class="t-label">비교과</div><div class="t-val">${d.nonS}<small>점</small></div><div class="xs muted">세특·활동·독서·일관성</div></div></div>
         ${d.minOK != null ? `<p class="small mt8">수능 최저학력기준(상위권 기준 "2개 합 5" 수준) 충족 가능성: <b>${['어려움 — 최저 없는 전형 비중을 높이세요', '경계 — 주요 과목 1개만 올리면 충족', '여유 — 최저 있는 전형도 적극 지원'][d.minOK]}</b>. 대학별 실제 기준은 모집요강에서 확인.</p>` : ''}</div>
@@ -222,14 +222,14 @@
         <div class="cn-port"><div><div class="small bold">수시 6장 배분(권장)</div><div class="cn-cards">${Object.entries(d.port.susi).map(([k, n]) => `<div class="cn-cardn" style="--sc:${col[k]}"><b>${n}</b><span>${k}</span></div>`).join('')}</div><div class="xs muted mt4">상향 ${d.port.mix[0]} · 적정 ${d.port.mix[1]} · 안정 ${d.port.mix[2]}</div></div>
         <div><div class="small bold">정시 3장(가·나·다군)</div><div class="cn-cards">${['가', '나', '다'].map((g, i) => `<div class="cn-cardn" style="--sc:#1F2A44"><b>${g}</b><span>${d.port.js[i]}</span></div>`).join('')}</div><div class="xs muted mt4">군별 1회 · 수시 합격 시 지원 불가</div></div></div>
         ${d.port.notes.length ? `<ul class="st-do mt8">${d.port.notes.map(n => `<li>${n}</li>`).join('')}</ul>` : ''}
-        <p class="xs muted mt8">대학·학과는 어디가(adiga.kr)에서 "내 성적으로 지원 가능 대학"과 전년도 입시 결과를 확인해 채우세요. 올배움은 특정 대학을 추천하지 않습니다.</p></div>
+        <p class="xs muted mt8">대학·학과는 어디가(adiga.kr)에서 "내 성적으로 지원 가능 대학"과 전년도 입시 결과를 확인해 채우세요. 쌤픽은 특정 대학을 추천하지 않습니다.</p></div>
       <div class="card mt12"><div class="card-head"><h2>3. 과목 보완 우선순위</h2><span class="xs muted">목표 ${TARGET[p.tier] || '현재-1'}등급 기준</span></div>
         ${d.prio.length ? `<ol class="steps">${d.prio.slice(0, 5).map(x => `<li><span><b>${x.n}</b> ${x.g}등급${x.gap ? ` → 목표까지 ${x.gap}등급` : ' · 목표 도달'} <small class="muted">(계열 비중 ${Math.round(x.w * 100)}%)</small>${x.gap ? `<br><small>${esc(((HA().SUBJ_H || []).find(s => s.k === (x.k === 'tam' ? 'sci' : x.k)) || { pts: [''] }).pts[0])}</small>` : ''}</span></li>`).join('')}</ol>` : '<p class="small muted">모의고사 등급을 입력하면 우선순위가 나옵니다.</p>'}</div>
       <div class="card mt12"><div class="card-head"><h2>4. 지금 단계 액션 플랜 · ${esc(s.title)}</h2><button class="btn btn-sm" data-act="cnPlanAll">📅 플래너에 담기</button></div><ul class="st-do">${act.map(x => `<li>${esc(x.title)}</li>`).join('')}</ul></div>
       <div class="card mt12"><div class="card-head"><h2>5. 체크리스트</h2></div><ul class="warn-list">${docs.map(t => `<li>${t}</li>`).join('')}</ul>${kid.grade === 12 ? `<div class="small bold mt12">핵심 일정(${K.exact ? '확정' : '예상'})</div><p class="small">수능 ${K.suneung} · 성적 통지 ${K.score} · 수시 합격 발표 ~${K.susiAnnounce} · 충원 ${K.susiExtra.join('~')} · 정시 접수 ${K.jsApply.join('~')} · 정시 발표 ~${K.jsAnnounce} · 정시 충원 ${K.jsExtra.join('~')}</p>` : ''}</div>
       <div class="card mt12"><div class="card-head"><h2>6. 면접·논술 대비 포인트</h2></div><ul class="st-do">${(p.interview < 2 ? ['면접: 학생부 세특·활동에서 "왜 했는지, 무엇을 배웠는지, 다음엔 무엇을 할지" 3단 답변을 항목마다 준비', '면접: 지원 학과의 기초 개념 질문(교과 심화) 10개 예상, 1분 자기소개 암기 금지·키워드만'] : ['면접: 모의 면접 녹화 후 말 속도·시선·답변 길이(40~60초) 점검']).concat(p.essay ? ['논술: 지원 대학 기출 3년치를 시간 재고 풀고, 대학 발표 모범답안의 "채점 기준"을 역으로 정리'] : ['논술 전형을 쓸 계획이면 지금이라도 대학 기출 1회분으로 적성 확인']).map(t => `<li>${t}</li>`).join('')}</ul></div>
       <div class="card mt12"><div class="card-head"><h2>7. 공식 자료</h2></div><div class="row" style="gap:8px;flex-wrap:wrap">${[['어디가', 'https://www.adiga.kr'], ['대교협', 'https://www.kcue.or.kr'], ['평가원 수능', 'https://www.suneung.re.kr'], ['EBSi', 'https://www.ebsi.co.kr'], ['서울진로진학정보센터', 'https://www.jinhak.or.kr'], ['한국장학재단', 'https://www.kosaf.go.kr'], ['학교알리미', 'https://www.schoolinfo.go.kr'], ['나이스 대국민서비스', 'https://www.neis.go.kr']].map(([n, u]) => `<a class="btn btn-sm" href="${u}" target="_blank" rel="noopener">${n} ↗</a>`).join('')}</div></div>
-      <p class="xs muted mt12 cn-disc">이 리포트는 올배움이 공개된 대입 제도 정보와 사용자가 입력한 성적·활동 수준을 바탕으로 계산한 참고용 자가 진단입니다. 특정 대학·학과의 합격 가능성을 보장하거나 예측하지 않으며, 대학별 반영 방법·수능 최저·전형 일정은 각 대학 모집요강과 대교협 기본사항이 우선합니다. 유료 입시 상담은 학원법상 등록 기관인지 확인하세요.</p></div>`);
+      <p class="xs muted mt12 cn-disc">이 리포트는 쌤픽이 공개된 대입 제도 정보와 사용자가 입력한 성적·활동 수준을 바탕으로 계산한 참고용 자가 진단입니다. 특정 대학·학과의 합격 가능성을 보장하거나 예측하지 않으며, 대학별 반영 방법·수능 최저·전형 일정은 각 대학 모집요강과 대교협 기본사항이 우선합니다. 유료 입시 상담은 학원법상 등록 기관인지 확인하세요.</p></div>`);
   }
 
   /* ---------- 입력 모달 ---------- */

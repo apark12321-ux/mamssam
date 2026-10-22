@@ -1,4 +1,4 @@
-/* 올배움 — 전과목 학습 (과목 허브 · 단원 · 학습 플레이어) */
+/* 쌤픽 — 전과목 학습 (과목 허브 · 단원 · 학습 플레이어) */
 (function () {
   'use strict';
   window.GL = (g) => g > 9 ? `고등학교 ${g - 9}학년` : g > 6 ? `중학교 ${g - 6}학년` : `초등 ${g}학년`;
@@ -184,7 +184,7 @@
       return `<a class="card unit-card sp-unit" href="#study/u/${u.id}" style="--sc:${S.c}"><div class="u-top"><div class="u-ico">${u.icon || S.ic}</div><div style="flex:1;min-width:0"><div class="u-no">${u.sem}학기 ${u.no}단원</div><div class="u-title">${esc(u.title)}</div></div></div><div class="progress"><i style="width:${pct(s.done, s.total)}%;background:${S.c}"></i></div><div class="row between xs muted"><span>차시 ${s.done}/${s.total}</span><span>${s.rate != null ? `정답률 ${s.rate}%` : `영상 ${vlist(u.id).length}개`}</span></div></a>`;
     }).join('') : `<div class="card" style="grid-column:1/-1"><div class="empty"><div class="e-ico">${S.ic}</div>${GS(g)} ${sem}학기 ${S.n} 단원이 없어요.</div></div>`;
     return MS().layout('study', `
-      <div class="page-head"><div><h1>과목별 학습</h1><div class="sub">${isStu() ? '단원 개념 → 영상 → 스스로 정리 → 확인 문제 순서로 혼자 공부해요.' : '2022 개정 교육과정 · 단원 개념 → 영상 → 확인 문제를 차시별로 이어서 공부해요.'}</div></div></div>
+      <div class="page-head"><div><h1>과목별 개념 정리</h1><div class="sub">${isStu() ? '단원 개념 → 영상 → 스스로 정리 → 확인 문제 순서로 혼자 공부해요.' : '2022 개정 교육과정 · 단원 개념 → 영상 → 확인 문제를 차시별로 이어서 공부해요.'}</div></div></div>
       ${subjTabs(k, kid.grade, 'study')}
       ${hero}
       <div class="row sp-filter"><div class="chips">${gs.map(x => `<button class="chip ${x === g ? 'on' : ''}" data-sa="sg" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-sa="ss" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-sa="ss" data-s="2">2학기</button></div></div>
@@ -702,10 +702,10 @@
       field.style.display = hs ? 'none' : '';
       const lab = (sel, a, b) => { const el = f.querySelector(sel); const l = el && el.closest('.field') && el.closest('.field').querySelector('label'); if (l) l.firstChild.textContent = stu ? a : b; };
       lab('input[name=name]', '이름', '아이 이름 또는 애칭');
-      lab('#obDays', '공부 요일', '엄마표 수업 요일');
-      lab('#obMin', '하루 공부 시간', '하루 수업 시간');
+      lab('#obDays', '공부 요일', '엄마표 개념 과외 요일');
+      lab('#obMin', '하루 공부 시간', '하루 과외 시간');
       const h = f.querySelector('h2'); if (h && !kid) h.textContent = hs ? '학생 정보를 입력해 주세요' : stu ? '나의 정보를 입력해 주세요' : '아이 정보를 알려 주세요';
-      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = hs ? '수능까지, 흔들리지 않게<br>한 곳에서 관리해요' : stu ? '중학생은 혼자서도<br>충분히 할 수 있어요' : lh.dataset.o; }
+      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = hs ? '개념은 과외처럼,<br>입시는 족집게처럼' : stu ? '개념을 정리하고<br>스스로 확인하는 공부' : lh.dataset.o; }
       const uSel = document.getElementById('obUnit');
       if (uSel && stu) { const m = (MS() ? MS().units : []).filter(u => u.grade === 6); const fb = (kid && U(kid.unitId) && U(kid.unitId).grade <= 6 ? U(kid.unitId) : m[m.length - 1]); if (fb) uSel.innerHTML = `<option value="${fb.id}" selected>${fb.id}</option>`; }
     };

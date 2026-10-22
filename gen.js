@@ -1,4 +1,4 @@
-/* 올배움 — 단원별 문제 자동 생성기 */
+/* 쌤픽 — 단원별 문제 자동 생성기 */
 (function () {
   const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
