@@ -73,6 +73,7 @@
   /* ---------- 오늘 할 일 3가지 ---------- */
   function top3(kid) {
     const h = store(); const out = [];
+    { const sd = ymd(HA().suneungDate(new Date(new Date().getFullYear(), 0, 1))); const t = today(); const end = new Date(sd); end.setDate(end.getDate() + 22); if (kid.grade === 12 && t >= sd && t <= ymd(end) && !(h.gc && h.gc.g && h.gc.g.kor)) out.push(['📝', '가채점하고 수능 최저 충족 확인', 'href', '#high/gachae', '수능 직후 가장 먼저']); }
     if (!daySec(h, today()) && !h.timer.run) out.push(['⏱', '공부 타이머 켜고 오늘 첫 공부 시작', 'act', 'edStart', '30초']);
     if (window.ConsultApp) { const s = ConsultApp.stage(kid); if (s && s.do && s.do.length) { const act = s.do.find(t => !/마감|끝났|전부$/.test(t)) || s.do[0]; out.push(['📍', act, 'href', '#high/consult', '지금 단계 · ' + s.title]); } }
     const plan = h.plan.filter(p => p.date === today() && !p.done)[0]; if (plan) out.push(['📅', plan.title, 'href', '#high/plan', '오늘 계획']);
