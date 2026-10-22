@@ -65,7 +65,7 @@
     const field = document.createElement('div'); field.className = 'field ob-school';
     const draw = () => {
       field.innerHTML = `<label>학교 <span class="xs muted">(선택 · 급식·학사일정·시간표·우리 학교 출판사를 보여 드려요)</span></label>
-        ${sel ? `<div class="sch-pick"><span class="sch-ic">🏫</span><span class="sch-t"><b>${esc(sel.name)}</b><small>${esc(sel.addr || sel.region)}</small></span><span class="row" style="gap:6px;align-items:center"><input class="input sch-cls" type="number" min="1" max="30" inputmode="numeric" placeholder="반" value="${esc(window._obSchool.cls)}" style="width:64px"><span class="small">반</span><button type="button" class="btn btn-sm" data-sch="clear">바꾸기</button></span></div><div class="sch-pubnote xs muted mt8" id="schPubNote"></div>`
+        ${sel ? `<div class="sch-pick"><span class="sch-ic">🏫</span><span class="sch-t"><b>${esc(sel.name)}</b><small>${esc(sel.addr || sel.region)}</small></span><span class="row" style="gap:6px;align-items:center"><select class="input sch-cls" style="width:76px"><option value="">반</option>${Array.from({ length: 20 }, (_, i) => i + 1).map(n => `<option value="${n}" ${String(window._obSchool.cls) === String(n) ? 'selected' : ''}>${n}</option>`).join('')}</select><span class="small">반</span><button type="button" class="btn btn-sm" data-sch="clear">바꾸기</button></span></div><div class="sch-pubnote xs muted mt8" id="schPubNote"></div>`
           : `<div class="sch-search"><input class="input" id="schQ" placeholder="학교 이름 검색 (예: 대치초, 서초중, 대광여고)" autocomplete="off"><div class="sch-list" id="schList"></div></div>`}`;
     };
     draw();

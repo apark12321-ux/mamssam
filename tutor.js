@@ -225,12 +225,13 @@
   function list() {
     const h = store(); const st = MS().st(); const open = st._tuS || 'all';
     const rows = C.filter(c => open === 'all' || c.s === open);
+    const nxId = (rows.find(c => !(h.tutor[c.id] && h.tutor[c.id].ok)) || {}).id;
     return layout('high/tutor', `
       <div class="page-head"><div><h1>1:1 온라인 개념 과외</h1><div class="sub">수능에 꼭 나오는 개념만 골라, 과외 선생님처럼 한 단계씩. 개념 정리 → 족집게 → 함정 → 확인 문제</div></div></div>
       <div class="card tu-intro"><div class="tu-prog"><b>${doneN()}</b>/${C.length} 개념 완료</div><div class="tu-bar"><i style="width:${Math.round(doneN() / C.length * 100)}%"></i></div>
         <p class="xs muted mt8">오늘의 과외는 최근 모의고사에서 등급이 가장 낮은 과목부터 추천해요. 틀린 개념은 3일 뒤 복습 일정이 플래너에 자동으로 들어갑니다.</p></div>
       <div class="chips scroll-x hi-sub mt12"><button class="chip ${open === 'all' ? 'on' : ''}" data-act="tuS" data-k="all">전체 ${doneN()}/${C.length}</button>${SUBJ.map(s => `<button class="chip ${open === s.k ? 'on' : ''}" data-act="tuS" data-k="${s.k}" style="--sc:${s.c}">${s.ic} ${s.n} <span class="xs">${doneN(s.k)}/${C.filter(c => c.s === s.k).length}</span></button>`).join('')}</div>
-      <div class="list tu-list">${rows.map(c => { const r = h.tutor[c.id]; return `<a class="li" href="#high/tutor/${c.id}" style="color:inherit"><div class="li-ico" style="background:${S(c.s).c}1a">${r && r.ok ? '✅' : r ? '🔁' : S(c.s).ic}</div><div class="li-main"><div class="li-t">${esc(c.t)} ${c.hot ? '<span class="tu-hot">빈출</span>' : ''}</div><div class="li-s">${S(c.s).n} · ${r && r.ok ? '완료 ' + r.date.slice(5).replace('-', '/') : r ? '다시 풀기' : '3분 과외'}</div></div><span class="muted">›</span></a>`; }).join('')}</div>
+      <div class="list tu-list">${rows.map(c => { const r = h.tutor[c.id]; return `<a class="li" href="#high/tutor/${c.id}" style="color:inherit" ${c.id === nxId ? 'data-next="1"' : ''}><div class="li-ico" style="background:${S(c.s).c}1a">${r && r.ok ? '✅' : r ? '🔁' : S(c.s).ic}</div><div class="li-main"><div class="li-t">${esc(c.t)} ${c.hot ? '<span class="tu-hot">빈출</span>' : ''}</div><div class="li-s">${S(c.s).n} · ${r && r.ok ? '완료 ' + r.date.slice(5).replace('-', '/') : r ? '다시 풀기' : '3분 과외'}</div></div><span class="muted">›</span></a>`; }).join('')}</div>
       <p class="xs muted mt12">개념 정리·문제·해설은 쌤픽이 직접 쓴 학습 자료입니다. 더 깊은 강의는 <a href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 무료 강의</a>, 질문은 EBSi "선생님께 묻기"를 이용하세요.</p>`);
   }
 
@@ -331,12 +332,12 @@
         <div class="tu-min-r ${r.ok === true ? 'ok' : r.ok === false ? 'no' : ''}">${r.ok == null ? r.msg : `<b>${r.ok ? '충족' : '미충족'}</b> · ${r.best.map(a => `${a[0]} ${a[1]}`).join(' + ')} = ${r.sum} (기준 ${h.min.n}합 ${h.min.sum})${!r.hisOK ? ' · 한국사 기준 미달' : ''}${r.ok ? (r.margin >= 1 ? ` · 여유 ${r.margin}등급` : ' · 경계선, 한 영역만 흔들려도 미충족') : ` · ${-r.margin}등급 부족`}`}</div>
         <p class="xs muted mt8">대학마다 필수 영역(예: 수학 포함), 탐구 계산 방식이 다릅니다. 지원 대학 모집요강의 최저 기준으로 다시 확인하세요.</p></div>
       <div class="card mt12"><div class="card-head"><h2>🎤 면접 족집게 · 예상 질문 만들기</h2></div>
-        <div class="form-grid"><div class="field"><label>면접 유형</label>${'<select class="input" data-act="tuIvType">' + [['doc', '서류 기반(학생부 확인)'], ['text', '제시문 기반'], ['mmi', '의약 계열 MMI']].map(([v, l]) => `<option value="${v}" ${iv.type === v ? 'selected' : ''}>${l}</option>`).join('') + '</select>'}</div><div class="field"><label>세특·활동 키워드 (쉼표로 구분)</label><input class="input" data-act="tuIvKw" maxlength="80" placeholder="예: 미생물 배양 실험, 기후 데이터 분석" value="${esc(iv.kw)}"></div></div>
+        <div class="form-grid"><div class="field"><label>면접 유형</label>${'<select class="input" data-act="tuIvType">' + [['doc', '서류 기반(학생부 확인)'], ['text', '제시문 기반'], ['mmi', '의약 계열 MMI']].map(([v, l]) => `<option value="${v}" ${iv.type === v ? 'selected' : ''}>${l}</option>`).join('') + '</select>'}</div><div class="field"><label>세특·활동 키워드 (쉼표로 구분)</label><input class="input" data-act="tuIvKw" maxlength="80" placeholder="입력하거나 아래에서 고르기" data-suggest="ivkw" data-chips-mode="append" data-chips="탐구 보고서|실험 설계|데이터 분석|독서 토론|동아리 프로젝트|진로 탐색" value="${esc(iv.kw)}"></div></div>
         <ol class="tu-ivq">${qs.map(q => `<li>${esc(q)}</li>`).join('')}</ol>
         <div class="tu-frame"><b>1분 답변 틀</b> · 결론 먼저(10초) → 근거·경험(35초) → 배운 점과 학과 연결(15초). 말끝은 "~했습니다"로 또렷하게.</div>
         <div class="row mt8" style="gap:8px;flex-wrap:wrap"><button class="btn btn-sm btn-primary" data-act="tuIvPlan">📅 매일 3문항 연습을 플래너에</button></div></div>
       <div class="card mt12"><div class="card-head"><h2>🎯 정시 3장 배치 · 상향·적정·안정</h2></div>
-        <div class="tu-jeong">${['가', '나', '다'].map((n, i) => `<div class="tu-j"><b>${n}군</b><input class="input" data-act="tuJ" data-i="${i}" data-f="u" maxlength="30" placeholder="대학·학과" value="${esc(J[i].u || '')}"><select class="input" data-act="tuJ" data-i="${i}" data-f="v">${[['', '판정'], ['up', '상향'], ['fit', '적정'], ['safe', '안정']].map(([v, l]) => `<option value="${v}" ${J[i].v === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
+        <div class="tu-jeong">${['가', '나', '다'].map((n, i) => `<div class="tu-j"><b>${n}군</b><input class="input" data-act="tuJ" data-i="${i}" data-f="u" maxlength="30" placeholder="대학 입력 후 선택" data-suggest="univ" value="${esc(J[i].u || '')}"><select class="input" data-act="tuJ" data-i="${i}" data-f="v">${[['', '판정'], ['up', '상향'], ['fit', '적정'], ['safe', '안정']].map(([v, l]) => `<option value="${v}" ${J[i].v === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`).join('')}</div>
         <div class="tu-jw">${jWarn}</div>
         <ul class="warn-list mt8">${['서울 주요 대학은 가·나군에 몰려 있고, 다군은 모집 대학이 적어 경쟁률과 추가 합격 규모가 모두 크다.', '같은 점수라도 대학별 반영 비율(국·수·탐 비중, 영어 환산)에 따라 유불리가 바뀐다. 내 점수가 가장 높게 환산되는 대학이 "적정"이다.', '판정은 입시 기관 모의 지원 결과를 2곳 이상 비교해서 정한다. 한 곳만 믿지 않는다.'].map(t => `<li>${t}</li>`).join('')}</ul></div>
       <div class="hi-consult-anchor"></div>

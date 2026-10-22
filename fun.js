@@ -236,7 +236,7 @@
   });
 
   /* 같은 화면 안에서 탭·과목·학기만 바꿀 때는 스크롤 위치 유지 (페이지가 바뀔 때만 맨 위로) */
-  window.MSpk = (a) => { a = a || []; const r = a[0] || 'home'; if (r === 'study') return a[1] === 'u' ? 'study/u/' + a[2] : a[1] === 'top' ? 'study/top' : 'study'; if (r === 'videos') return 'videos'; if (r === 'learn' || r === 'lesson' || r === 'sheet' || r === 'kid') return a.join('/'); return r; };
+  window.MSpk = (a) => { a = a || []; const r = a[0] || 'home'; if (r === 'study') return a[1] === 'u' ? 'study/u/' + a[2] : a[1] === 'top' ? 'study/top' : 'study'; if (r === 'videos') return 'videos'; if (r === 'high') return a.slice(0, 3).join('/'); if (r === 'learn' || r === 'lesson' || r === 'sheet' || r === 'kid') return a.join('/'); return r; };
   window.__pk = window.MSpk(location.hash.replace(/^#/, '').split('?')[0].split('/'));
   const GONE = /^#(books|contents|scraps)(\/|\?|$)/;
   function sweep() { if (GONE.test(location.hash)) location.replace('#home'); }
