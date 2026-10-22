@@ -148,7 +148,7 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '공부 타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
+  const NAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '공부 타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/gachae', '📝', '가채점'], ['high/chance', '📊', '합격 가늠'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
   const BNAV = [['home', '🏠', '홈'], ['high/timer', '⏱', '타이머'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/ipsi', '📌', '대입 족집게']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
@@ -260,10 +260,10 @@
   }
   function page(a) {
     if (!isHigh()) return home();
-    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'timer': return window.EdgeApp ? EdgeApp.timerPage() : home(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
+    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'gachae': return window.ScoreApp ? ScoreApp.gcPage() : home(); case 'chance': return window.ScoreApp ? ScoreApp.chancePage() : home(); case 'timer': return window.EdgeApp ? EdgeApp.timerPage() : home(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/pin', '🎯', '수능 족집게', '과목별 출제 구조 · 꼭 지킬 전략'], ['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/gachae', '📝', '가채점', '원점수 → 등급 → 최저 확인'], ['high/chance', '📊', '합격 가늠', '작년 입결과 내 성적 비교'], ['high/pin', '🎯', '수능 족집게', '과목별 출제 구조 · 꼭 지킬 전략'], ['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */
