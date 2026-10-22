@@ -324,6 +324,9 @@
   function after(a) {
     const high = isHigh();
     document.body.classList.toggle('is-high', high);
+    // 교급별 폰트: 온보딩 중에는 고른 교급, 그 외에는 현재 학생의 교급
+    const fl = a[0] === 'ob' || !MS().st().kids.length ? MS().st()._lv : curLv();
+    ['e', 'm', 'h'].forEach(k => document.body.classList.toggle('fl-' + k, fl === k));
     const lv = curLv(); if (lv) document.querySelectorAll('.brand-sub').forEach(x => x.textContent = LVSUB[lv]);
     if (a[0] === 'ob') { const lv = MS().st()._lv; document.body.dataset.lv = lv || ''; const left = document.querySelector('.ob-left'); if (left && lv === 'e' && !left.querySelector('[data-act="pickLv"]')) left.insertAdjacentHTML('beforeend', '<button class="btn btn-ghost btn-sm" data-act="pickLv" data-lv="" style="color:#fff;align-self:flex-start;margin-top:auto">← 학교급 다시 고르기</button>'); if (lv === 'h' || lv === 'm') { const f = document.querySelector('#obForm'); if (f) { const h2 = f.querySelector('h2'); if (h2 && /아이 정보를/.test(h2.textContent)) h2.textContent = lv === 'h' ? '학생 정보를 알려 주세요' : '내 정보를 알려 주세요'; f.querySelectorAll('label').forEach(l => { if (/아이 이름/.test(l.textContent)) l.textContent = lv === 'h' ? '학생 이름 또는 별명' : '이름 또는 별명'; if (/수업 요일/.test(l.textContent)) l.textContent = '공부하는 요일'; if (/수업 시간/.test(l.textContent)) l.textContent = '하루 공부 시간'; if (/출판사/.test(l.textContent) && lv === 'h') l.closest('.field').style.display = 'none'; }); } } return; }
     if (high) {
