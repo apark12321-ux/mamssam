@@ -140,7 +140,7 @@
     if (!ready()) return;
     const f = fun(), s = stats();
     const ms = missions(s, f);
-    if (ms.every(m => m.ok) && !f.bonus[today()]) { f.bonus[today()] = 50; if (!silent) { setTimeout(() => { floatMsg('🎁 오늘의 미션 완료! +50 XP', 'mission'); confetti(null, innerHeight / 2, 70, 1.3); tone(SND.lv); }, 600); } }
+    if (ms.every(m => m.ok) && !f.bonus[today()]) { f.bonus[today()] = 50; if (!silent && PET) { setTimeout(() => { floatMsg('🎁 오늘의 미션 완료! +50 XP', 'mission'); confetti(null, innerHeight / 2, 70, 1.3); tone(SND.lv); }, 600); } }
     const xp = xpOf(s, f), lv = lvOf(xp);
     const init = f.xp == null;
     const gain = xp - (f.xp || 0), prevLv = f.lv || lv;
@@ -148,7 +148,7 @@
     const fresh = earned.filter(b => !f.badges.includes(b));
     f.xp = xp; f.lv = lv; f.badges = [...new Set(f.badges.concat(earned))];
     persist();
-    if (init || silent) return;
+    if (init || silent || !PET) return;
     if (gain > 0) floatMsg(`+${gain} XP`, 'xp');
     if (lv > prevLv) setTimeout(() => levelUp(prevLv, lv), 500);
     else fresh.forEach((id, i) => setTimeout(() => badgeToast(id), 700 + i * 1300));
@@ -205,9 +205,11 @@
       <div class="bd-grid">${BADGES.map(b => { const on = f.badges.includes(b[0]); return `<div class="bd ${on ? 'on' : ''}"><span class="bd-ic">${b[1]}</span><b>${esc(b[2])}</b><small>${esc(b[3])}</small></div>`; }).join('')}</div>
       <div class="modal-actions"><button class="btn btn-primary" data-act="closeModal">닫기</button></div>`);
   }
+  // 학습 알 카드(캐릭터·XP)는 쌤픽에서 뺐다. 정답 효과음·효과는 그대로 둔다
+  const PET = false;
   function mount(a) {
     document.getElementById('funCard') && document.getElementById('funCard').remove();
-    if (!ready()) return;
+    if (!PET || !ready()) return;
     const r = a[0] || 'home';
     let host = null, where = 'after';
     if (r === 'home') { host = document.querySelector('.wrap .hero, .wrap .stu-hero, .wrap .card'); }
