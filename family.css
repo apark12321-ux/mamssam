@@ -131,5 +131,26 @@
 .lv-wait{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px}.lv-wait b{font-size:20px}.lv-wait small{color:var(--muted)}
 .lv-spin{width:44px;height:44px;border-radius:50%;border:4px solid var(--sky-l,#E3F4FA);border-top-color:var(--sky,#2BB0DC);animation:lvSpin 1s linear infinite}
 @keyframes lvSpin{to{transform:rotate(360deg)}}
-.lv-joinlink{display:block;margin:18px auto 0;font:inherit;font-weight:700;border:1px dashed var(--line2);background:#fff;border-radius:999px;padding:10px 16px;color:var(--sky-d,#1592BE);cursor:pointer}
+.lv-join{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:720px;margin:20px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;text-align:left}
+.lv-join-ic{font-size:26px;white-space:nowrap}.lv-join-ic span{font-size:14px;color:var(--muted);margin:0 2px;vertical-align:middle}
+.lv-join-t{flex:1;min-width:220px}.lv-join-t b{display:block;font-size:16px}.lv-join-t span{font-size:13.5px;color:var(--ink2)}
+.lv-join-b{display:flex;gap:8px;flex-wrap:wrap}
+.lvg{overflow:auto;align-items:flex-start}.lvg-box{max-width:460px;margin:auto}.lvg-ic{font-size:44px}
+.lvg-where{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;text-align:left;line-height:1.55}.lvg-where>b:first-child{display:block;margin-bottom:2px}
+.lvg-phones{display:flex;align-items:center;justify-content:center;gap:10px;margin:4px 0}
+.lvg-ph{display:flex;flex-direction:column;align-items:center;gap:4px;width:130px}.lvg-ph b{font-size:15px}.lvg-ph small{font-size:12px;color:var(--muted);line-height:1.4}
+.lvg-scr{width:96px;height:150px;border:3px solid #2A2E33;border-radius:16px;background:#fff;padding:10px 8px;display:flex;flex-direction:column;gap:6px;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.lvg-scr i{font-style:normal;font-size:10px;font-weight:800;display:block}
+.lvg-t{color:var(--muted)}
+.lvg-l{height:7px;border-radius:4px;background:#E3E8EC}.lvg-l.s{width:70%}.lvg-l.hl{background:#FDE68A}
+.lvg-btn{background:var(--sky,#2BB0DC);color:#fff;border-radius:6px;padding:3px 0}.lvg-btn.y{background:#F59E0B}
+.lvg-card{background:var(--sky-l,#E3F4FA);color:var(--sky-d,#1592BE);border-radius:8px;padding:16px 0;font-size:13px!important}
+.lvg-k .lvg-btn{margin-top:auto}
+.lvg-arrow{font-size:22px;color:var(--sky,#2BB0DC);font-weight:900}
+.lvg-steps{text-align:left;margin:0;padding:0;list-style:none;counter-reset:g;display:flex;flex-direction:column;gap:8px}
+.lvg-steps li{counter-increment:g;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px 10px 46px;position:relative;font-size:14px;line-height:1.5}
+.lvg-steps li::before{content:counter(g);position:absolute;left:12px;top:10px;width:24px;height:24px;border-radius:50%;background:var(--sky,#2BB0DC);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.lvg-steps li>b:first-child{display:block;font-size:13px;color:var(--sky-d,#1592BE)}.lvg-steps small{color:var(--muted)}
+.lvg-note{font-size:12.5px!important;color:var(--muted)!important;line-height:1.5}
+.lv-howto{text-align:left;margin:4px auto 10px;padding-left:20px;max-width:300px;font-size:14px;line-height:1.7}
 .lv-kidover .lv-kid{padding-bottom:96px}

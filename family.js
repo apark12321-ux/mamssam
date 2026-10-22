@@ -55,7 +55,7 @@
       <div class="card-head"><h2>오늘의 엄마표 3단계</h2><span class="xs muted">${[s1, s2, s3].filter(Boolean).length}/3</span></div>
       ${d.brag && !s3 ? `<div class="fm-brag">${name}가 "오늘 공부 다 했어요!" 하고 알려 왔어요. 결과를 보고 칭찬해 주세요.</div>` : ''}
       <ol class="fm-steps">
-        ${step(1, s1, '함께 10분 · 개념 설명', '한 장 개념 카드를 보여 주며 설명해요', s1 ? '' : `<span class="fm-acts"><button class="btn btn-sm btn-primary" data-act="fmCard" data-u="${u.id}" data-l="${u.l || 0}">개념 카드</button><button class="btn btn-sm" data-act="fmLive" data-u="${u.id}" data-l="${u.l || 0}">아이 폰과 함께 보기</button><button class="btn btn-sm" data-act="fmTogether">했어요</button></span>`)}
+        ${step(1, s1, '함께 10분 · 개념 설명', '한 장 개념 카드를 보여 주며 설명해요', s1 ? '' : `<span class="fm-acts"><button class="btn btn-sm btn-primary" data-act="fmCard" data-u="${u.id}" data-l="${u.l || 0}">개념 카드</button><button class="btn btn-sm" data-act="fmLive" data-u="${u.id}" data-l="${u.l || 0}">📱 아이 폰과 함께 보기</button><button class="btn btn-sm" data-act="fmTogether">했어요</button></span>`)}
         ${step(2, s2, `혼자 15분 · ${name} 차례`, s2 ? `문제 ${tot.n}개 중 ${tot.ok}개 맞혔어요` : '휴대폰을 건네면 영상 → 문제 순서로 안내해요', s2 ? '' : `<span class="fm-acts"><button class="btn btn-sm btn-primary" data-act="fmHandoff">아이에게 넘기기</button></span>`)}
         ${step(3, s3, '확인 3분 · 칭찬하기', s2 ? (tot.wrong.length ? `틀린 문제 ${tot.wrong.length}개를 같이 보고 칭찬 한마디` : '모두 맞혔어요. 칭찬 한마디만 보내 주세요') : '아이가 끝내면 여기서 결과를 볼 수 있어요', '')}
       </ol>
@@ -127,7 +127,7 @@
       fmTogether() { fam().days[today()].together = true; save(); MS().render(); MS().toast('함께 공부 완료!'); },
       fmHandoff() { ensureSheet(); fam().days[today()].handoff = true; save(); handoff(); },
       fmCard() { if (window.InfoCard) InfoCard.open(b.dataset.u, b.dataset.l); },
-      fmLive() { if (window.LiveApp) LiveApp.host(b.dataset.u, b.dataset.l); },
+      fmLive() { if (window.LiveApp) LiveApp.start(b.dataset.u, b.dataset.l); },
       fmPraise() { const f = fam(); f.praise.push({ t: b.dataset.t, at: Date.now(), seen: false }); f.days[today()].checked = true; save(); if (window.LiveApp) LiveApp.sticker(b.dataset.t); MS().render(); MS().toast('스티커를 보냈어요'); },
       kpSeen() { fam().praise.forEach(p => p.seen = true); save(); MS().render(); },
       kpSay() { sayPath(); },
