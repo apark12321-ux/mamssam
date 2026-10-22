@@ -1064,3 +1064,22 @@ a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.b
 .tu-jw{margin-top:10px;padding:10px 12px;border-radius:12px;background:#F5F7FB;font-size:13px;font-weight:600}
 .tu-notes{margin:0 0 0 18px;padding:0;font-size:14px;line-height:1.6}.tu-notes li{margin:6px 0}
 @media (max-width:640px){.tu-news{grid-template-columns:1fr}.tu-min-rule{grid-template-columns:repeat(2,minmax(0,1fr))}.tu-min-g{grid-template-columns:repeat(3,minmax(0,1fr))}.tu-m{font-size:13.5px}}
+
+/* ===== 교급별 폰트 =====
+   초등: 둥글고 친근한 Jua 제목 + 부드러운 고운돋움 본문
+   중등: 굵고 단단한 도현 제목(청소년 감성) + 프리텐다드 본문
+   고등: 시험지·교과서 같은 명조(Noto Serif KR) 제목 + 프리텐다드 본문
+   로고(쌤픽)는 모든 교급에서 Jua로 고정 */
+:root{--brand-font:'Jua',sans-serif}
+body.fl-e{--round:'Jua',sans-serif;font-family:'Gowun Dodum','Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif}
+body.fl-m{--round:'Do Hyeon','Pretendard Variable',sans-serif}
+body.fl-h{--round:'Noto Serif KR','Nanum Myeongjo','AppleMyungjo',serif}
+body.fl-h h1,body.fl-h h2,body.fl-h h3,body.fl-h .page-head h1,body.fl-h .card h2,body.fl-h .hero .h-title,body.fl-h .tile .t-val,body.fl-h .hi-q b,body.fl-h .tu-prog b{font-weight:700;letter-spacing:-.01em}
+body.fl-h .hero .h-title{font-weight:900}
+body.fl-e .tu-m,body.fl-e .small{line-height:1.65}
+.brand-name,.brand-mark,#splash .s-title{font-family:var(--brand-font)!important}
+body.fl-h .brand-name,body.fl-h .brand-mark,body.fl-m .brand-name,body.fl-m .brand-mark{font-weight:400}
+/* 첫 화면 카드: 각 교급의 글꼴을 미리 보여 주기 */
+.lv-card.lv-e .lv-n,.lv-card.lv-e .lv-t{font-family:'Jua',sans-serif;font-weight:400}
+.lv-card.lv-m .lv-n,.lv-card.lv-m .lv-t{font-family:'Do Hyeon',sans-serif;font-weight:400}
+.lv-card.lv-h .lv-n,.lv-card.lv-h .lv-t{font-family:'Noto Serif KR',serif;font-weight:700}
