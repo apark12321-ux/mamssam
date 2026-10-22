@@ -25,7 +25,7 @@
         <div class="lv-tag">초·중·고 공부주치의 · 개념 정리 · 족집게 · 온라인 과외</div>
         <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '꼭 필요한 개념만,<br>콕 집어 주는 쌤'}</h1>
         <p class="muted">개념 정리 · 족집게 · 온라인 과외를 학교급에 맞게. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
-      <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기 ›</span></button>`; }).join('')}</div>
+      <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기</span></button>`; }).join('')}</div>
       ${adding ? '<p class="center mt16"><a class="btn btn-ghost btn-sm" href="#settings">← 설정으로</a></p>' : ''}
       <p class="xs muted center mt16">입력한 정보는 이 기기의 브라우저에만 저장됩니다. · <a href="#legal">저작권·광고·개인정보 안내</a></p>
     </div>`;
