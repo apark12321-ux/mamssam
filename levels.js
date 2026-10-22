@@ -1,4 +1,4 @@
-/* 올배움 — 학교급(초·중·고) 진입, 고등 수능·대입 모드, 초등 모바일 압축 홈 */
+/* 쌤픽 — 학교급(초·중·고) 진입, 고등 수능·대입 모드, 초등 모바일 압축 홈 */
 (function () {
   'use strict';
   const MS = () => window.MS;
@@ -14,17 +14,17 @@
 
   /* ---------- 첫 화면: 초·중·고 선택 ---------- */
   const LV = {
-    e: { n: '초등', t: '엄마표 학습', ic: '🧒', c: '#4A7DF0', d: '엄마가 선생님이 되는 가장 쉬운 방법', pts: ['오늘 30분 수업 흐름과 설명 대본', '단원별 워크시트 자동 출제·채점', '전과목 개념 영상·우리 학교 급식·시간표', '"분수는 어떻게 설명해요?" 엄마 도우미'] },
-    m: { n: '중등', t: '자기주도 학습', ic: '🎒', c: '#12A150', d: '스스로 계획하고, 영상으로 배우고, 문제로 확인', pts: ['과목별 단원 개념 → 영상 → 확인 문제', '주간 시간표와 연속 공부 기록', '오답 노트 자동 수집·다시 풀기', '최상위 공부법(메타인지·간격 복습)'] },
-    h: { n: '고등', t: '수능·대입 쪽집게', ic: '🎯', c: '#1F2A44', d: '수능 D-day부터 전형 캘린더, 쪽집게 체크리스트까지', pts: ['수능 D-day · 모의고사 등급 추적', '과목별 출제 구조·쪽집게 체크리스트', '고1·2·3 대입 로드맵과 전형 캘린더', 'EBSi·평가원·어디가 등 공식 자료 허브'] }
+    e: { n: '초등', t: '엄마표 개념 과외', ic: '🧒', c: '#4A7DF0', d: '엄마가 오늘 30분, 꼭 필요한 개념만 콕 집어 가르쳐요', pts: ['오늘의 개념 과외 대본(설명 순서·질문·예시)', '단원별 개념 정리와 개념 영상', '확인 문제 자동 출제·채점, 오답 다시 풀기', '"분수는 어떻게 설명해요?" 엄마 도우미'] },
+    m: { n: '중등', t: '개념 정리 · 자기주도', ic: '🎒', c: '#12A150', d: '교과서 핵심 개념을 스스로 정리하고, 문제로 확인해요', pts: ['과목별 단원 개념 정리 → 개념 영상 → 확인 문제', '내가 쓰는 개념 정리 노트와 오답 다시 풀기', '주간 시간표와 연속 공부 기록', '최상위 공부법(메타인지·간격 복습)'] },
+    h: { n: '고등', t: '수능·대입 족집게', ic: '🎯', c: '#1F2A44', d: '1:1 온라인 개념 과외부터 수능 족집게, 대입 족집게, 대치동식 맞춤 컨설팅까지', pts: ['1:1 개념 과외: 수능 빈출 개념 정리 → 족집게 → 확인 문제', '수능 족집게: 과목별 출제 구조와 꼭 지킬 전략', '대입 족집게: 핵심 변화 · 최저 계산기 · 면접 예상 질문', '대치동식 맞춤 컨설팅: 전형 적합도 · 수시 6장 · 정시 3장'] }
   };
   function picker(adding) {
     const st = MS().st();
     return `<div class="lv-wrap">
-      <div class="lv-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">올</div><div class="brand-name">올배움</div></div>
-        <div class="lv-tag">초등은 엄마표 · 중등은 자기주도 · 고등은 수능·대입 쪽집게</div>
-        <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '아이의 12년 공부,<br>한 앱에서 이어 갑니다'}</h1>
-        <p class="muted">학교급마다 화면과 기능이 달라져요. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
+      <div class="lv-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">픽</div><div class="brand-name">쌤픽</div></div>
+        <div class="lv-tag">초·중·고 공부주치의 · 개념 정리 · 족집게 · 온라인 과외</div>
+        <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '꼭 필요한 개념만,<br>콕 집어 주는 쌤'}</h1>
+        <p class="muted">개념 정리 · 족집게 · 온라인 과외를 학교급에 맞게. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
       <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기 ›</span></button>`; }).join('')}</div>
       ${adding ? '<p class="center mt16"><a class="btn btn-ghost btn-sm" href="#settings">← 설정으로</a></p>' : ''}
       <p class="xs muted center mt16">입력한 정보는 이 기기의 브라우저에만 저장됩니다. · <a href="#legal">저작권·광고·개인정보 안내</a></p>
@@ -32,11 +32,11 @@
   }
   function obLeft(lv) {
     const L = LV[lv] || LV.e;
-    return `<div class="brand" style="padding:0"><div class="brand-mark" style="background:#fff;color:${L.c}">올</div><div class="brand-name">올배움</div></div>
+    return `<div class="brand" style="padding:0"><div class="brand-mark" style="background:#fff;color:${L.c}">픽</div><div class="brand-name">쌤픽</div></div>
       <div class="ob-lv"><span>${L.ic}</span> ${L.n} · ${L.t}</div>
-      <h1>${lv === 'h' ? '수능까지, 흔들리지 않게<br>한 곳에서 관리해요' : '스스로 계획하고<br>스스로 확인하는 공부'}</h1>
+      <h1>${lv === 'h' ? '개념은 과외처럼,<br>입시는 족집게처럼' : (lv === 'm' ? '개념을 정리하고<br>스스로 확인하는 공부' : '꼭 필요한 개념만<br>엄마가 콕 집어 주기')}</h1>
       <p class="ob-sub">${L.d}</p>
-      <div class="ob-feats">${L.pts.map((p, i) => `<div class="ob-feat"><span class="of-i">${['📅', '🎯', '🗺️', '📚'][i]}</span><div><div class="of-t">${p}</div></div></div>`).join('')}</div>
+      <div class="ob-feats">${L.pts.map((p, i) => `<div class="ob-feat"><span class="of-i">${['👩‍🏫', '🎯', '📌', '🎓'][i]}</span><div><div class="of-t">${p}</div></div></div>`).join('')}</div>
       <button class="btn btn-ghost btn-sm" data-act="pickLv" data-lv="" style="color:#fff;margin-top:auto;align-self:flex-start">← 학교급 다시 고르기</button>`;
   }
 
@@ -148,8 +148,8 @@
   const todayStr = () => ymd(new Date());
 
   /* ---------- 고등: 화면 ---------- */
-  const NAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['high/consult', '🎓', '맞춤 컨설팅'], ['settings', '⚙️', '설정']];
-  const BNAV = [['home', '🏠', '홈'], ['high/pin', '🎯', '쪽집게'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사']];
+  const NAV = [['home', '🏠', '홈'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게'], ['high/consult', '🎓', '맞춤 컨설팅'], ['high/plan', '📅', '플래너'], ['high/mock', '📈', '모의고사'], ['high/road', '🗺️', '대입 로드맵'], ['high/res', '📚', '자료실'], ['school', '🏫', '우리 학교'], ['settings', '⚙️', '설정']];
+  const BNAV = [['home', '🏠', '홈'], ['high/tutor', '👩‍🏫', '개념 과외'], ['high/pin', '🎯', '수능 족집게'], ['high/ipsi', '📌', '대입 족집게']];
   const layout = (nav, html) => MS().layout(nav, `<div class="hi">${html}</div>`);
   const hero = (kid) => {
     const s = suneungDate(), d = dday(s, new Date()), ey = examYear(kid);
@@ -166,10 +166,11 @@
     const last = h.mock.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
     const pinDone = Object.values(h.pin).filter(Boolean).length, pinAll = SUBJ_H.reduce((n, s) => n + s.pts.length, 0);
     return layout('home', `
-      <div class="page-head"><div><h1>${esc(kid.name)}의 수능 플랜</h1><div class="sub">${GL(kid.grade)} · ${ROAD[kid.grade].t}</div></div></div>
+      <div class="page-head"><div><h1>${esc(kid.name)}의 수능·대입 족집게</h1><div class="sub">${GL(kid.grade)} · ${ROAD[kid.grade].t}</div></div></div>
       ${hero(kid)}
       ${window.ConsultApp ? ConsultApp.stageCard(kid) : ''}
-      <div class="hi-quick">${[['high/pin', '🎯', '쪽집게', `${pinDone}/${pinAll}`], ['high/plan', '📅', '플래너', `오늘 ${doneN}/${today.length}`], ['high/mock', '📈', '모의고사', last ? `${last.name.slice(0, 6)}` : '기록 없음'], ['high/consult', '🎓', '컨설팅', '맞춤 리포트']].map(([h, i, n, s]) => `<a class="hi-q" href="#${h}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(s)}</small></a>`).join('')}</div>
+      <div class="hi-quick">${[['high/tutor', '👩‍🏫', '개념 과외', window.TutorApp ? `${TutorApp.C.filter(c => (h.tutor || {})[c.id] && h.tutor[c.id].ok).length}/${TutorApp.C.length}` : ''], ['high/pin', '🎯', '수능 족집게', `${pinDone}/${pinAll}`], ['high/ipsi', '📌', '대입 족집게', '최저·면접·정시'], ['high/consult', '🎓', '컨설팅', '대치동식 리포트']].map(([h, i, n, s]) => `<a class="hi-q" href="#${h}"><span class="hi-q-i">${i}</span><b>${n}</b><small>${esc(s)}</small></a>`).join('')}</div>
+      ${window.TutorApp ? TutorApp.homeCard() : ''}
       <div class="card mt12"><div class="card-head"><h2>오늘 할 일</h2><a class="more" href="#high/plan">플래너 ›</a></div>
         ${today.length ? `<div class="hi-todo">${today.map(p => `<label class="hi-td ${p.done ? 'done' : ''}"><input type="checkbox" data-act="hiDone" data-id="${p.id}" ${p.done ? 'checked' : ''}><span class="hi-td-s" style="--sc:${(SUBJ_H.find(s => s.k === p.subj) || {}).c || '#666'}">${esc((SUBJ_H.find(s => s.k === p.subj) || { n: '기타' }).n)}</span><span class="hi-td-t">${esc(p.title)}</span></label>`).join('')}</div>` : `<div class="empty small"><div class="e-ico">📝</div>오늘 계획이 비어 있어요. 과목·할 일을 30초 안에 등록해 보세요.<div class="mt8"><button class="btn btn-sm btn-primary" data-act="hiAdd">+ 오늘 할 일</button></div></div>`}
         ${upcoming.length ? `<div class="xs muted mt8">다음: ${upcoming.map(p => `${p.date.slice(5).replace('-', '/')} ${esc(p.title)}`).join(' · ')}</div>` : ''}
@@ -182,13 +183,13 @@
     const kid = MS().kid(), h = hi(), nw = newSystem(kid);
     const open = MS().st()._hiPin || SUBJ_H[0].k;
     return layout('high/pin', `
-      <div class="page-head"><div><h1>쪽집게 체크리스트</h1><div class="sub">${examYear(kid)}학년도 ${nw ? '통합형' : '현행'} 수능 기준 · 과목별 출제 구조와 꼭 지킬 것</div></div></div>
+      <div class="page-head"><div><h1>수능 족집게</h1><div class="sub">${examYear(kid)}학년도 ${nw ? '통합형' : '현행'} 수능 기준 · 과목별 출제 구조와 꼭 지킬 것</div></div></div>
       <div class="chips scroll-x hi-sub">${SUBJ_H.map(s => `<button class="chip ${s.k === open ? 'on' : ''}" data-act="hiPinTab" data-k="${s.k}" style="--sc:${s.c}">${s.ic} ${s.n} <span class="xs">${s.pts.filter((_, i) => h.pin[s.k + i]).length}/${s.pts.length}</span></button>`).join('')}</div>
       ${SUBJ_H.filter(s => s.k === open).map(s => `<div class="card" style="--sc:${s.c}"><div class="card-head"><h2>${s.ic} ${s.n}</h2><span class="xs muted">${s.pts.filter((_, i) => h.pin[s.k + i]).length}/${s.pts.length} 실천 중</span></div>
         <div class="hi-struct"><div class="c-t">출제 구조</div>${esc(nw ? s.nxt : s.cur)}${nw ? `<div class="xs muted mt4">현행(~2027학년도): ${esc(s.cur)}</div>` : `<div class="xs muted mt4">2028학년도부터: ${esc(s.nxt)}</div>`}</div>
         <div class="hi-pins">${s.pts.map((p, i) => `<label class="hi-pin ${h.pin[s.k + i] ? 'on' : ''}"><input type="checkbox" data-act="hiPin" data-k="${s.k + i}" ${h.pin[s.k + i] ? 'checked' : ''}><span>${esc(p)}</span></label>`).join('')}</div>
         <div class="row mt12" style="gap:8px"><button class="btn btn-sm" data-act="hiAdd" data-subj="${s.k}">📅 이 과목 할 일 추가</button><a class="btn btn-sm btn-ghost" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi ↗</a><a class="btn btn-sm btn-ghost" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 기출 ↗</a></div></div>`).join('')}
-      <p class="xs muted mt12">출제 구조는 한국교육과정평가원 시행 기본계획과 교육부 2028학년도 대입제도 개편안을 바탕으로 정리했고, 체크리스트는 올배움이 작성한 학습 전략입니다. 기출문제·교재 원문은 저작권이 각 기관에 있어 링크로만 안내합니다.</p>`);
+      <p class="xs muted mt12">출제 구조는 한국교육과정평가원 시행 기본계획과 교육부 2028학년도 대입제도 개편안을 바탕으로 정리했고, 체크리스트는 쌤픽이 작성한 학습 전략입니다. 기출문제·교재 원문은 저작권이 각 기관에 있어 링크로만 안내합니다.</p>`);
   }
   function plan() {
     const h = hi(), t = todayStr(); const st = MS().st();
@@ -219,7 +220,7 @@
       <div class="card mt12"><div class="card-head"><h2>기록 ${rows.length}회</h2></div>
         ${rows.length ? `<div class="hi-mock-tbl"><table><thead><tr><th>시험</th>${ks.map(k => `<th>${S(k).n.slice(0, 2)}</th>`).join('')}<th></th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td><b>${esc(r.name)}</b><br><small class="muted">${r.date}</small></td>${ks.map(k => `<td>${r.g[k] || '–'}</td>`).join('')}<td><button class="btn btn-sm btn-ghost" data-act="hiMockDel" data-id="${r.id}">✕</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty small"><div class="e-ico">📈</div>아직 기록이 없어요. 3·6·9·11월 학력평가와 6·9월 모의평가를 적어 보세요.</div>'}
       </div>
-      <div class="card mt12"><div class="card-head"><h2>등급컷·해설은 어디서?</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 저작권이 각 기관에 있어 올배움은 링크만 제공합니다.</p></div>`);
+      <div class="card mt12"><div class="card-head"><h2>등급컷·해설은 어디서?</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 저작권이 각 기관에 있어 쌤픽은 링크만 제공합니다.</p></div>`);
   }
   function road() {
     const kid = MS().kid(); const st = MS().st(); const g = +(st._hiRoadG || kid.grade);
@@ -237,7 +238,7 @@
     return layout('high/res', `
       <div class="page-head"><div><h1>공식 자료실</h1><div class="sub">평가원·EBS·교육청·대교협 등 공공 기관의 자료로 바로 연결합니다.</div></div></div>
       ${RES.map(G => `<div class="card mt12"><div class="card-head"><h2>${G.g}</h2></div><div class="list">${G.items.map(([n, u, d]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🔗</div><div class="li-main"><div class="li-t">${esc(n)}</div><div class="li-s">${esc(d)}</div></div><span class="muted">↗</span></a>`).join('')}</div></div>`).join('')}
-      <p class="xs muted mt12">각 사이트의 자료 저작권은 해당 기관에 있습니다. 올배움은 자료를 복제하지 않고 공식 페이지로 연결만 합니다. 링크는 기관 사정에 따라 바뀔 수 있어요.</p>`);
+      <p class="xs muted mt12">각 사이트의 자료 저작권은 해당 기관에 있습니다. 쌤픽은 자료를 복제하지 않고 공식 페이지로 연결만 합니다. 링크는 기관 사정에 따라 바뀔 수 있어요.</p>`);
   }
   function consult() {
     return layout('high/consult', `
@@ -245,22 +246,22 @@
       <div class="hi-consult-anchor"></div>
       <div class="card mt12"><div class="card-head"><h2>컨설팅·학원 고르기 체크리스트</h2></div><ul class="warn-list">${['학원·교습소 등록번호가 있는지(학원법에 따라 유료 진학 상담도 등록 대상). 교육청 "학원 정보 공개"에서 조회 가능', '"합격 보장", "100% 합격" 같은 표현은 표시·광고법상 허위·과장 광고 소지. 이런 문구를 쓰는 곳은 피하기', '계약서에 환불 규정, 상담 횟수·시간, 담당자가 명시되어 있는지', '학생부 대필·허위 기재를 권하는 곳은 즉시 거절(입학 취소 사유)', '공공 상담(교육청 진로진학센터, 어디가 상담)을 먼저 받아 보고 비교하기'].map(t => `<li>${t}</li>`).join('')}</ul></div>
       <div class="card mt12"><div class="card-head"><h2>무료 공공 상담</h2></div><div class="list">${[['서울특별시교육청 진로진학정보센터', 'https://www.jinhak.or.kr', '대입 상담 예약, 설명회'], ['대입정보포털 어디가 상담', 'https://www.adiga.kr', '대학 입학사정관·교사 온라인 상담']].map(([n, u, d]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🏛️</div><div class="li-main"><div class="li-t">${n}</div><div class="li-s">${d}</div></div><span class="muted">↗</span></a>`).join('')}</div></div>
-      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 올배움은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div>`);
+      <div class="card mt12 hi-adv"><div class="card-head"><h2>📣 컨설턴트·학원·인강 광고주 안내</h2></div><p class="small">고등 화면(홈·컨설팅 페이지)은 수능·대입을 준비하는 학생과 학부모가 매일 보는 지면입니다. 광고는 "AD" 표시와 함께 콘텐츠와 구분해 노출되며, 쌤픽은 상담을 직접 제공하거나 광고주를 보증하지 않습니다.</p><div class="row mt8" style="gap:8px"><a class="btn btn-primary" href="#ads?slot=high_consult">광고 문의하기</a><a class="btn btn-ghost" href="#legal">광고·개인정보 안내</a></div></div>`);
   }
   function legal() {
     return MS().layout('settings', `
-      <div class="page-head"><div><h1>저작권 · 광고 · 개인정보 안내</h1><div class="sub">올배움을 안전하게 운영하기 위한 기준</div></div></div>
-      <div class="card"><h2>저작권</h2><p class="small mt8">수업 카드·체크리스트·문제는 올배움이 직접 작성한 자료입니다. 평가원·EBS·교육청·대교협·KERIS·한국과학창의재단 등 외부 기관의 자료(기출문제, 교재, 영상, 통계)는 복제하지 않고 공식 페이지로 연결만 하며, 그 저작권은 각 기관에 있습니다. 유튜브 영상은 각 채널의 저작물로 유튜브 공식 플레이어를 통해 재생합니다. 교육과정 정보는 교육부 고시를 바탕으로 요약했습니다.</p></div>
-      <div class="card mt12"><h2>광고</h2><p class="small mt8">광고는 콘텐츠와 구분되도록 "AD" 표시를 붙여 노출합니다. 올배움은 광고주의 서비스를 보증하지 않으며, 유료 입시 상담·학원은 학원법상 등록 대상이므로 이용 전 등록 여부를 확인하시기 바랍니다. "합격 보장" 등 표시·광고법에 어긋나는 문구의 광고는 게재하지 않습니다. 중학생 본인 모드에는 광고를 싣지 않습니다.</p></div>
+      <div class="page-head"><div><h1>저작권 · 광고 · 개인정보 안내</h1><div class="sub">쌤픽을 안전하게 운영하기 위한 기준</div></div></div>
+      <div class="card"><h2>저작권</h2><p class="small mt8">수업 카드·개념 과외(개념 정리·족집게·확인 문제·해설)·체크리스트·면접 예상 질문은 쌤픽이 직접 작성한 자료입니다. 평가원·EBS·교육청·대교협·KERIS·한국과학창의재단 등 외부 기관의 자료(기출문제, 교재, 영상, 통계)는 복제하지 않고 공식 페이지로 연결만 하며, 그 저작권은 각 기관에 있습니다. 유튜브 영상은 각 채널의 저작물로 유튜브 공식 플레이어를 통해 재생합니다. 교육과정 정보는 교육부 고시를 바탕으로 요약했습니다.</p></div>
+      <div class="card mt12"><h2>광고</h2><p class="small mt8">광고는 콘텐츠와 구분되도록 "AD" 표시를 붙여 노출합니다. 쌤픽은 광고주의 서비스를 보증하지 않으며, 유료 입시 상담·학원은 학원법상 등록 대상이므로 이용 전 등록 여부를 확인하시기 바랍니다. "합격 보장" 등 표시·광고법에 어긋나는 문구의 광고는 게재하지 않습니다. 중학생 본인 모드에는 광고를 싣지 않습니다.</p></div>
       <div class="card mt12"><h2>개인정보</h2><p class="small mt8">학습 기록·이름·학년은 이 기기의 브라우저에만 저장되며 서버로 전송되지 않습니다. 광고 문의 폼으로 보내 주신 연락처는 문의 응대 목적으로만 사용하고, 응대 완료 후 1년 이내 파기합니다. 우리 학교 기능은 나이스 교육정보 개방 포털의 공개 정보(급식·학사일정)를 사용합니다.</p></div>
-      <div class="card mt12"><h2>면책</h2><p class="small mt8">대입 일정·전형 정보는 일반적인 내용을 정리한 것으로, 정확한 내용은 평가원·대교협·각 대학의 공식 공지를 기준으로 합니다. 올배움은 입시 결과에 대해 책임지지 않습니다.</p></div>`);
+      <div class="card mt12"><h2>면책</h2><p class="small mt8">대입 일정·전형 정보는 일반적인 내용을 정리한 것으로, 정확한 내용은 평가원·대교협·각 대학의 공식 공지를 기준으로 합니다. 쌤픽은 입시 결과에 대해 책임지지 않습니다.</p></div>`);
   }
   function page(a) {
     if (!isHigh()) return home();
-    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
+    switch (a[1]) { case 'pin': return pin(); case 'plan': return plan(); case 'mock': return mock(); case 'road': return road(); case 'res': return res(); case 'tutor': case 'ipsi': return window.TutorApp ? TutorApp.page(a) : home(); case 'consult': return window.ConsultApp ? ConsultApp.page(a) : consult(); default: return home(); }
   }
   function more() {
-    MS().modal(`<h2>더보기</h2><div class="list">${[['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['high/consult', '🎓', '맞춤 컨설팅', '지금 단계 · 전형 적합도 · 지원 전략 리포트'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
+    MS().modal(`<h2>더보기</h2><div class="list">${[['high/consult', '🎓', '대치동식 맞춤 컨설팅', '지금 단계 · 전형 적합도 · 수시 6장·정시 3장 리포트'], ['high/plan', '📅', '플래너', '오늘 할 일 · 주간 계획'], ['high/mock', '📈', '모의고사 기록', '등급 추이'], ['high/road', '🗺️', '대입 로드맵 · 캘린더', '학년별 할 일과 연간 일정'], ['high/res', '📚', '공식 자료실', '평가원·EBSi·어디가·교육청'], ['school', '🏫', '우리 학교', '급식 · 학사일정 · 시험 D-day · 시간표'], ['settings', '⚙️', '설정', '학생 정보 · 백업'], ['legal', '📄', '저작권·광고·개인정보', '운영 기준 안내']].map(([t, s, a, e]) => `<a class="li" href="#${t}" style="color:inherit"><div class="li-ico">${s}</div><div class="li-main"><div class="li-t">${a}</div><div class="li-s">${e}</div></div><span class="muted">›</span></a>`).join('')}</div>`);
   }
 
   /* ---------- 고등: 입력 모달 ---------- */
@@ -302,7 +303,7 @@
     const st = MS().st();
     // 엄마들이 매일 찾는 기능 6개를 히어로 바로 아래 한 줄로
     const quick = document.createElement('div'); quick.className = 'home-quick';
-    quick.innerHTML = [['lessons', '📖', '수업 준비'], ['sheets', '📝', '워크시트'], ['videos', '🎬', '개념 영상'], ['chat', '💬', '엄마 도우미'], ['records', '📊', '기록'], ['school', '🏫', '우리 학교']].map(([h, i, n]) => `<a href="#${h}"><span class="hq-i">${i}</span><span>${n}</span></a>`).join('');
+    quick.innerHTML = [['lessons', '📖', '개념 과외'], ['sheets', '📝', '워크시트'], ['videos', '🎬', '개념 영상'], ['chat', '💬', '엄마 도우미'], ['records', '📊', '기록'], ['school', '🏫', '우리 학교']].map(([h, i, n]) => `<a href="#${h}"><span class="hq-i">${i}</span><span>${n}</span></a>`).join('');
     const adTop = hero.nextElementSibling && hero.nextElementSibling.classList.contains('ad-slot') ? hero.nextElementSibling : null;
     (adTop || hero).insertAdjacentElement('afterend', quick);
     // 과목별 이어서 학습은 위로
@@ -317,9 +318,9 @@
   }
 
   /* ---------- 공통 후처리 ---------- */
-  const LVSUB = { e: '초등 엄마표 학습', m: '중등 자기주도 학습', h: '고등 수능·대입 쪽집게' };
+  const LVSUB = { e: '초등 엄마표 개념 과외', m: '중등 개념 정리', h: '고등 수능·대입 족집게' };
   function curLv() { try { return MS().st().kids.length ? lvOf(MS().kid().grade) : null; } catch (e) { return null; } }
-  function title() { const lv = curLv(); return '올배움 · ' + (lv ? LVSUB[lv] : '초·중·고 공부 원스톱'); }
+  function title() { const lv = curLv(); return '쌤픽 · ' + (lv ? LVSUB[lv] : '초·중·고 공부주치의'); }
   function after(a) {
     const high = isHigh();
     document.body.classList.toggle('is-high', high);

@@ -1036,3 +1036,31 @@ a.card:active,.unit-card:active,.road-row:active,.top-tab:active,.chip:active,.b
 .cn-tiles .tile{border-top:4px solid #1F2A44}
 @media (max-width:640px){.cn-port{grid-template-columns:1fr}.cn-fit{grid-template-columns:76px 1fr 36px;font-size:13px}.st-lefts{grid-template-columns:1fr 1fr}.cn-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media print{body.print-report .sidebar,body.print-report .topbar,body.print-report .bottomnav,body.print-report .fab,body.print-report .ad-slot,body.print-report .cn-report .btn{display:none!important}body.print-report .wrap{padding:0}body.print-report .card{break-inside:avoid;box-shadow:none;border:1px solid #ddd}body.print-report .cn-cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+/* ===== 개념 과외 · 대입 족집게 ===== */
+#splash .s-sub2{font-size:13px;opacity:.8;margin-top:6px;letter-spacing:.02em;animation:rise .7s .2s ease both}
+.tu-hot{display:inline-block;font-size:10px;font-weight:700;color:#C2410C;background:#FFEDD5;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}
+.tu-next{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tu-next b{font-size:15px}
+.tu-sb{font-size:12px;font-weight:700;color:var(--sc);background:color-mix(in srgb,var(--sc) 12%,#fff);border-radius:8px;padding:2px 8px}
+.tu-prog{font-size:13px}.tu-prog b{font-size:22px}
+.tu-bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}.tu-bar i{display:block;height:100%;background:linear-gradient(90deg,#4A7DF0,#7C3AED);border-radius:6px}
+.tu-list{margin-top:12px}
+.tu-chat{display:flex;flex-direction:column;gap:12px}
+.tu-b{display:flex;gap:8px;align-items:flex-start;animation:rise .35s ease both}.tu-b.me{flex-direction:row-reverse}
+.tu-av{flex:0 0 32px;height:32px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:18px}
+.tu-m{max-width:calc(100% - 44px);background:#F5F7FB;border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:14px;line-height:1.6}
+.tu-b.me .tu-m{background:color-mix(in srgb,var(--sc,#4A7DF0) 14%,#fff);border-radius:16px 4px 16px 16px}
+.tu-c{margin:8px 0 0 18px;padding:0}.tu-c li{margin:4px 0}
+.tu-lbl{font-size:12px;font-weight:800;color:var(--sc,#4A7DF0);margin-bottom:4px}
+.tu-opts{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.tu-o{text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font:inherit;cursor:pointer}
+.tu-o:hover:not([disabled]){border-color:var(--sc,#4A7DF0)}.tu-o.ok{border-color:#16A34A;background:#ECFDF3;font-weight:700}.tu-o.no{border-color:#E5484D;background:#FEF2F2}.tu-o[disabled]{cursor:default}
+.tu-news{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tu-new{border:1px solid var(--line);border-radius:12px;padding:12px}.tu-new b{font-size:14px}.tu-new p{font-size:13px;margin:6px 0;line-height:1.55}.tu-new small{font-size:11px;color:var(--muted)}
+.tu-min-rule{grid-template-columns:repeat(5,minmax(0,1fr))}
+.tu-min-g{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:8px}
+.tu-min-r{margin-top:12px;padding:12px 14px;border-radius:12px;background:#F5F7FB;font-size:14px}.tu-min-r.ok{background:#ECFDF3;color:#166534}.tu-min-r.no{background:#FEF2F2;color:#991B1B}
+.tu-ivq{margin:12px 0 0 20px;padding:0;font-size:14px;line-height:1.6}.tu-ivq li{margin:4px 0}
+.tu-frame{margin-top:10px;padding:10px 12px;border-radius:12px;background:#FFF7ED;font-size:13px}
+.tu-jeong{display:flex;flex-direction:column;gap:8px}.tu-j{display:grid;grid-template-columns:44px 1fr 96px;gap:8px;align-items:center}
+.tu-jw{margin-top:10px;padding:10px 12px;border-radius:12px;background:#F5F7FB;font-size:13px;font-weight:600}
+.tu-notes{margin:0 0 0 18px;padding:0;font-size:14px;line-height:1.6}.tu-notes li{margin:6px 0}
+@media (max-width:640px){.tu-news{grid-template-columns:1fr}.tu-min-rule{grid-template-columns:repeat(2,minmax(0,1fr))}.tu-min-g{grid-template-columns:repeat(3,minmax(0,1fr))}.tu-m{font-size:13.5px}}
