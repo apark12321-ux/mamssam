@@ -1083,3 +1083,39 @@ body.fl-h .brand-name,body.fl-h .brand-mark,body.fl-m .brand-name,body.fl-m .bra
 .lv-card.lv-e .lv-n,.lv-card.lv-e .lv-t{font-family:'Jua',sans-serif;font-weight:400}
 .lv-card.lv-m .lv-n,.lv-card.lv-m .lv-t{font-family:'Do Hyeon',sans-serif;font-weight:400}
 .lv-card.lv-h .lv-n,.lv-card.lv-h .lv-t{font-family:'Noto Serif KR',serif;font-weight:700}
+/* ===== 고등 경쟁력: 대시보드 · 오늘 할 일 · 타이머 · 등급 추이 ===== */
+.ed-head h1{font-size:22px}
+.ed-dash{padding:16px 16px 14px}
+.ed-d-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.ed-dash .h-title{font-size:40px;line-height:1.05;margin-top:2px}
+.ed-goal{font:inherit;font-size:12px;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 10px;cursor:pointer;max-width:58%;text-align:right;line-height:1.35}
+.ed-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+.ed-k{background:rgba(255,255,255,.1);border-radius:12px;padding:9px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.ed-k span{font-size:11px;opacity:.8}.ed-k b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ed-k small{font-size:10.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-bar{display:block;height:4px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden;margin:2px 0}.ed-bar em{display:block;height:100%;background:#FFD36A;border-radius:4px}
+.ed-top3{margin-top:12px}
+.ed-todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ed-todo a,.ed-todo button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--blue-ll,#F3F7FF);border:1px solid var(--line);border-radius:14px;padding:11px 12px;cursor:pointer;text-decoration:none}
+.ed-todo a:active,.ed-todo button:active{transform:scale(.99)}
+.ed-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--blue,#4A7DF0);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.ed-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.ed-t b{font-size:14px;line-height:1.4}.ed-t small{font-size:11.5px;color:var(--muted)}
+.ed-go{color:var(--muted);font-size:20px}
+.ed-timer{margin-top:12px;border-top:4px solid var(--sc)}
+.ed-timer.on{background:linear-gradient(180deg,color-mix(in srgb,var(--sc) 8%,#fff),#fff)}
+.ed-t-main{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ed-clock{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--sc)}
+.ed-big{min-width:108px;padding:14px 18px;font-size:16px;border-radius:14px}
+.ed-subj{margin-top:10px}.ed-subj .chip.on{background:var(--sc);border-color:var(--sc);color:#fff}.ed-subj .chip[disabled]{opacity:.55}
+.ed-chart{width:100%;height:auto;display:block}
+.ed-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;margin-top:4px}.ed-legend i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.ed-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end}
+.ed-day{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px}.ed-day b{font-size:10.5px;min-height:13px}.ed-day span{color:var(--muted)}.ed-day.today span{color:var(--blue);font-weight:800}
+.ed-col{position:relative;width:100%;height:120px;background:#F1F5F9;border-radius:8px;overflow:hidden;display:flex;align-items:flex-end}.ed-col em{display:block;width:100%;background:linear-gradient(180deg,#7C9DF5,#4A7DF0);border-radius:8px 8px 0 0}.ed-col i{position:absolute;left:0;right:0;height:0;border-top:2px dashed #F59E0B}
+.ed-stack{display:flex;height:14px;border-radius:8px;overflow:hidden}
+.ed-sublist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px}.ed-sublist li{display:flex;align-items:center;gap:8px}.ed-sublist i{width:10px;height:10px;border-radius:3px}.ed-sublist b{margin-left:auto}.ed-sublist span{width:40px;text-align:right;color:var(--muted)}
+@media (max-width:640px){.ed-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ed-clock{font-size:30px}}
+.ed-dash::after,.ed-dash::before{display:none}
+.ed-dash .ed-goal{position:relative;z-index:1}
+/* 홈의 지금 단계 카드는 요약만(자세한 체크리스트는 컨설팅 화면) */
+.ed-stage .st-do,.ed-stage .st-card>p.xs{display:none}
+.ed-stage .st-lefts{margin-bottom:8px}
