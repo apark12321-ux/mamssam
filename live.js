@@ -64,7 +64,7 @@
     const s = H.st, link = location.origin + location.pathname + '#live/' + H.code;
     o.innerHTML = `<div class="lv-top"><b>아이 폰과 함께 보기</b><span class="lv-dot ${H.kidOn ? 'on' : ''}">${H.kidOn ? '아이 폰 연결됨' : '연결 기다리는 중'}</span><button class="btn btn-sm" data-lv="end">끝내기</button></div>
       <div class="lv-scroll">
-        ${H.kidOn ? '' : `<div class="lv-pair"><div class="lv-lbl">아이 폰에서 이렇게 해 주세요</div><ol class="lv-howto"><li>아이 폰으로 쌤픽(이 주소)을 열어요</li><li>첫 화면 아래 <b>'코드 넣기 (아이 폰)'</b>를 눌러요</li><li>아래 코드를 넣으면 연결 끝!</li></ol><div class="lv-code">${fmt(H.code)}</div><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary" data-lv="share" data-link="${esc(link)}">링크 보내기</button><button class="btn" data-lv="copy" data-link="${esc(link)}">링크 복사</button></div><p class="xs muted mt8">링크를 카톡으로 보내 아이 폰에서 열어도 바로 연결돼요. 주고받는 내용은 이 코드로 암호화되어 공개 중계 서버를 거쳐 전달돼요. 이름 같은 개인정보는 보내지 않아요.</p></div>`}
+        ${H.kidOn ? '' : `<div class="lv-pair"><div class="lv-lbl">아이 폰에서 이렇게 해 주세요</div><ol class="lv-howto"><li>아이 폰으로 쌤픽(이 주소)을 열어요</li><li>첫 화면에서 <b>'초등'</b>을 누르고 아래 <b>'코드 넣기'</b>를 눌러요</li><li>아래 코드를 넣으면 연결 끝!</li></ol><div class="lv-code">${fmt(H.code)}</div><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary" data-lv="share" data-link="${esc(link)}">링크 보내기</button><button class="btn" data-lv="copy" data-link="${esc(link)}">링크 복사</button></div><p class="xs muted mt8">링크를 카톡으로 보내 아이 폰에서 열어도 바로 연결돼요. 주고받는 내용은 이 코드로 암호화되어 공개 중계 서버를 거쳐 전달돼요. 이름 같은 개인정보는 보내지 않아요.</p></div>`}
         ${H.log.length ? `<div class="lv-log">${H.log.slice(0, 3).map((x, i) => `<div class="lv-rx ${i ? '' : 'new'}"><span>${REACT[x.r][0]}</span><b>${REACT[x.r][1]}</b><small>${new Date(x.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</small></div>`).join('')}</div>` : ''}
         <div class="lv-ctl"><div class="lv-lbl">아이 화면 조종하기</div>
           <div class="lv-btns">${s.card.pts.map((p, i) => `<button class="lv-b ${s.mode === 'card' && s.hi === i ? 'on' : ''}" data-lv="hi" data-i="${i}">핵심 ${i + 1} 짚기</button>`).join('')}<button class="lv-b ${s.mode === 'card' && s.hi === -1 ? 'on' : ''}" data-lv="all">전체 보기</button>${s.card.q ? `<button class="lv-b ${s.mode === 'q' ? 'on' : ''}" data-lv="q">확인 질문 내기</button>` : ''}</div>
@@ -149,7 +149,7 @@
       </div>
       <ol class="lvg-steps">
         <li><b>엄마 폰</b>초등 홈 '오늘의 엄마표 3단계' → <b>'아이 폰과 함께 보기'</b> → 코드 8자리가 떠요</li>
-        <li><b>아이 폰</b>쌤픽 첫 화면(학교급 고르는 화면) 아래 <b>'코드 넣기'</b> → 코드 입력<br><small>또는 엄마 폰에서 '링크 보내기'로 카톡 링크를 보내 열기</small></li>
+        <li><b>아이 폰</b>쌤픽 첫 화면에서 <b>'초등'</b>을 누르고 아래 <b>'코드 넣기'</b> → 코드 입력<br><small>또는 엄마 폰에서 '링크 보내기'로 카톡 링크를 보내 열기</small></li>
         <li><b>연결 끝</b>엄마가 버튼을 누르면 아이 화면이 따라 바뀌어요</li>
       </ol>
       <p class="lvg-note">두 폰 모두 인터넷만 되면 돼요(같은 와이파이 아니어도 OK) · 아이 폰은 로그인·회원가입 없이 쓸 수 있어요 · 이름 같은 개인정보는 보내지 않아요</p>
@@ -167,13 +167,15 @@
 
   /* ---------- 진입점 ---------- */
   function fromURL() { const m = (location.hash || '').match(/^#live\/([A-Za-z0-9-]{8,9})/); if (m) join(m[1]); }
+  // 아이 폰 연결은 초등을 고른 뒤(초등 가입 화면)에만 보여 준다
   function addJoinLink() {
-    const w = document.querySelector('#app .lv-wrap'); if (!w || w.querySelector('.lv-join')) return;
-    const a = document.createElement('div'); a.className = 'lv-join'; a.setAttribute('data-keep-emoji', '');
-    a.innerHTML = `<div class="lv-join-ic">📱<span>⇄</span>📱</div><div class="lv-join-t"><b>엄마 폰 + 아이 폰 함께 보기</b><span>엄마가 설명하는 개념 카드를 아이 폰에 크게 띄워요. 엄마 폰에 뜬 코드를 이 폰에 넣으면 연결돼요.</span></div>
-      <div class="lv-join-b"><button class="btn btn-primary btn-sm" data-j="join">코드 넣기 (아이 폰)</button><button class="btn btn-sm" data-j="how">어떻게 하나요?</button></div>`;
+    if (!window.MS || MS().st()._lv !== 'e') return;
+    const f = document.querySelector('#app #obForm'); if (!f || f.querySelector('.lv-join')) return;
+    const a = document.createElement('div'); a.className = 'lv-join lv-join-sm'; a.setAttribute('data-keep-emoji', '');
+    a.innerHTML = `<div class="lv-join-t"><b>📱 이 폰은 아이 폰인가요?</b><span>엄마 폰에 뜬 코드를 넣으면 가입 없이 바로 연결돼요</span></div>
+      <div class="lv-join-b"><button type="button" class="btn btn-primary btn-sm" data-j="join">코드 넣기</button><button type="button" class="btn btn-sm" data-j="how">함께 보기란?</button></div>`;
     a.addEventListener('click', (e) => { const b = e.target.closest('[data-j]'); if (!b) return; b.dataset.j === 'join' ? joinPrompt() : guide(''); });
-    const g = w.querySelector('.lv-grid'); g ? g.insertAdjacentElement('afterend', a) : w.appendChild(a);
+    const h = f.querySelector('h2'); (h ? h : f.firstElementChild).insertAdjacentElement('beforebegin', a);
   }
   let pend = false; const mo = new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; addJoinLink(); }); });
   function boot() { const r = document.getElementById('app'); if (r) mo.observe(r, { childList: true, subtree: true }); addJoinLink(); fromURL(); }

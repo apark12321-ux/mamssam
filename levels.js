@@ -18,16 +18,34 @@
     m: { n: '중등', t: '개념 정리 · 자기주도', ic: '🎒', c: '#12A150', d: '교과서 핵심 개념을 스스로 정리하고, 문제로 확인해요', pts: ['과목별 단원 개념 정리 → 개념 영상 → 확인 문제', '내가 쓰는 개념 정리 노트와 오답 다시 풀기', '주간 시간표와 연속 공부 기록', '최상위 공부법(메타인지·간격 복습)'] },
     h: { n: '고등', t: '수능·대입 족집게', ic: '🎯', c: '#1F2A44', d: '1:1 온라인 개념 과외부터 수능 족집게, 대입 족집게, 전형별 1:1 대입 진단까지', pts: ['1:1 개념 과외: 수능 빈출 개념 정리 → 족집게 → 확인 문제', '수능 족집게: 과목별 출제 구조와 꼭 지킬 전략', '대입 족집게: 핵심 변화 · 최저 계산기 · 면접 예상 질문', '1:1 대입 진단: 전형 적합도 · 수시 6장 · 정시 3장'] }
   };
+  // 첫 화면: 글은 최소로, 학교급마다 움직이는 그림 한 장 + 이름 + 한 줄
+  const ART = {
+    e: `<svg viewBox="0 0 160 120" aria-hidden="true"><g class="pa-e">
+      <rect class="blk b1" x="22" y="74" width="34" height="34" rx="7" fill="#FFB547"/><text x="39" y="98" text-anchor="middle" font-size="20" font-weight="900" fill="#fff">가</text>
+      <rect class="blk b2" x="62" y="74" width="34" height="34" rx="7" fill="#4A7DF0"/><text class="b2t" x="79" y="98" text-anchor="middle" font-size="20" font-weight="900" fill="#fff">1</text>
+      <rect class="blk b3" x="102" y="74" width="34" height="34" rx="7" fill="#2BB0DC"/><text x="119" y="98" text-anchor="middle" font-size="20" font-weight="900" fill="#fff">A</text>
+      <g class="star"><path d="M80 14l6 12 13 2-9.5 9 2.3 13L80 44l-11.8 6 2.3-13-9.5-9 13-2z" fill="#FFD84D" stroke="#F4B400" stroke-width="2" stroke-linejoin="round"/></g>
+      <g class="crayon"><rect x="104" y="22" width="40" height="10" rx="3" fill="#E5484D" transform="rotate(-35 124 27)"/><path d="M104 40l-8 6 3-9z" fill="#2A2E33"/></g></g></svg>`,
+    m: `<svg viewBox="0 0 160 120" aria-hidden="true"><g class="pa-m">
+      <path d="M20 96 C 50 86, 70 86, 80 94 C 90 86, 110 86, 140 96 L140 34 C110 24, 90 24, 80 32 C 70 24, 50 24, 20 34 Z" fill="#E8F7EE" stroke="#12A150" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M80 32 V94" stroke="#12A150" stroke-width="3"/>
+      <g class="lines"><rect x="32" y="44" width="36" height="5" rx="2.5" fill="#12A150" opacity=".55"/><rect x="32" y="56" width="30" height="5" rx="2.5" fill="#12A150" opacity=".35"/><rect x="32" y="68" width="34" height="5" rx="2.5" fill="#12A150" opacity=".35"/></g>
+      <path class="page" d="M80 32 C 90 24, 110 24, 140 34 L140 96 C110 86, 90 86, 80 94 Z" fill="#fff" stroke="#12A150" stroke-width="3" stroke-linejoin="round"/>
+      <g class="check"><circle cx="112" cy="58" r="14" fill="#12A150"/><path d="M105 58l5 5 9-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g></g></svg>`,
+    h: `<svg viewBox="0 0 160 120" aria-hidden="true"><g class="pa-h">
+      <circle cx="68" cy="64" r="44" fill="#EEF2FB" stroke="#1F2A44" stroke-width="3"/><circle cx="68" cy="64" r="30" fill="#fff" stroke="#1F2A44" stroke-width="3"/><circle cx="68" cy="64" r="16" fill="#FFD36A" stroke="#1F2A44" stroke-width="3"/>
+      <circle class="hit" cx="68" cy="64" r="6" fill="#E5484D"/>
+      <g class="arrow"><path d="M70 62 L140 22" stroke="#1F2A44" stroke-width="4" stroke-linecap="round"/><path d="M134 16 l14 0 -4 6 z M138 28 l4 -14 4 6 z" fill="#E5484D"/></g>
+      <text class="dd" x="128" y="104" text-anchor="middle" font-size="15" font-weight="900" fill="#1F2A44">D-day</text></g></svg>`
+  };
+  const SHORT = { e: '엄마랑 개념 쏙쏙', m: '스스로 개념 정리', h: '수능·대입 족집게' };
   function picker(adding) {
-    const st = MS().st();
-    return `<div class="lv-wrap">
-      <div class="lv-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">픽</div><div class="brand-name">쌤픽</div></div>
-        <div class="lv-tag">초·중·고 공부주치의 · 개념 정리 · 족집게 · 온라인 과외</div>
-        <h1>${adding ? '추가할 학생의 학교급을 골라 주세요' : '꼭 필요한 개념만,<br>콕 집어 주는 쌤'}</h1>
-        <p class="muted">개념 정리 · 족집게 · 온라인 과외를 학교급에 맞게. 학년이 올라가면 설정에서 바꾸면 돼요.</p></div>
-      <div class="lv-grid">${['e', 'm', 'h'].map(k => { const L = LV[k]; return `<button class="lv-card lv-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c}"><span class="lv-ic">${L.ic}</span><span class="lv-n">${L.n}</span><span class="lv-t">${L.t}</span><span class="lv-d">${L.d}</span><ul class="lv-pts">${L.pts.map(p => `<li>${p}</li>`).join('')}</ul><span class="lv-go">시작하기</span></button>`; }).join('')}</div>
+    return `<div class="lv-wrap pk-wrap">
+      <div class="pk-head"><div class="brand" style="padding:0;justify-content:center"><div class="brand-mark">픽</div><div class="brand-name">쌤픽</div></div>
+        <h1>${adding ? '추가할 학생은 어디에 다니나요?' : '누구의 공부를 시작할까요?'}</h1></div>
+      <div class="pk-grid">${['e', 'm', 'h'].map((k, i) => { const L = LV[k]; return `<button class="pk-card pk-${k}" data-act="pickLv" data-lv="${k}" style="--sc:${L.c};--d:${i * 0.12}s"><span class="pk-art">${ART[k]}</span><span class="pk-txt"><b>${L.n}</b><small>${SHORT[k]}</small></span><span class="pk-go" aria-hidden="true">›</span></button>`; }).join('')}</div>
       ${adding ? '<p class="center mt16"><a class="btn btn-ghost btn-sm" href="#settings">← 설정으로</a></p>' : ''}
-      <p class="xs muted center mt16">입력한 정보는 이 기기의 브라우저에만 저장됩니다. · <a href="#legal">저작권·광고·개인정보 안내</a></p>
+      <p class="xs muted center pk-foot">정보는 이 기기에만 저장돼요 · <a href="#legal">안내</a></p>
     </div>`;
   }
   function obLeft(lv) {
