@@ -91,3 +91,6 @@
 .lv-pair-t{font-size:18px;font-weight:900;margin-bottom:6px}
 .lv-pair-s{font-size:14px;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){.eg-btn.hot,.eg-hl{animation:none}}
+
+/* 첫 구동 화면: PYJ 픽스컴퍼니 로고는 아래 파란 곡선 안쪽(광고 영역 바로 위)에 흰색으로 */
+html body #splash .s-logo{bottom:calc(110px + env(safe-area-inset-bottom))!important;opacity:1}
