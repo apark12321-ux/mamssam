@@ -1,0 +1,138 @@
+/* =====================================================================
+   쌤픽 학교급 테마 — 학교급마다 '공책' 컨셉을 다르게
+   · 초등(fl-e)  스케치북: 크림색 모눈 종이 + 파스텔 카드 + 둥근 주아체 + 분홍 형광펜 밑줄
+   · 중등(fl-m)  스터디 플래너: 점 모눈 종이 + 마스킹테이프 머리 + 민트·코랄 + 도현체
+   · 고등(fl-h)  수험 노트: 줄 노트 + 빨간 여백선 + 남색 잉크 + 노란 형광펜 + 명조 제목
+   ===================================================================== */
+
+/* ---------------------------------------------------------------- 초등 */
+body.fl-e{
+  --e-paper:#FFFDF6;--e-grid:#DCEFF7;--e-ink:#2E2F36;--e-sub:#7C8088;
+  --e-pink:#F2A0C4;--e-pink-l:#FDE3EF;--e-mint:#E4F5E2;--e-butter:#FFF3C4;--e-lav:#E7E4FA;--e-sky:#DDF2FB;--e-peach:#FDE4D9;
+  --e-blue:#3CB4E0;--e-blue-d:#1E97C4;
+  --sky:var(--e-blue);--sky-d:var(--e-blue-d);--sky-l:var(--e-sky);--ink:var(--e-ink);--ink2:#55585F;--muted:var(--e-sub);
+  --line:#E3EEF2;--line2:#CFE4EC;--radius:26px;
+  --round:'Jua',var(--sans);
+  font-family:'Gowun Dodum',var(--sans);
+  background:#CDEBF6!important;
+}
+/* 크림색 모눈 종이 */
+body.fl-e .main,body.fl-e .kid,body.fl-e .onboard .ob-form{
+  background-color:var(--e-paper)!important;
+  background-image:linear-gradient(var(--e-grid) 1px,transparent 1px),linear-gradient(90deg,var(--e-grid) 1px,transparent 1px)!important;
+  background-size:26px 26px!important;
+}
+body.fl-e .wrap{background:transparent!important}
+/* 제목: 둥근 주아체 + 분홍 형광펜 밑줄 */
+body.fl-e h1,body.fl-e h2,body.fl-e h3,body.fl-e .page-head h1{font-family:'Jua',var(--sans)!important;font-weight:400!important;color:var(--e-ink)!important;letter-spacing:-.02em}
+body.fl-e .page-head h1{display:inline-block;position:relative;z-index:0}
+body.fl-e .page-head h1::after{content:''!important;position:absolute;z-index:-1;left:-4px;right:-6px;bottom:.05em;width:auto!important;height:.5em!important;margin:0!important;border-radius:999px 999px 999px 999px/60% 60% 40% 40%;background:var(--e-pink)!important;opacity:.55;transform:rotate(-1.2deg)}
+body.fl-e .page-head .sub{color:var(--e-sub)!important}
+/* 카드: 파스텔 큰 둥근 모서리, 테두리 없이 */
+body.fl-e .card,body.fl-e .kid-card{border:0!important;border-radius:28px!important;box-shadow:0 6px 0 rgba(46,47,54,.05),0 10px 26px rgba(60,180,224,.10)!important;background:#fff!important}
+body.fl-e .wrap>.card:nth-of-type(6n+1),body.fl-e .kid-body>.kid-card:nth-of-type(6n+1){background:var(--e-pink-l)!important}
+body.fl-e .wrap>.card:nth-of-type(6n+2),body.fl-e .kid-body>.kid-card:nth-of-type(6n+2){background:var(--e-mint)!important}
+body.fl-e .wrap>.card:nth-of-type(6n+3),body.fl-e .kid-body>.kid-card:nth-of-type(6n+3){background:var(--e-butter)!important}
+body.fl-e .wrap>.card:nth-of-type(6n+4),body.fl-e .kid-body>.kid-card:nth-of-type(6n+4){background:var(--e-lav)!important}
+body.fl-e .wrap>.card:nth-of-type(6n+5),body.fl-e .kid-body>.kid-card:nth-of-type(6n+5){background:var(--e-sky)!important}
+body.fl-e .wrap>.card:nth-of-type(6n),body.fl-e .kid-body>.kid-card:nth-of-type(6n){background:var(--e-peach)!important}
+body.fl-e .card-head h2,body.fl-e .card h2{font-size:21px!important}
+body.fl-e .card-head h2::before{background:var(--e-pink)!important;border-radius:999px!important}
+/* 오늘의 3단계: 단계마다 다른 파스텔, 분홍 번호 원 */
+body.fl-e .fam-card{background:#fff!important}
+body.fl-e .fm-step{border:0!important;border-radius:24px!important}
+body.fl-e .fm-step:nth-child(1){background:var(--e-pink-l)!important}
+body.fl-e .fm-step:nth-child(2){background:var(--e-sky)!important}
+body.fl-e .fm-step:nth-child(3){background:var(--e-butter)!important}
+body.fl-e .fm-n,body.fl-e .num,body.fl-e .steps li::before{background:var(--e-pink)!important;color:#fff!important;font-family:'Jua',var(--sans)!important}
+/* 버튼·칩: 둥근 알약, 선택은 하늘색 테두리 */
+body.fl-e .btn{border-radius:999px!important;font-family:'Jua',var(--sans)!important;font-weight:400!important;letter-spacing:0}
+body.fl-e .btn-primary{background:var(--e-blue)!important;border-color:var(--e-blue)!important;color:#fff!important;box-shadow:0 4px 0 var(--e-blue-d)!important}
+body.fl-e .btn:not(.btn-primary){background:#fff!important;border:2px solid var(--line2)!important;color:var(--e-ink)!important}
+body.fl-e .chip{border-radius:999px!important;background:#fff!important;border:2px solid var(--line2)!important;font-family:'Jua',var(--sans)!important;font-weight:400!important}
+body.fl-e .chip.on{background:var(--e-sky)!important;border-color:var(--e-blue)!important;color:var(--e-ink)!important;box-shadow:0 3px 0 var(--e-blue)!important}
+/* 입력칸: 흰 둥근 상자, 비어 있는 곳은 하늘색 점선 */
+body.fl-e .input,body.fl-e input.input,body.fl-e select.input,body.fl-e textarea{border-radius:20px!important;border:2px solid var(--line2)!important;background:#fff!important}
+body.fl-e .input:focus{border-color:var(--e-blue)!important;box-shadow:0 0 0 4px rgba(60,180,224,.18)!important}
+body.fl-e .empty{border:2px dashed #A9DCEF!important;border-radius:26px!important;background:rgba(255,255,255,.7)!important}
+/* 바로가기 6개: 파스텔 동그란 칸 */
+body.fl-e .home-quick a{border:0!important;border-radius:22px!important;font-family:'Jua',var(--sans)}
+body.fl-e .home-quick a:nth-child(6n+1){background:var(--e-pink-l)!important}
+body.fl-e .home-quick a:nth-child(6n+2){background:var(--e-mint)!important}
+body.fl-e .home-quick a:nth-child(6n+3){background:var(--e-butter)!important}
+body.fl-e .home-quick a:nth-child(6n+4){background:var(--e-lav)!important}
+body.fl-e .home-quick a:nth-child(6n+5){background:var(--e-sky)!important}
+body.fl-e .home-quick a:nth-child(6n){background:var(--e-peach)!important}
+/* 아이 화면: 오늘의 길 */
+body.fl-e .kid-top{background:rgba(255,253,246,.92)!important;border-bottom:2px dashed #BFE3F1!important}
+body.fl-e .kp-card{background:#fff!important;border:3px solid var(--e-blue)!important;box-shadow:0 6px 0 #BDE6F5!important}
+body.fl-e .kp-step{border-radius:22px!important;border:0!important;background:var(--e-butter)!important}
+body.fl-e .kp-step.cur{background:var(--e-pink-l)!important;outline:3px solid var(--e-blue);outline-offset:-3px}
+/* 아래 메뉴·옆 메뉴 */
+body.fl-e .bottomnav,body.fl-e .sidebar{background:rgba(255,253,246,.96)!important;border-color:#D7ECF4!important}
+body.fl-e .bottomnav a.on,body.fl-e .bottomnav a.active{color:var(--e-blue-d)!important}
+
+/* ---------------------------------------------------------------- 중등 */
+body.fl-m{
+  --m-paper:#FBFBF7;--m-dot:#CBD6D1;--m-ink:#24302C;--m-sub:#6E7A75;
+  --m-mint:#12A486;--m-mint-d:#0B8A70;--m-mint-l:#DDF4EE;--m-coral:#FF7A6B;--m-coral-l:#FFE6E2;--m-lemon:#FFE36E;--m-lemon-l:#FFF7D1;
+  --sky:var(--m-mint);--sky-d:var(--m-mint-d);--sky-l:var(--m-mint-l);--ink:var(--m-ink);--ink2:#45514C;--muted:var(--m-sub);
+  --line:#E1E8E4;--line2:#CFDAD5;--radius:14px;
+  --round:'Do Hyeon',var(--sans);
+  background:#E6EFEB!important;
+}
+/* 점 모눈 종이 */
+body.fl-m .main,body.fl-m .onboard .ob-form{background-color:var(--m-paper)!important;background-image:radial-gradient(var(--m-dot) 1.2px,transparent 1.3px)!important;background-size:20px 20px!important}
+body.fl-m .wrap{background:transparent!important}
+body.fl-m h1,body.fl-m h2,body.fl-m h3,body.fl-m .page-head h1{font-family:'Do Hyeon',var(--sans)!important;font-weight:400!important;color:var(--m-ink)!important}
+/* 제목 아래: 민트 마스킹테이프 */
+body.fl-m .page-head h1::after{width:96px!important;height:14px!important;border-radius:2px!important;background:repeating-linear-gradient(90deg,rgba(18,164,134,.55) 0 8px,rgba(18,164,134,.42) 8px 16px)!important;transform:rotate(-2deg);margin-top:8px!important}
+/* 카드: 플래너 칸 + 위에 테이프 한 조각 */
+body.fl-m .card{border:1.5px solid var(--line2)!important;border-radius:14px!important;box-shadow:3px 3px 0 rgba(36,48,44,.08)!important;background:#fff!important}
+body.fl-m .wrap>.card:not(.hero){position:relative;overflow:visible!important}
+body.fl-m .wrap>.card:not(.hero)::before{content:'';position:absolute;top:-9px;left:22px;width:64px;height:18px;border-radius:2px;transform:rotate(-3deg);opacity:.85;background:var(--m-lemon)}
+body.fl-m .wrap>.card:not(.hero):nth-of-type(3n+2)::before{background:#9FE3D2;transform:rotate(2deg)}
+body.fl-m .wrap>.card:not(.hero):nth-of-type(3n)::before{background:#FFB7AE;left:auto;right:26px}
+body.fl-m .card-head h2::before{background:var(--m-coral)!important;border-radius:2px!important}
+body.fl-m .btn{border-radius:10px!important;font-family:'Do Hyeon',var(--sans)!important;font-weight:400!important}
+body.fl-m .btn-primary{background:var(--m-mint)!important;border-color:var(--m-mint)!important;color:#fff!important;box-shadow:0 3px 0 var(--m-mint-d)!important}
+body.fl-m .chip{border-radius:8px!important}
+body.fl-m .chip.on{background:var(--m-lemon-l)!important;border-color:#E9C53A!important;color:var(--m-ink)!important}
+body.fl-m .input,body.fl-m select.input,body.fl-m textarea{border-radius:10px!important;border:1.5px solid var(--line2)!important}
+body.fl-m .tile,body.fl-m .hi-q{border-radius:12px!important}
+body.fl-m .bottomnav,body.fl-m .sidebar{background:#FBFBF7!important}
+
+/* ---------------------------------------------------------------- 고등 */
+body.fl-h{
+  --h-paper:#FFFEFA;--h-rule:#DCE3EE;--h-margin:#F2A3A3;--h-ink:#1B2540;--h-sub:#5D677D;
+  --h-navy:#24336B;--h-navy-d:#16224C;--h-navy-l:#E6EAF5;--h-hi:#FFE45C;--h-red:#D64545;
+  --sky:var(--h-navy);--sky-d:var(--h-navy-d);--sky-l:var(--h-navy-l);--ink:var(--h-ink);--ink2:#3A4560;--muted:var(--h-sub);
+  --line:#E2E6EE;--line2:#CDD4E1;--radius:8px;
+  background:#E9ECF2!important;
+}
+/* 줄 노트 + 왼쪽 빨간 여백선 */
+body.fl-h .main,body.fl-h .onboard .ob-form{
+  background-color:var(--h-paper)!important;
+  background-image:linear-gradient(90deg,transparent 30px,var(--h-margin) 30px,var(--h-margin) 31.5px,transparent 31.5px),linear-gradient(var(--h-rule) 1px,transparent 1px)!important;
+  background-size:100% 100%,100% 30px!important;
+}
+body.fl-h .wrap{background:transparent!important}
+body.fl-h h1,body.fl-h h2,body.fl-h h3,body.fl-h .page-head h1{font-family:'Noto Serif KR',serif!important;font-weight:900!important;color:var(--h-ink)!important;letter-spacing:-.03em}
+/* 제목: 노란 형광펜 */
+body.fl-h .page-head h1{display:inline;background:linear-gradient(transparent 58%,var(--h-hi) 58%,var(--h-hi) 92%,transparent 92%);padding:0 4px}
+body.fl-h .page-head h1::after{display:none!important}
+/* 카드: 시험지 같은 반듯한 칸, 남색 얇은 선, 왼쪽 굵은 띠 */
+body.fl-h .card{border:1px solid var(--line2)!important;border-left:5px solid var(--h-navy)!important;border-radius:6px!important;box-shadow:none!important;background:#fff!important}
+body.fl-h .card-head h2::before{background:var(--h-red)!important;border-radius:0!important}
+body.fl-h .btn{border-radius:6px!important;font-weight:800!important}
+body.fl-h .btn-primary{background:var(--h-navy)!important;border-color:var(--h-navy)!important;color:#fff!important}
+body.fl-h .chip{border-radius:4px!important}
+body.fl-h .chip.on{background:var(--h-navy)!important;border-color:var(--h-navy)!important;color:#fff!important}
+body.fl-h .input,body.fl-h select.input,body.fl-h textarea{border-radius:4px!important;border:1px solid var(--line2)!important}
+body.fl-h .hero{border-left-color:var(--h-hi)!important}
+body.fl-h .num,body.fl-h .steps li::before{background:var(--h-red)!important;color:#fff!important;border-radius:4px!important}
+body.fl-h .bottomnav,body.fl-h .sidebar{background:#FFFEFA!important}
+
+/* 아이 모드 전환 버튼은 늘 눈에 띄게(테마의 흰 버튼 규칙에서 제외) */
+body.fl-e [data-act="enterKid"]{background:var(--e-pink)!important;border-color:var(--e-pink)!important;color:#fff!important;box-shadow:0 3px 0 #D97AA5!important}
+body.fl-m [data-act="enterKid"]{background:var(--m-coral)!important;border-color:var(--m-coral)!important;color:#fff!important}
