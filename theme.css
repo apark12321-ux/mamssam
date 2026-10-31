@@ -136,3 +136,34 @@ body.fl-h .bottomnav,body.fl-h .sidebar{background:#FFFEFA!important}
 /* 아이 모드 전환 버튼은 늘 눈에 띄게(테마의 흰 버튼 규칙에서 제외) */
 body.fl-e [data-act="enterKid"]{background:var(--e-pink)!important;border-color:var(--e-pink)!important;color:#fff!important;box-shadow:0 3px 0 #D97AA5!important}
 body.fl-m [data-act="enterKid"]{background:var(--m-coral)!important;border-color:var(--m-coral)!important;color:#fff!important}
+
+/* ---------------------------------------------------------------- 휴대폰 최적화 (가입 화면 등) */
+@media (max-width:760px){
+  /* 가입 화면: 위 소개 블록은 짧게, 종이는 화면 전체로, 양옆 여백 고르게 */
+  body.fl-e .onboard,body.fl-e .onboard .ob-right{background-color:var(--e-paper)!important;background-image:linear-gradient(var(--e-grid) 1px,transparent 1px),linear-gradient(90deg,var(--e-grid) 1px,transparent 1px)!important;background-size:26px 26px!important}
+  body.fl-m .onboard,body.fl-m .onboard .ob-right{background-color:var(--m-paper)!important;background-image:radial-gradient(var(--m-dot) 1.2px,transparent 1.3px)!important;background-size:20px 20px!important}
+  body.fl-h .onboard,body.fl-h .onboard .ob-right{background-color:var(--h-paper)!important;background-image:linear-gradient(var(--h-rule) 1px,transparent 1px)!important;background-size:100% 30px!important}
+  .onboard .ob-left{background:transparent!important;padding:calc(14px + env(safe-area-inset-top)) 18px 0!important;min-height:0!important}
+  .onboard .ob-left::before,.onboard .ob-left::after{display:none!important}
+  .onboard .ob-left h1{font-size:22px!important;margin-top:12px!important}
+  .onboard .ob-left .ob-sub,.onboard .ob-left .ob-feats,.onboard .ob-left .ob-lv{display:none!important}
+  .onboard .ob-left [data-act="pickLv"]{margin-top:10px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;box-shadow:none!important}
+  .onboard .ob-right{padding:12px 18px calc(40px + env(safe-area-inset-bottom))!important}
+  .onboard .ob-form{background:none!important;padding:0!important;max-width:none!important}
+  .onboard .ob-form h2{font-size:24px!important;margin-top:4px}
+  .onboard .ob-form .field{margin-bottom:16px}
+  .onboard .ob-form .field>label{font-size:14px!important;margin-bottom:6px!important;display:block}
+  .onboard .lv-join.lv-join-sm{margin:0 0 20px!important;padding:12px 14px!important}
+  .onboard .lv-join-sm .lv-join-b .btn{padding:8px 14px!important;font-size:14px!important;box-shadow:none!important}
+  /* 입력칸: 손가락 크기, 16px 글자(아이폰 확대 방지), 긴 안내문은 줄여 보이게 */
+  .input,input.input,select.input{min-height:50px!important;height:auto!important;padding:12px 16px!important;font-size:16px!important}
+  body.fl-e .input,body.fl-e input.input,body.fl-e select.input{border-radius:16px!important}
+  .input::placeholder{font-size:15px;text-overflow:ellipsis}
+  .onboard .chip{padding:8px 11px!important;font-size:15px!important;box-shadow:none!important;min-width:0!important}
+  .onboard .chips{gap:6px!important}
+  .daypick{display:flex!important;flex-wrap:nowrap!important;gap:5px!important}
+  .daypick .chip{flex:1 1 0!important;width:auto!important;height:42px!important;padding:0!important;text-align:center;justify-content:center}
+  .onboard{grid-template-columns:minmax(0,1fr)!important}
+  body.fl-e .chip.on{box-shadow:0 2px 0 var(--e-blue)!important}
+  .onboard button[type=submit]{min-height:54px;font-size:18px!important}
+}
