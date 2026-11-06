@@ -1,4 +1,4 @@
-/* 쌤픽 — 전과목 학습 (과목 허브 · 단원 · 학습 플레이어) */
+/* 탑픽 — 전과목 학습 (과목 허브 · 단원 · 학습 플레이어) */
 (function () {
   'use strict';
   window.GL = (g) => g > 9 ? `고등학교 ${g - 9}학년` : g > 6 ? `중학교 ${g - 6}학년` : `초등 ${g}학년`;
@@ -39,7 +39,7 @@
 
   /* ---------- 썸네일 실패·자리표시 처리 ---------- */
   // 내려간 영상은 404 대신 120×90 회색 이미지를 200으로 돌려주므로 onload에서 크기로도 판별한다.
-  const vtFallback = (img) => { const p = img.parentNode; if (p) { p.classList.add('noimg'); if (!p.title) p.title = '미리보기 이미지를 불러오지 못했어요'; } img.remove(); };
+  const vtFallback = (img) => { const p = img.parentNode; if (p) { p.classList.add('noimg'); if (!p.title) p.title = '미리보기 이미지를 불러오지 못했습니다'; } img.remove(); };
   window.vtErr = function (img) {
     if (!img.dataset.f) { img.dataset.f = '1'; img.src = (img.getAttribute('src') || '').replace('i.ytimg.com', 'img.youtube.com'); return; }
     vtFallback(img);
@@ -182,14 +182,14 @@
     const cards = list.length ? list.map(u => {
       const s = unitStat(u);
       return `<a class="card unit-card sp-unit" href="#study/u/${u.id}" style="--sc:${S.c}"><div class="u-top"><div class="u-ico">${u.icon || S.ic}</div><div style="flex:1;min-width:0"><div class="u-no">${u.sem}학기 ${u.no}단원</div><div class="u-title">${esc(u.title)}</div></div></div><div class="progress"><i style="width:${pct(s.done, s.total)}%;background:${S.c}"></i></div><div class="row between xs muted"><span>차시 ${s.done}/${s.total}</span><span>${s.rate != null ? `정답률 ${s.rate}%` : `영상 ${vlist(u.id).length}개`}</span></div></a>`;
-    }).join('') : `<div class="card" style="grid-column:1/-1"><div class="empty"><div class="e-ico">${S.ic}</div>${GS(g)} ${sem}학기 ${S.n} 단원이 없어요.</div></div>`;
+    }).join('') : `<div class="card" style="grid-column:1/-1"><div class="empty"><div class="e-ico">${S.ic}</div>${GS(g)} ${sem}학기 ${S.n} 단원이 없습니다.</div></div>`;
     return MS().layout('study', `
-      <div class="page-head"><div><h1>과목별 개념 정리</h1><div class="sub">${isStu() ? '단원 개념 → 영상 → 스스로 정리 → 확인 문제 순서로 혼자 공부해요.' : '2022 개정 교육과정 · 단원 개념 → 영상 → 확인 문제를 차시별로 이어서 공부해요.'}</div></div></div>
+      <div class="page-head"><div><h1>기초 다지기 · 과목별 학습</h1><div class="sub">${isStu() ? '단원 개념 → 영상 → 자기 정리 → 확인 문항 순서로 자기주도 학습을 진행합니다.' : '2022 개정 교육과정 · 단원 개념 → 영상 → 확인 문항을 차시별로 이어서 학습합니다.'}</div></div></div>
       ${subjTabs(k, kid.grade, 'study')}
       ${hero}
       <div class="row sp-filter"><div class="chips">${gs.map(x => `<button class="chip ${x === g ? 'on' : ''}" data-sa="sg" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-sa="ss" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-sa="ss" data-s="2">2학기</button></div></div>
       <div class="grid g3 sp-ulist mt16">${cards}</div>
-      ${k === 'math' ? '<p class="small muted mt16">수학은 단원별 엄마 설명 대본·자동 출제 워크시트도 함께 쓸 수 있어요. <a href="#lessons">수학 수업 준비 ›</a></p>' : ''}
+      ${k === 'math' ? '<p class="small muted mt16">수학은 단원별 학부모 설명 대본과 자동 출제 문제지를 함께 사용할 수 있습니다. <a href="#lessons">수학 학부모 지원 ›</a></p>' : ''}
       ${(isStu() ? meta.pubNoteM : meta.pubNote) ? `<p class="xs muted mt16">※ ${esc(isStu() ? meta.pubNoteM : meta.pubNote)}</p>` : ''}`);
   }
 
@@ -211,23 +211,23 @@
     const concept = `<div class="card"><div class="card-head"><h2>핵심 개념</h2></div><div class="concept" style="border-color:${S.c}">${esc(u.concept)}</div>
       <div class="grid g2 mt12"><div class="callout green"><div class="c-t">확인 질문</div>${esc(u.check)}</div><div class="callout orange"><div class="c-t">다음 학습과의 연결</div>${esc(u.next)}</div></div></div>`;
     const stu = u.grade >= 7;
-    const guide = `<div class="card"><div class="card-head"><h2>${stu ? '스스로 공부 순서' : '엄마 설명 가이드'}</h2></div><ol class="steps">${(u.script || []).map(t => `<li><span>${esc(t)}</span></li>`).join('')}</ol>
+    const guide = `<div class="card"><div class="card-head"><h2>${stu ? '자기주도 학습 순서' : '학부모 설명 가이드'}</h2></div><ol class="steps">${(u.script || []).map(t => `<li><span>${esc(t)}</span></li>`).join('')}</ol>
       <div class="callout yellow mt12"><div class="c-t">${stu ? '생각 열기' : '집에서 하는 도입 활동'}</div>${esc(u.warmup)}</div>
-      <h3 class="mt16">${stu ? '자주 틀리는 포인트' : '아이가 자주 헷갈리는 점'}</h3><ul class="warn-list mt8">${(u.mistakes || []).map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
-    const video = `<div class="card"><div class="card-head"><h2>개념 영상 <span class="xs muted">${vids.length}개</span></h2>${vids.length ? `<a class="more" href="#videos/${u.id}">크게 보기 ›</a>` : ''}</div>${vids.length ? `<div class="sp-vgrid">${vids.slice(0, 12).map(v => vcard(u, v)).join('')}</div>` : '<p class="muted small">이 단원은 아직 검증된 영상이 없어요.</p>'}</div>`;
-    const tabs = [['lessons', '차시'], ['concept', '개념'], ['video', `영상 ${vids.length}`], ['guide', stu ? '공부 가이드' : '엄마 가이드']];
+      <h3 class="mt16">${stu ? '자주 틀리는 지점' : '학습자가 자주 틀리는 지점'}</h3><ul class="warn-list mt8">${(u.mistakes || []).map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
+    const video = `<div class="card"><div class="card-head"><h2>개념 영상 <span class="xs muted">${vids.length}개</span></h2>${vids.length ? `<a class="more" href="#videos/${u.id}">크게 보기 ›</a>` : ''}</div>${vids.length ? `<div class="sp-vgrid">${vids.slice(0, 12).map(v => vcard(u, v)).join('')}</div>` : '<p class="muted small">이 단원은 검증된 영상이 아직 없습니다.</p>'}</div>`;
+    const tabs = [['lessons', '차시'], ['concept', '개념'], ['video', `영상 ${vids.length}`], ['guide', stu ? '학습 가이드' : '학부모 가이드']];
     return MS().layout('study', `
       <div class="row" style="margin-bottom:6px"><a class="btn btn-ghost btn-sm" href="#study/${k}">← ${S.n} 단원 목록</a></div>
       <div class="page-head sp-uhead" style="--sc:${S.c}"><div style="min-width:0"><div class="muted small bold"><span class="badge" style="background:${S.c};color:#fff">${S.ic} ${S.n}</span> ${GS(u.grade)} ${u.sem}학기 · ${u.no}단원</div><h1>${u.icon || ''} ${esc(u.title)}</h1>
       <div class="row mt8" style="gap:8px"><div class="progress" style="width:140px"><i style="width:${pct(s.done, s.total)}%;background:${S.c}"></i></div><span class="xs muted">차시 ${s.done}/${s.total}${s.rate != null ? ` · 정답률 ${s.rate}%` : ''}</span></div></div>
-      <div class="row sp-uact"><a class="btn btn-primary" style="background:${S.c};border-color:${S.c}" href="#learn/${u.id}/${nextL}">▶ ${nextL + 1}차시 학습</a><a class="btn" href="#learn/${u.id}/q">✏️ 단원 문제 10개</a><button class="btn" data-act="makeSheet" data-unit="${u.id}" data-level="1">🖨 워크시트</button></div></div>
+      <div class="row sp-uact"><a class="btn btn-primary" style="background:${S.c};border-color:${S.c}" href="#learn/${u.id}/${nextL}">▶ ${nextL + 1}차시 학습</a><a class="btn" href="#learn/${u.id}/q">✏️ 단원 문항 10개</a><button class="btn" data-act="makeSheet" data-unit="${u.id}" data-level="1">🖨 문제지</button></div></div>
       <div class="sp-tabs" role="tablist">${tabs.map(([t, n]) => `<button class="${t === tab ? 'on' : ''}" data-sa="utab" data-t="${t}">${n}</button>`).join('')}</div>
       <div class="sp-ugrid" data-tab="${tab}">
         <div class="stack"><section class="sp-sec" data-sec="lessons"><div class="card"><div class="card-head"><h2>차시</h2><span class="xs muted">눌러서 바로 학습</span></div><div class="sp-lessons">${lessons}</div></div></section>
         <section class="sp-sec" data-sec="video">${video}</section></div>
         <div class="stack"><section class="sp-sec" data-sec="concept">${concept}</section><section class="sp-sec" data-sec="guide">${guide}</section></div>
       </div>
-      ${k === 'math' ? `<p class="small muted mt16"><a href="#lesson/${u.id}">수학 수업 카드(진도 지정·심화 워크시트) ›</a></p>` : ''}`);
+      ${k === 'math' ? `<p class="small muted mt16"><a href="#lesson/${u.id}">수학 설명 자료(진도 지정·심화 문제지) ›</a></p>` : ''}`);
   }
 
   function page(a) {
@@ -247,7 +247,7 @@
     sp().cur[k] = u.id;
     const kidMode = /[?&]k=1/.test(location.hash);
     LP = { u, k, l, quizOnly, kidMode, step: 0, steps: [], qs: null, qi: 0, ans: {}, vsel: 0, ready: false };
-    const title = quizOnly ? `${u.title} · 단원 문제` : u.lessons[l];
+    const title = quizOnly ? `${u.title} · 단원 문항` : u.lessons[l];
     const back = kidMode ? '#kid' : `#study/u/${u.id}`;
     return `<div class="lp" style="--sc:${S.c}">
       <header class="lp-top"><a class="lp-x" href="${back}" aria-label="닫기">✕</a><div class="lp-tt"><div class="xs">${S.ic} ${S.n} · ${GS(u.grade)}-${u.sem} ${u.no}단원${quizOnly ? '' : ` · ${l + 1}/${u.lessons.length}차시`}</div><b>${esc(title)}</b></div><span class="lp-cnt" id="lpCnt"></span></header>
@@ -326,6 +326,7 @@
     if (a[0] === 'ob' || a[0] === 'addkid' || a[0] === 'editkid') obInject(a[0] === 'editkid');
     try { window.SchoolApp && SchoolApp.after(a); } catch (e) { }
     try { window.AdsApp && AdsApp.after(a); } catch (e) { }
+    try { window.DiagApp && DiagApp.after(a); } catch (e) { }
     if (!MS() || !MS().st().kids.length) return;
     try { applyPubOrder(); } catch (e) { }
     if (a[0] === 'home' || !a[0]) weekDecor();
@@ -355,7 +356,7 @@
       return `<div class="lp-card pop"><div class="lp-emoji">🎯</div><div class="lp-kicker">오늘 배울 것</div><h2 class="lp-h">${esc(u.lessons[l])}</h2>
         <div class="concept mt16" style="border-color:${S.c}">${esc(u.concept)}</div>
         ${l === 0 && u.warmup ? `<div class="callout yellow mt12"><div class="c-t">시작 활동</div>${esc(u.warmup)}</div>` : ''}
-        <div class="lp-path mt16">${LP.steps.map((s, i) => `<span class="${i === LP.step ? 'on' : ''}">${{ intro: '목표', video: '영상', talk: u.grade >= 7 ? '정리' : '이야기', quiz: '문제', done: '완료' }[s]}</span>`).join('<i>›</i>')}</div></div>`;
+        <div class="lp-path mt16">${LP.steps.map((s, i) => `<span class="${i === LP.step ? 'on' : ''}">${{ intro: '목표', video: '영상', talk: u.grade >= 7 ? '정리' : '이야기', quiz: '문항', done: '완료' }[s]}</span>`).join('<i>›</i>')}</div></div>`;
     }
     if (name === 'video') {
       const vs = vidsForLP(); const v = vs[LP.vsel] || vs[0];
@@ -368,9 +369,9 @@
         ${vs.length > 1 ? `<div class="lp-vlist mt12">${vs.map((x, i) => `<button class="lp-vopt ${i === LP.vsel ? 'on' : ''}" data-sa="lpv" data-i="${i}"><span class="vthumb${MS().embed() ? '' : ' noimg'}">${MS().vimg(x.i)}<span class="vdur">${esc(x.d)}</span></span><span class="vtitle">${esc(x.t)}</span></button>`).join('')}</div>` : ''}</div>`;
     }
     if (name === 'talk') {
-      return `<div class="lp-card pop"><div class="lp-emoji">${u.grade >= 7 ? '📝' : '💬'}</div><div class="lp-kicker">${u.grade >= 7 ? '스스로 정리하기 — 순서대로 따라 해 보자' : '엄마랑 이야기하기'}</div>
+      return `<div class="lp-card pop"><div class="lp-emoji">${u.grade >= 7 ? '📝' : '💬'}</div><div class="lp-kicker">${u.grade >= 7 ? '자기 정리 · 순서대로 진행' : '학부모와 이야기하기'}</div>
         <ol class="steps mt12">${(u.script || []).map(t => `<li><span>${esc(t)}</span></li>`).join('')}</ol>
-        ${(u.mistakes || []).length ? `<div class="callout orange mt12"><div class="c-t">이것만 조심!</div>${esc(u.mistakes[l % u.mistakes.length])}</div>` : ''}</div>`;
+        ${(u.mistakes || []).length ? `<div class="callout orange mt12"><div class="c-t">주의 지점</div>${esc(u.mistakes[l % u.mistakes.length])}</div>` : ''}</div>`;
     }
     if (name === 'quiz') return quizHTML();
     if (name === 'done') return doneHTML();
@@ -389,8 +390,8 @@
     } else {
       body = `<form class="lp-inp" data-sa-form="1"><input class="input kid-input" id="lpIn" inputmode="${p.t === 'frac' || p.t === 'list' ? 'text' : 'decimal'}" autocomplete="off" placeholder="${p.t === 'frac' ? '예: 3/4 또는 1 2/3' : p.t === 'list' ? '쉼표로 구분' : '답'}" ${an ? 'disabled' : ''} value="${an ? esc(an.given) : ''}">${p.unit ? `<span class="bold">${p.unit}</span>` : ''}${an ? '' : '<button class="btn btn-primary btn-lg">확인</button>'}</form>`;
     }
-    const fb = an ? `<div class="feedback ${an.ok ? 'ok' : 'no'}">${an.ok ? '정답이에요! 👏' : `정답은 ${p.t === 'choice' ? p.opts[p.v] : p.a}${p.unit && p.t !== 'choice' ? ' ' + p.unit : ''}`}</div>${p.ex ? `<div class="lp-ex">${p.ex}</div>` : ''}${an.msg ? `<div class="small muted">${esc(an.msg)}</div>` : ''}` : '';
-    return `<div class="lp-card"><div class="kid-progress">${dots}</div><div class="lp-kicker">✏️ 확인 문제 ${i + 1}/${qs.length}</div><div class="lp-q">${p.q}${p.fig || ''}</div>${body}${fb}</div>`;
+    const fb = an ? `<div class="feedback ${an.ok ? 'ok' : 'no'}">${an.ok ? '정답입니다 👏' : `정답은 ${p.t === 'choice' ? p.opts[p.v] : p.a}${p.unit && p.t !== 'choice' ? ' ' + p.unit : ''}`}</div>${p.ex ? `<div class="lp-ex">${p.ex}</div>` : ''}${an.msg ? `<div class="small muted">${esc(an.msg)}</div>` : ''}` : '';
+    return `<div class="lp-card"><div class="kid-progress">${dots}</div><div class="lp-kicker">✏️ 확인 문항 ${i + 1}/${qs.length}</div><div class="lp-q">${p.q}${p.fig || ''}</div>${body}${fb}</div>`;
   }
 
   function doneHTML() {
@@ -400,14 +401,14 @@
     const nl = !quizOnly && l + 1 < u.lessons.length ? l + 1 : null;
     const nu = (() => { if (nl != null) return null; const list = unitsOf(LP.k, u.grade).concat(unitsOf(LP.k, u.grade + 1)); const i = list.indexOf(u); return list[i + 1] || null; })();
     return `<div class="lp-card pop" style="text-align:center"><div class="big-emoji">${!tot || ok / tot >= .8 ? '🎉' : ok / tot >= .5 ? '👍' : '💪'}</div>
-      <h2 class="lp-h">${quizOnly ? '단원 문제 완료!' : `${l + 1}차시 학습 완료!`}</h2>
-      ${tot ? `<div class="lp-score">${ok} / ${tot}</div><div class="small muted">맞힌 문제마다 칭찬 코인 1개를 받았어요</div>` : ''}
-      ${u.check ? `<div class="callout green mt16" style="text-align:left"><div class="c-t">${u.grade >= 7 ? '스스로 설명해 보기' : '엄마에게 설명해 보기'}</div>${esc(u.check)}</div>` : ''}
+      <h2 class="lp-h">${quizOnly ? '단원 문항 완료' : `${l + 1}차시 학습 완료`}</h2>
+      ${tot ? `<div class="lp-score">${ok} / ${tot}</div><div class="small muted">정답 문항마다 칭찬 코인 1개를 획득했습니다</div>` : ''}
+      ${u.check ? `<div class="callout green mt16" style="text-align:left"><div class="c-t">${u.grade >= 7 ? '스스로 설명하기' : '학부모에게 설명하기'}</div>${esc(u.check)}</div>` : ''}
       <div class="lp-donebtns mt16">
         ${nl != null ? `<a class="btn btn-primary btn-lg" href="#learn/${u.id}/${nl}${LP.kidMode ? '?k=1' : ''}">다음 차시: ${esc(u.lessons[nl])} ▶</a>` : ''}
         ${nu && !LP.kidMode ? `<a class="btn btn-primary btn-lg" href="#study/u/${nu.id}">다음 단원: ${esc(nu.title)} ▶</a>` : ''}
-        ${tot && ok < tot ? `<button class="btn btn-lg" data-sa="lretry">틀린 문제 다시</button>` : ''}
-        <a class="btn btn-lg" href="${LP.kidMode ? '#kid' : '#study/u/' + u.id}">${LP.kidMode ? '공부방으로' : '단원으로'}</a>
+        ${tot && ok < tot ? `<button class="btn btn-lg" data-sa="lretry">틀린 문항 다시 풀기</button>` : ''}
+        <a class="btn btn-lg" href="${LP.kidMode ? '#kid' : '#study/u/' + u.id}">${LP.kidMode ? '학습 홈으로' : '단원으로'}</a>
       </div></div>`;
   }
 
@@ -444,8 +445,8 @@
     if (prev) prev.disabled = LP.step === 0 && (name !== 'quiz' || LP.qi === 0);
     if (next) {
       next.style.display = name === 'done' ? 'none' : '';
-      if (name === 'quiz') { const an = LP.ans[LP.qi]; next.disabled = !an; next.textContent = LP.qi + 1 < LP.qs.length ? '다음 문제 ▶' : '결과 보기 ▶'; }
-      else { next.disabled = false; next.textContent = LP.steps[LP.step + 1] === 'quiz' ? '문제 풀기 ▶' : '다음 ▶'; }
+      if (name === 'quiz') { const an = LP.ans[LP.qi]; next.disabled = !an; next.textContent = LP.qi + 1 < LP.qs.length ? '다음 문항 ▶' : '결과 보기 ▶'; }
+      else { next.disabled = false; next.textContent = LP.steps[LP.step + 1] === 'quiz' ? '문항 풀기 ▶' : '다음 ▶'; }
     }
     const inp = document.getElementById('lpIn'); if (inp && !inp.disabled && !matchMedia('(pointer:coarse)').matches) inp.focus();
   }
@@ -505,13 +506,13 @@
     const ps = kidPubs(kid);
     const set = kidSubjs(kid).filter(k => !isNat(k, kid.grade) && ps[k] && ps[k] !== '선택 안 함').map(k => `${SK[k].n} ${ps[k]}`);
     const nat = kidSubjs(kid).filter(k => isNat(k, kid.grade)).map(k => SK[k].n);
-    return (set.length ? set.join(' · ') : '아직 고르지 않았어요') + (nat.length ? ` (${nat.join('·')}는 국정)` : '');
+    return (set.length ? set.join(' · ') : '미선택') + (nat.length ? ` (${nat.join('·')}는 국정)` : '');
   }
   function pubSelects(kid, ks, pubs, attr, g) {
     g = g || (kid ? kid.grade : 1);
     const list = ks.filter(k => !isNat(k, g));
     const nat = ks.filter(k => isNat(k, g));
-    return `<div class="pub-grid">${list.map(k => `<label class="pub-row" style="--sc:${SK[k].c}"><span class="pub-s">${SK[k].ic} ${SK[k].n}</span><select class="input" ${attr}="${k}">${PUBS().map(p => `<option ${p === (pubs[k] || '선택 안 함') ? 'selected' : ''}>${p}</option>`).join('')}</select></label>`).join('')}</div>${nat.length ? `<p class="xs muted mt8">${nat.map(k => SK[k].n).join('·')}는 국정 교과서라 출판사를 고르지 않아도 돼요.</p>` : ''}`;
+    return `<div class="pub-grid">${list.map(k => `<label class="pub-row" style="--sc:${SK[k].c}"><span class="pub-s">${SK[k].ic} ${SK[k].n}</span><select class="input" ${attr}="${k}">${PUBS().map(p => `<option ${p === (pubs[k] || '선택 안 함') ? 'selected' : ''}>${p}</option>`).join('')}</select></label>`).join('')}</div>${nat.length ? `<p class="xs muted mt8">${nat.map(k => SK[k].n).join('·')}는 국정 교과서이므로 출판사 선택이 필요 없습니다.</p>` : ''}`;
   }
   let pubSig = '';
   function applyPubOrder() {
@@ -584,16 +585,16 @@
     };
     if (subs.length) {
       const first = subs.find(k => !done.has(k)), nx = first && nextFor(first);
-      return `<div class="card hero tt-hero"><div class="h-top"><div><div class="h-label">${lab} · ${kid.grade >= 7 ? '오늘의 공부' : '오늘의 엄마표 수업'} ${kid.minutes || 30}분</div><div class="h-title">${first ? `오늘은 ${subs.map(k => SK[k].n).join(' · ')}` : '오늘 공부를 모두 마쳤어요 🎉'}</div></div>${badge}</div>
+      return `<div class="card hero tt-hero"><div class="h-top"><div><div class="h-label">${lab} · ${kid.grade >= 7 ? '오늘의 학습' : '오늘의 학습 운영'} ${kid.minutes || 30}분</div><div class="h-title">${first ? `오늘은 ${subs.map(k => SK[k].n).join(' · ')}` : '오늘 학습을 모두 완료했습니다 🎉'}</div></div>${badge}</div>
         <div class="tt-list">${subs.map(row).join('')}</div>
-        <div class="h-actions">${nx ? `<a class="btn btn-white" href="#learn/${nx.u.id}/${nx.l}">▶ ${SK[first].n}부터 시작</a>` : `<a class="btn btn-white" href="#study">더 공부하기</a>`}<a class="btn" href="#settings">시간표 바꾸기</a></div></div>`;
+        <div class="h-actions">${nx ? `<a class="btn btn-white" href="#learn/${nx.u.id}/${nx.l}">▶ ${SK[first].n}부터 시작</a>` : `<a class="btn btn-white" href="#study">추가 학습</a>`}<a class="btn" href="#settings">시간표 바꾸기</a></div></div>`;
     }
     let nd = null;
     for (let i = 1; i <= 7; i++) { const d = new Date(today); d.setDate(d.getDate() + i); if ((kid.days || []).includes(d.getDay())) { nd = d; break; } }
     const ns = nd ? (kid.tt[nd.getDay()] || []) : [];
     const f = ns[0] || kidSubjs(kid)[0], fx = f && nextFor(f);
-    return `<div class="card hero tt-hero"><div class="h-top"><div><div class="h-label">${lab}</div><div class="h-title">오늘은 쉬는 날이에요</div><div class="h-unit">${nd ? `다음 수업 ${nd.getMonth() + 1}월 ${nd.getDate()}일 (${DAYN[nd.getDay()]}) · ${ns.map(k => SK[k].ic + ' ' + SK[k].n).join('  ')}` : '수업 요일을 정해 주세요'}</div></div>${badge}</div>
-      <div class="h-actions">${fx ? `<a class="btn btn-white" href="#learn/${fx.u.id}/${fx.l}">그래도 오늘 공부하기</a>` : ''}<a class="btn" href="#study">과목별 학습</a></div></div>`;
+    return `<div class="card hero tt-hero"><div class="h-top"><div><div class="h-label">${lab}</div><div class="h-title">오늘은 휴식일입니다</div><div class="h-unit">${nd ? `다음 학습 ${nd.getMonth() + 1}월 ${nd.getDate()}일 (${DAYN[nd.getDay()]}) · ${ns.map(k => SK[k].ic + ' ' + SK[k].n).join('  ')}` : '학습 요일을 설정하십시오'}</div></div>${badge}</div>
+      <div class="h-actions">${fx ? `<a class="btn btn-white" href="#learn/${fx.u.id}/${fx.l}">오늘도 학습하기</a>` : ''}<a class="btn" href="#study">과목별 학습</a></div></div>`;
   }
 
   function weekDecor() {
@@ -621,11 +622,11 @@
     const el = document.createElement('div');
     el.className = 'card tt-card mb16';
     el.innerHTML = `<div class="card-head"><h2>📅 과목 · 시간표</h2><button class="btn btn-sm" data-sa="ttreset">추천 시간표로</button></div>
-      <div class="small muted">함께 공부할 과목</div>
+      <div class="small muted">학습 과목</div>
       <div class="chips mt8">${subs.map(s => `<button class="chip subj-chip ${mine.includes(s.k) ? 'on' : ''}" style="--sc:${s.c}" data-sa="ttsub" data-k="${s.k}">${s.ic} ${s.n}</button>`).join('')}</div>
-      <div class="tt-grid mt16">${days.map(d => `<div class="tt-day"><b>${DAYN[d]}</b><div class="chips">${mine.map(k => `<button class="chip subj-chip ${kid.tt[d].includes(k) ? 'on' : ''}" style="--sc:${SK[k].c}" data-sa="ttcell" data-d="${d}" data-k="${k}">${SK[k].ic} ${SK[k].n}</button>`).join('')}</div></div>`).join('') || '<p class="muted small">수업 요일이 없어요. 아이 정보 \'수정\'에서 요일을 골라 주세요.</p>'}</div>
-      <p class="xs muted mt8">요일마다 공부할 과목을 눌러 켜고 끄세요. 수업 요일·시간은 아이 정보의 '수정'에서 바꿀 수 있어요.</p>
-      <h3 class="mt16">과목별 교과서 출판사</h3><p class="xs muted">학교에서 받은 교과서 표지 아래쪽 출판사를 골라 주세요. 같은 출판사 영상이 먼저 보여요.</p>
+      <div class="tt-grid mt16">${days.map(d => `<div class="tt-day"><b>${DAYN[d]}</b><div class="chips">${mine.map(k => `<button class="chip subj-chip ${kid.tt[d].includes(k) ? 'on' : ''}" style="--sc:${SK[k].c}" data-sa="ttcell" data-d="${d}" data-k="${k}">${SK[k].ic} ${SK[k].n}</button>`).join('')}</div></div>`).join('') || '<p class="muted small">학습 요일이 없습니다. 학습자 정보 \'수정\'에서 요일을 선택하십시오.</p>'}</div>
+      <p class="xs muted mt8">요일별 학습 과목을 눌러 켜고 끕니다. 학습 요일·시간은 학습자 정보의 '수정'에서 변경합니다.</p>
+      <h3 class="mt16">과목별 교과서 출판사</h3><p class="xs muted">학교 교과서 표지 하단의 출판사를 선택합니다. 같은 출판사 영상이 먼저 표시됩니다.</p>
       <div class="mt8">${pubSelects(kid, mine, kidPubs(kid), 'data-pubset', kid.grade)}</div>`;
     main.insertAdjacentElement('afterend', el);
   }
@@ -650,14 +651,14 @@
     const head = document.querySelector('.page-head'); if (!head || document.querySelector('.les-subj')) return;
     const kid = MS().kid();
     const el = document.createElement('div'); el.className = 'les-subj mb16';
-    el.innerHTML = `<div class="chips scroll-x">${kidSubjs(kid).concat(subjsForGrade(kid.grade).map(s => s.k).filter(k => !kidSubjs(kid).includes(k))).map(k => { const S = SK[k]; return k === 'math' ? `<span class="chip subj-chip on" style="--sc:${S.c}">${S.ic} ${S.n}</span>` : `<a class="chip subj-chip" style="--sc:${S.c}" href="#study/${k}" data-sa="toguide">${S.ic} ${S.n}</a>`; }).join('')}</div><p class="xs muted mt8">다른 과목은 단원마다 '엄마 가이드' 탭에 설명 대본·도입 활동·헷갈리는 점이 정리되어 있어요.</p>`;
+    el.innerHTML = `<div class="chips scroll-x">${kidSubjs(kid).concat(subjsForGrade(kid.grade).map(s => s.k).filter(k => !kidSubjs(kid).includes(k))).map(k => { const S = SK[k]; return k === 'math' ? `<span class="chip subj-chip on" style="--sc:${S.c}">${S.ic} ${S.n}</span>` : `<a class="chip subj-chip" style="--sc:${S.c}" href="#study/${k}" data-sa="toguide">${S.ic} ${S.n}</a>`; }).join('')}</div><p class="xs muted mt8">다른 과목은 단원마다 '학부모 가이드' 탭에 설명 대본·도입 활동·자주 틀리는 지점이 정리되어 있습니다.</p>`;
     head.insertAdjacentElement('afterend', el);
   }
 
   function genOpts(k, g, sel) {
     if (k === 'math') return [1, 2].map(sem => `<optgroup label="${g}학년 ${sem}학기">${unitsOf('math', g, sem).map(u => `<option value="${u.id}" ${u.id === sel ? 'selected' : ''}>${u.no}. ${esc(u.title)}</option>`).join('')}</optgroup>`).join('');
     const list = unitsOf(k, g);
-    return list.length ? `<optgroup label="${SK[k].n} ${GS(g)}">${list.map(u => `<option value="${u.id}" ${u.id === sel ? 'selected' : ''}>${u.sem}학기 ${u.no}. ${esc(u.title)}</option>`).join('')}</optgroup>` : `<option value="">${GS(g)} ${SK[k].n} 단원이 없어요</option>`;
+    return list.length ? `<optgroup label="${SK[k].n} ${GS(g)}">${list.map(u => `<option value="${u.id}" ${u.id === sel ? 'selected' : ''}>${u.sem}학기 ${u.no}. ${esc(u.title)}</option>`).join('')}</optgroup>` : `<option value="">${GS(g)} ${SK[k].n} 단원이 없습니다</option>`;
   }
   function sheetsDecor() {
     const sel = document.getElementById('genUnit'); if (!sel || document.getElementById('genSubj')) return;
@@ -686,8 +687,8 @@
     const draw = () => {
       const g = +gEl.value; const avail = subjsForGrade(g);
       const sel = (picked || defSubjs(g)).filter(k => avail.some(s => s.k === k));
-      field.innerHTML = `<label>함께 공부할 과목 <span class="xs muted">(설정에서 요일별 시간표로 바꿀 수 있어요)</span></label><div class="chips" id="obSubj">${avail.map(s => `<button type="button" class="chip subj-chip ${sel.includes(s.k) ? 'on' : ''}" style="--sc:${s.c}" data-k="${s.k}">${s.ic} ${s.n}</button>`).join('')}</div>
-        <label class="mt16" style="display:block">과목별 교과서 출판사 <span class="xs muted">(모르면 비워 두세요)</span></label>${pubSelects(null, sel, pubs, 'data-obpub', g)}`;
+      field.innerHTML = `<label>학습 과목 <span class="xs muted">(설정에서 요일별 시간표로 변경 가능)</span></label><div class="chips" id="obSubj">${avail.map(s => `<button type="button" class="chip subj-chip ${sel.includes(s.k) ? 'on' : ''}" style="--sc:${s.c}" data-k="${s.k}">${s.ic} ${s.n}</button>`).join('')}</div>
+        <label class="mt16" style="display:block">과목별 교과서 출판사 <span class="xs muted">(모르면 비워 둡니다)</span></label>${pubSelects(null, sel, pubs, 'data-obpub', g)}`;
     };
     const pubs = Object.assign({}, kid ? kidPubs(kid) : {});
     window._obPubs = pubs;
@@ -701,11 +702,11 @@
       const g = +gEl.value, stu = g >= 7, hs = g >= 10;
       field.style.display = hs ? 'none' : '';
       const lab = (sel, a, b) => { const el = f.querySelector(sel); const l = el && el.closest('.field') && el.closest('.field').querySelector('label'); if (l) l.firstChild.textContent = stu ? a : b; };
-      lab('input[name=name]', '이름', '아이 이름 또는 애칭');
-      lab('#obDays', '공부 요일', '엄마표 개념 과외 요일');
-      lab('#obMin', '하루 공부 시간', '하루 과외 시간');
-      const h = f.querySelector('h2'); if (h && !kid) h.textContent = hs ? '학생 정보를 입력해 주세요' : stu ? '나의 정보를 입력해 주세요' : '아이 정보를 알려 주세요';
-      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = hs ? '개념은 과외처럼,<br>입시는 족집게처럼' : stu ? '개념을 정리하고<br>스스로 확인하는 공부' : lh.dataset.o; }
+      lab('input[name=name]', '학습자 이름', '학습자 이름');
+      lab('#obDays', '학습 요일', '학습 요일');
+      lab('#obMin', '하루 학습 시간', '하루 학습 시간');
+      const h = f.querySelector('h2'); if (h && !kid) h.textContent = '학습자 정보 입력';
+      const lh = document.querySelector('.ob-left h1'); if (lh) { lh.dataset.o = lh.dataset.o || lh.innerHTML; lh.innerHTML = hs ? '수능·대입 상위권<br>전략 운영' : stu ? '최상위권 변별 구간<br>돌파 학습' : lh.dataset.o; }
       const uSel = document.getElementById('obUnit');
       if (uSel && stu) { const m = (MS() ? MS().units : []).filter(u => u.grade === 6); const fb = (kid && U(kid.unitId) && U(kid.unitId).grade <= 6 ? U(kid.unitId) : m[m.length - 1]); if (fb) uSel.innerHTML = `<option value="${fb.id}" selected>${fb.id}</option>`; }
     };
@@ -713,7 +714,7 @@
     gEl.addEventListener('change', () => { picked = null; draw(); stuForm(); });
     document.getElementById('obSem') && document.getElementById('obSem').addEventListener('change', () => setTimeout(stuForm, 0));
     const txt = document.querySelector('.ob-feats');
-    if (txt) txt.querySelectorAll('.of-d').forEach(d => { d.textContent = d.textContent.replace('단원별 문제 자동 출제', '과목·단원별 문제 자동 출제'); });
+    if (txt) txt.querySelectorAll('.of-d').forEach(d => { d.textContent = d.textContent.replace('단원별 문항 자동 출제', '과목·단원별 문항 자동 출제'); });
   }
   function applyObSubj() {
     const o = window._obSubj; if (!o || !MS() || !MS().st().kids.length) return;
@@ -731,7 +732,7 @@
     window._obSubj = ks;
   }, true);
   document.addEventListener('change', e => {
-    if (e.target.dataset && e.target.dataset.pubset) { const kid = MS().kid(); kidPubs(kid)[e.target.dataset.pubset] = e.target.value; if (e.target.dataset.pubset === 'math') kid.publisher = e.target.value; MS().save(); MS().toast(`${SK[e.target.dataset.pubset].n} 교과서를 ${e.target.value}(으)로 저장했어요`); document.querySelectorAll('.li-s').forEach(x => { if (x.textContent === '교과서 출판사' && x.nextElementSibling) x.nextElementSibling.textContent = pubLine(kid); }); pubSig = ''; return; }
+    if (e.target.dataset && e.target.dataset.pubset) { const kid = MS().kid(); kidPubs(kid)[e.target.dataset.pubset] = e.target.value; if (e.target.dataset.pubset === 'math') kid.publisher = e.target.value; MS().save(); MS().toast(`${SK[e.target.dataset.pubset].n} 교과서를 ${e.target.value}(으)로 저장했습니다`); document.querySelectorAll('.li-s').forEach(x => { if (x.textContent === '교과서 출판사' && x.nextElementSibling) x.nextElementSibling.textContent = pubLine(kid); }); pubSig = ''; return; }
     if (e.target.id === 'genGrade' && document.getElementById('genSubj')) setTimeout(() => {
       const sel = document.getElementById('genUnit'); const k = MS().st()._genSubj || 'math';
       if (sel && document.getElementById('genSubj')) { const g = +e.target.value; sel.innerHTML = genOpts(k, g, sel.value); sel.dispatchEvent(new Event('change', { bubbles: true })); }
@@ -752,11 +753,11 @@
     const line = (k) => { const nx = nextFor(k); return nx ? `${SK[k].ic} ${SK[k].n}${done.has(k) ? ' (완료)' : ''} — ${nx.u.title} ${nx.l + 1}차시 「${nx.u.lessons[nx.l]}」\n   도입: ${nx.u.warmup || ''}` : ''; };
     if (subs.length) {
       const acts = subs.map(k => { const nx = nextFor(k); return nx ? [`${SK[k].n} 시작`, 'nav', `learn/${nx.u.id}/${nx.l}`] : null; }).filter(Boolean).slice(0, 3);
-      return { text: `오늘은 ${subs.map(k => SK[k].n).join('·')} 수업이에요. (${kid.minutes || 30}분)\n\n${subs.map(line).filter(Boolean).join('\n\n')}\n\n과목마다 '시작'을 누르면 도입 → 영상 → 설명 → 확인 문제 순서로 진행돼요.`, actions: acts };
+      return { text: `오늘은 ${subs.map(k => SK[k].n).join('·')} 학습입니다. (${kid.minutes || 30}분)\n\n${subs.map(line).filter(Boolean).join('\n\n')}\n\n과목마다 '시작'을 누르면 도입 → 영상 → 설명 → 확인 문항 순서로 진행됩니다.`, actions: acts };
     }
     let nd = null; for (let i = 1; i <= 7; i++) { const d = new Date(); d.setDate(d.getDate() + i); if ((kid.days || []).includes(d.getDay())) { nd = d; break; } }
     const ns = nd ? kid.tt[nd.getDay()] || [] : [];
-    return { text: `오늘은 쉬는 날이에요.${nd ? `\n다음 수업은 ${nd.getMonth() + 1}월 ${nd.getDate()}일(${DAYN[nd.getDay()]}) ${ns.map(k => SK[k].n).join('·')}예요.` : ''}\n\n원하면 오늘도 가볍게 한 과목 해 볼 수 있어요.`, actions: [['과목별 학습', 'nav', 'study'], ['시간표 바꾸기', 'nav', 'settings']] };
+    return { text: `오늘은 휴식일입니다.${nd ? `\n다음 학습은 ${nd.getMonth() + 1}월 ${nd.getDate()}일(${DAYN[nd.getDay()]}) ${ns.map(k => SK[k].n).join('·')}입니다.` : ''}\n\n오늘도 한 과목을 가볍게 학습할 수 있습니다.`, actions: [['과목별 학습', 'nav', 'study'], ['시간표 바꾸기', 'nav', 'settings']] };
   }
 
   /* ---------- 중학생 자기주도 홈 ---------- */
@@ -777,28 +778,25 @@
     const sk = streak(kid);
     const week = [...Array(7)].map((_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); const ds = ymd(d); const done = doneToday(kid, ds); const plan = (kid.days || []).includes(d.getDay()) ? (kid.tt[d.getDay()] || []) : []; const today = ds === MS().today();
       return `<div class="day ${today ? 'today' : ''} ${done.size ? 'done' : ''} ${!plan.length && !done.size ? 'off' : ''}"><span class="d-w">${DAYN[d.getDay()]}</span><span class="d-n">${d.getDate()}</span><span class="d-l"><span class="wk-ic">${(done.size ? [...done] : plan).map(k => (SK[k] || SK.kor).ic).join('')}</span>${done.size ? '✓' : plan.length ? `<span class="wk-n">${plan.map(k => SK[k].n).join('·')}</span>` : '쉬는 날'}</span></div>`; }).join('');
-    const tip = ['개념 영상은 1.25배속으로 보고, 핵심 정리를 노트에 3줄로 써 보자.', '틀린 문제는 다음 날 다시 풀어야 진짜 내 것이 돼.', '25분 공부하고 5분 쉬기(뽀모도로)로 집중력을 지키자.', '시험 2주 전에는 단원 문제 10개를 매일 한 단원씩 풀어 보자.'][now.getDate() % 4];
+    const tip = ['개념 영상은 1.25배속으로 시청하고, 핵심 정리를 노트에 3줄로 기록합니다.', '틀린 문항은 다음 날 다시 풀어야 완전히 습득됩니다.', '25분 학습, 5분 휴식(뽀모도로)으로 집중력을 유지합니다.', '시험 2주 전에는 단원 문항 10개를 매일 한 단원씩 풉니다.'][now.getDate() % 4];
     return MS().layout('home', `
-      <div class="page-head"><div><h1>${esc(kid.name)}의 공부 계획</h1><div class="sub">${GL(kid.grade)} ${kid.sem}학기 · 주 ${(kid.days || []).length}회 ${kid.minutes || 30}분 · 스스로 공부</div></div></div>
+      <div class="page-head"><div><h1>${esc(kid.name)}의 학습 계획</h1><div class="sub">${GL(kid.grade)} ${kid.sem}학기 · 주 ${(kid.days || []).length}회 ${kid.minutes || 30}분 · 자기주도 학습</div></div></div>
+      <div class="home-top">${homeCard()}</div>
+      <div class="stat-strip mt12"><span><b>${sk}</b>일 연속</span><span><b>${weekN}</b>차시 이번 주</span><span><b>${t ? pct(ok, t) + '%' : '–'}</b> 정답률</span><span><b>${wrong}</b>오답</span></div>
+      ${wrong ? `<div class="card mt12 stu-wrong"><div class="row between"><div><h2>🔁 오답 다시 풀기</h2><div class="small muted">틀린 문항 ${wrong}개가 대기 중입니다.</div></div><a class="btn btn-primary btn-sm" href="#records">풀기</a></div></div>` : ''}
       ${hero(`<span class="badge">연속 ${sk}일</span>`, now)}
-      <div class="grid g4 mt16">
-        <div class="tile"><div class="t-label">연속 공부</div><div class="t-val">${sk}<small>일</small></div></div>
-        <div class="tile"><div class="t-label">이번 주 마친 차시</div><div class="t-val">${weekN}<small>차시</small></div></div>
-        <div class="tile"><div class="t-label">확인 문제 정답률</div><div class="t-val">${t ? pct(ok, t) : '–'}<small>${t ? '%' : ''}</small></div></div>
-        <div class="tile"><div class="t-label">오답 노트</div><div class="t-val">${wrong}<small>문항</small></div></div>
-      </div>
-      ${wrong ? `<div class="card mt16 stu-wrong"><div class="row between"><div><h2>🔁 오답 다시 풀기</h2><div class="small muted">틀린 문제 ${wrong}개가 기다리고 있어. 맞히면 오답 노트에서 빠져.</div></div><a class="btn btn-primary" href="#sheets">다시 풀기</a></div></div>` : ''}
-      ${homeCard()}
-      <div class="card mt16"><div class="card-head"><h2>이번 주 시간표</h2><a class="more" href="#settings">시간표 바꾸기</a></div><div class="week">${week}</div></div>
-      <div class="card mt16"><div class="card-head"><h2>💡 오늘의 공부 팁</h2></div><p>${tip}</p><p class="small muted mt8">공부 순서: 개념 영상 → 스스로 정리 → 확인 문제 → 오답 다시 풀기</p></div>`);
+      <details class="card home-fold mt12"><summary>더 보기 <span class="xs muted">시간표 · 학습 팁</span></summary>
+        <div class="card-head mt12"><h2>이번 주 시간표</h2><a class="more" href="#settings">시간표 변경</a></div><div class="week">${week}</div>
+        <div class="card-head mt12"><h2>💡 오늘의 학습 팁</h2></div><p class="small">${tip}</p><p class="xs muted mt8">학습 순서: 개념 영상 → 자기 정리 → 확인 문항 → 오답 다시 풀기</p>
+      </details>`);
   }
   function stuDecor(a) {
     document.body.classList.toggle('is-stu', isStu());
     if (!isStu()) return;
-    document.querySelectorAll('.brand-sub').forEach(x => x.textContent = '스스로 공부');
+    document.querySelectorAll('.brand-sub').forEach(x => x.textContent = '자기주도 학습');
     if (a[0] === 'videos' && !a[1]) { const k = kidSubjs()[0]; const nx = k && nextFor(k); if (nx) { setTimeout(() => MS().go('videos/' + nx.u.id), 0); } }
-    if (a[0] === 'settings') document.querySelectorAll('.card h2').forEach(h => { if (h.textContent.trim() === '아이 모드 잠금') h.closest('.card').style.display = 'none'; if (h.textContent.trim() === '아이 정보') h.textContent = '내 정보'; if (h.textContent.trim() === '아이 목록') h.textContent = '사용자 목록'; });
-    if (a[0] === 'records') document.querySelectorAll('.t-label').forEach(x => { if (x.textContent === '엄마표 수업') x.textContent = '공부한 날'; });
+    if (a[0] === 'settings') document.querySelectorAll('.card h2').forEach(h => { if (h.textContent.trim() === '학습자 화면 잠금') h.closest('.card').style.display = 'none'; if (h.textContent.trim() === '학습자 정보') h.textContent = '내 정보'; if (h.textContent.trim() === '학습자 목록') h.textContent = '사용자 목록'; });
+    if (a[0] === 'records') document.querySelectorAll('.t-label').forEach(x => { if (x.textContent === '학습한 날') x.textContent = '학습한 날'; });
     if (['lessons', 'chat', 'contents', 'scraps', 'kid'].includes(a[0])) MS().go('home');
   }
 
@@ -830,13 +828,13 @@
       if (a === 'ttsub') {
         const k = el.dataset.k; let s = kidSubjs(kid);
         s = s.includes(k) ? s.filter(x => x !== k) : s.concat(k);
-        if (!s.length) return MS().toast('과목을 하나 이상 골라 주세요');
+        if (!s.length) return MS().toast('과목을 하나 이상 선택하십시오');
         kid.subjs = SUBJ.map(x => x.k).filter(x => s.includes(x));
         if (s.includes(k)) { const days = Object.keys(kid.tt).map(Number); if (days.length && !days.some(d => kid.tt[d].includes(k))) { const d = days.sort((x, y) => kid.tt[x].length - kid.tt[y].length)[0]; kid.tt[d].push(k); } }
       } else if (a === 'ttcell') {
         const d = +el.dataset.d, k = el.dataset.k, row = kid.tt[d] || (kid.tt[d] = []);
         kid.tt[d] = row.includes(k) ? row.filter(x => x !== k) : kidSubjs(kid).filter(x => row.includes(x) || x === k);
-      } else { kid.tt = defTT(kid); MS().toast('추천 시간표로 바꿨어요'); }
+      } else { kid.tt = defTT(kid); MS().toast('추천 시간표로 변경했습니다'); }
       ensureTT(kid); MS().save(); MS().render();
     }
     else if (a === 'gensubj') {
@@ -873,7 +871,7 @@
     const kid = MS().kid(), g = kid.grade;
     const ks = kidSubjs(kid).concat(subjsForGrade(g).map(s => s.k).filter(k => !kidSubjs(kid).includes(k)));
     const items = ks.map(k => ({ s: SK[k], nx: nextFor(k), p: subjProgress(k, g) })).filter(x => x.nx);
-    const sc = window.SchoolApp ? SchoolApp.homeCard() : '';
+    const sc = (window.DiagApp ? DiagApp.homeCard() : '') + (window.SchoolApp ? SchoolApp.homeCard() : '');
     if (!items.length) return sc;
     return sc + `<div class="card mt16 sp-home"><div class="card-head"><h2>🎒 과목별 이어서 학습</h2><a class="more" href="#study">전체 보기 ›</a></div><div class="sp-home-row">${items.map(({ s, nx, p }) =>
       `<a class="sp-hcard" style="--sc:${s.c}" href="#learn/${nx.u.id}/${nx.l}"><div class="row between"><span class="sp-hs">${s.ic} ${s.n}</span><span class="xs muted">${p}%</span></div><div class="sp-hl">${esc(nx.u.lessons[nx.l])}</div><div class="xs muted">${esc(nx.u.title)} · ${nx.l + 1}차시</div><div class="progress mt8"><i style="width:${p}%;background:${s.c}"></i></div></a>`).join('')}</div></div>`;
@@ -884,7 +882,7 @@
     const ks = today.concat(kidSubjs(kid).filter(k => !today.includes(k)));
     const items = ks.map(k => ({ s: SK[k], nx: nextFor(k), t: today.includes(k), d: done.has(k) })).filter(x => x.nx).slice(0, 8);
     if (!items.length) return '';
-    return `<div class="kid-card mb16"><h2 style="font-size:19px">🎒 ${today.length ? '오늘 공부할 과목' : '공부할 과목'}</h2><div class="kid-subj mt12">${items.map(({ s, nx, t, d }) =>
+    return `<div class="kid-card mb16"><h2 style="font-size:19px">🎒 ${today.length ? '오늘 학습 과목' : '학습 과목'}</h2><div class="kid-subj mt12">${items.map(({ s, nx, t, d }) =>
       `<a class="kid-sbtn ${d ? 'done' : ''}" style="--sc:${s.c}" href="#learn/${nx.u.id}/${nx.l}?k=1"><span class="ks-ic">${d ? '✅' : s.ic}</span><span class="ks-n">${s.n}${t && !d ? ' <span class="ks-t">오늘</span>' : ''}</span><span class="ks-l">${esc(nx.u.lessons[nx.l])}</span></a>`).join('')}</div></div>`;
   }
   function vsubj(d) {

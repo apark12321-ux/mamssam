@@ -1,4 +1,4 @@
-/* 쌤픽 초등 — 엄마가 개념을 설명할 때 보여 주는 '한 장 개념 카드'(인포그래픽)
+/* 탑픽 초등 — 학부모가 개념을 설명할 때 보여 주는 '개념 카드'(인포그래픽)
    단원 자료(개념·생활 예시·헷갈리는 점·확인 질문·다음 연결)로 자동으로 만들고,
    엄마가 문구를 직접 고칠 수 있으며, '아이에게 크게 보여주기'로 전체 화면에 띄운다.
    수학 분수 단원은 분수 막대 그림을 함께 그린다. */
@@ -24,7 +24,7 @@
     const fr = [...txt.matchAll(/(\d+)\s*\/\s*(\d+)/g)].map(m => [+m[1], +m[2]]).filter(([a, b]) => b > 0 && b <= 12 && a <= b).slice(0, 2);
     if (!fr.length) return '';
     const bar = ([a, b], y, c) => `${Array.from({ length: b }, (_, i) => `<rect x="${10 + i * (300 / b)}" y="${y}" width="${300 / b - 3}" height="34" rx="5" fill="${i < a ? c : '#EEF3F6'}" stroke="${c}" stroke-width="1.5"/>`).join('')}<text x="320" y="${y + 23}" font-size="18" font-weight="800" fill="#2A2E33">${a}/${b}</text>`;
-    return `<div class="ic-vis"><svg viewBox="0 0 380 ${fr.length * 52 + 8}" role="img" aria-label="분수 막대">${fr.map((f, i) => bar(f, 8 + i * 52, i ? '#F59E0B' : d.sc)).join('')}</svg><small>전체를 똑같이 나눈 칸 중 색칠한 만큼이 분수예요</small></div>`;
+    return `<div class="ic-vis"><svg viewBox="0 0 380 ${fr.length * 52 + 8}" role="img" aria-label="분수 막대">${fr.map((f, i) => bar(f, 8 + i * 52, i ? '#F59E0B' : d.sc)).join('')}</svg><small>전체를 똑같이 나눈 칸 중 색칠한 만큼이 분수입니다</small></div>`;
   }
 
   function card(d, big) {
@@ -35,19 +35,19 @@
         <div class="ic-sec"><div class="ic-lbl">핵심 3가지</div><ol class="ic-pts">${d.pts.map((p, i) => `<li><span class="ic-n">${i + 1}</span>${ed('pt' + i, p)}</li>`).join('')}</ol></div>
         ${fractionSVG(d)}
         ${d.ex ? `<div class="ic-sec ic-ex"><div class="ic-lbl">생활 속에서 보면</div>${ed('ex', d.ex, 'p')}</div>` : ''}
-        ${d.wrong ? `<div class="ic-sec ic-mis"><div class="ic-x"><b>✗ 헷갈려요</b>${ed('wrong', d.wrong, 'p')}</div><div class="ic-o"><b>✓ 이렇게 기억해요</b>${ed('right', d.right || '선생님 설명을 다시 떠올려 봐요', 'p')}</div></div>` : ''}
+        ${d.wrong ? `<div class="ic-sec ic-mis"><div class="ic-x"><b>✗ 혼동하기 쉬운 점</b>${ed('wrong', d.wrong, 'p')}</div><div class="ic-o"><b>✓ 바른 이해</b>${ed('right', d.right || '개념 설명을 다시 확인합니다', 'p')}</div></div>` : ''}
         ${d.q ? `<div class="ic-sec ic-q"><div class="ic-lbl">확인 질문</div>${ed('q', d.q, 'p')}</div>` : ''}
-        ${!big && d.script ? `<div class="ic-sec ic-script"><div class="ic-lbl">엄마 설명 대본 (아이 화면에는 안 보여요)</div><p>${esc(d.script)}</p></div>` : ''}
-        ${d.next ? `<div class="ic-next">다음에 이어져요 · ${esc(d.next)}</div>` : ''}
+        ${!big && d.script ? `<div class="ic-sec ic-script"><div class="ic-lbl">학부모 설명 대본 (학습자 화면에는 표시되지 않습니다)</div><p>${esc(d.script)}</p></div>` : ''}
+        ${d.next ? `<div class="ic-next">다음 연결 · ${esc(d.next)}</div>` : ''}
       </div></div>`;
   }
 
   let cur = null;
   function open(uid, l) {
-    const d = data(uid, l); if (!d) return MS().toast('이 단원의 개념 카드를 만들 수 없어요');
+    const d = data(uid, l); if (!d) return MS().toast('이 단원의 개념 카드를 만들 수 없습니다');
     cur = { uid, l }; close();
     const o = document.createElement('div'); o.className = 'ic-wrap'; o.id = 'icWrap';
-    o.innerHTML = `<div class="ic-bar"><button class="btn btn-sm" data-ic="close">✕ 닫기</button><span class="ic-bar-t">한 장 개념 카드</span><button class="btn btn-sm" data-ic="edit">문구 고치기</button><button class="btn btn-sm btn-primary" data-ic="big">아이에게 크게 보여주기</button></div><div class="ic-scroll">${card(d, false)}</div>`;
+    o.innerHTML = `<div class="ic-bar"><button class="btn btn-sm" data-ic="close">✕ 닫기</button><span class="ic-bar-t">개념 카드</span><button class="btn btn-sm" data-ic="edit">문구 수정</button><button class="btn btn-sm btn-primary" data-ic="big">학습자 화면으로 크게 보기</button></div><div class="ic-scroll">${card(d, false)}</div>`;
     document.body.appendChild(o); document.body.style.overflow = 'hidden';
     o.addEventListener('click', onClick);
   }
@@ -55,14 +55,14 @@
   function onClick(e) {
     const b = e.target.closest('[data-ic]'); if (!b) return; const o = document.getElementById('icWrap'); const act = b.dataset.ic;
     if (act === 'close') return close();
-    if (act === 'big') { const d = data(cur.uid, cur.l); o.classList.add('ic-full'); o.querySelector('.ic-scroll').innerHTML = card(d, true); o.querySelector('.ic-bar').innerHTML = '<button class="btn btn-sm" data-ic="small">← 엄마 화면</button><span class="ic-bar-t"></span><button class="btn btn-sm" data-ic="close">✕</button>'; try { o.requestFullscreen && o.requestFullscreen(); } catch (x) { } return; }
+    if (act === 'big') { const d = data(cur.uid, cur.l); o.classList.add('ic-full'); o.querySelector('.ic-scroll').innerHTML = card(d, true); o.querySelector('.ic-bar').innerHTML = '<button class="btn btn-sm" data-ic="small">← 학부모 화면</button><span class="ic-bar-t"></span><button class="btn btn-sm" data-ic="close">✕</button>'; try { o.requestFullscreen && o.requestFullscreen(); } catch (x) { } return; }
     if (act === 'small') { try { document.fullscreenElement && document.exitFullscreen(); } catch (x) { } open(cur.uid, cur.l); return; }
     if (act === 'edit') {
       const on = !o.classList.contains('ic-editing'); o.classList.toggle('ic-editing', on);
       o.querySelectorAll('.ic-ed').forEach(x => x.contentEditable = on ? 'true' : 'false');
-      b.textContent = on ? '저장' : '문구 고치기';
-      if (!on) { const e2 = edits(cur.uid); const pts = []; o.querySelectorAll('.ic-ed').forEach(x => { const k = x.dataset.k, v = x.textContent.trim(); if (/^pt\d$/.test(k)) pts.push(v); else e2[k] = v; }); e2.pts = pts.filter(Boolean); MS().save(); MS().toast('개념 카드를 저장했어요'); }
-      else { const f = o.querySelector('.ic-ed'); if (f) f.focus(); MS().toast('글자를 눌러 고친 뒤 저장을 눌러요'); }
+      b.textContent = on ? '저장' : '문구 수정';
+      if (!on) { const e2 = edits(cur.uid); const pts = []; o.querySelectorAll('.ic-ed').forEach(x => { const k = x.dataset.k, v = x.textContent.trim(); if (/^pt\d$/.test(k)) pts.push(v); else e2[k] = v; }); e2.pts = pts.filter(Boolean); MS().save(); MS().toast('개념 카드를 저장했습니다'); }
+      else { const f = o.querySelector('.ic-ed'); if (f) f.focus(); MS().toast('문구를 수정한 뒤 저장을 누르십시오'); }
     }
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('icWrap')) close(); });
@@ -71,7 +71,7 @@
   function inject() {
     const m = (location.hash || '').match(/^#learn\/([^/?]+)\/(\d+)/); if (!m || /[?&]k=1/.test(location.hash)) return;
     const h = document.querySelector('#app .lp-card .lp-h'); if (!h || document.querySelector('.ic-open')) return;
-    const b = document.createElement('button'); b.className = 'btn btn-sm btn-primary ic-open'; b.textContent = '한 장 개념 카드로 설명하기'; b.addEventListener('click', () => open(m[1], m[2]));
+    const b = document.createElement('button'); b.className = 'btn btn-sm btn-primary ic-open'; b.textContent = '개념 카드로 설명하기'; b.addEventListener('click', () => open(m[1], m[2]));
     h.insertAdjacentElement('afterend', b);
   }
   let pend = false; const mo = new MutationObserver(() => { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; inject(); }); });

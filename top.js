@@ -1,4 +1,4 @@
-/* 쌤픽 — 최상위 학습 (공교육 심화 · 사교육 최상위) */
+/* 탑픽 — 최상위 학습 (심화 사고력 · 고난도 문항 · 최상위 학습법) */
 (function () {
   const FILES = {"deep":{"eng":["top/d_eng_1.js","top/d_eng_2.js"],"his":["top/d_his_1.js"],"kor":["top/d_kor_1.js","top/d_kor_2.js","top/d_kor_3.js","top/d_kor_4.js","top/d_kor_5.js"],"math":["top/d_math_1.js","top/d_math_2.js","top/d_math_3.js"],"sci":["top/d_sci_1.js","top/d_sci_2.js"],"soc":["top/d_soc_1.js","top/d_soc_2.js"]},"hard":{"eng":["top/h_eng_1.js","top/h_eng_2.js","top/h_eng_3.js"],"fix":["top/h_fix_1.js"],"his":["top/h_his_1.js"],"kor":["top/h_kor_1.js","top/h_kor_2.js","top/h_kor_3.js","top/h_kor_4.js","top/h_kor_5.js","top/h_kor_6.js","top/h_kor_7.js"],"math":["top/h_math_1.js","top/h_math_2.js","top/h_math_3.js","top/h_math_4.js"],"sci":["top/h_sci_1.js","top/h_sci_2.js","top/h_sci_3.js"],"soc":["top/h_soc_1.js","top/h_soc_2.js","top/h_soc_3.js"]}};
   const DATA = { deep: {}, hard: {} };
@@ -30,15 +30,15 @@
   function ui() { const s = MS().st(); s._top = s._top || {}; return s._top; }
 
   /* ---------- 페이지 ---------- */
-  const TABS = [['deep', '🧠', '심화 사고력', '서술형 · 탐구'], ['hard', '🔥', '고난도 문제', '최상위 변별'], ['method', '🎯', '최상위 공부법', '메타인지 · 복습']];
+  const TABS = [['deep', '🧠', '심화 사고력', '서술형 · 탐구'], ['hard', '🔥', '고난도 문항', '최상위 변별'], ['method', '🎯', '최상위 학습법', '메타인지 · 복습']];
   function page(a) {
     const kid = MS().kid(), u = ui();
     const tab = TABS.some(t => t[0] === a[2]) ? a[2] : (TABS.some(t => t[0] === u.tab) ? u.tab : 'deep');
     u.tab = tab;
-    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">최상위권 학생들의 공부 방식으로 전 과목 심화·고난도 문제를 풀어요.</div></div></div>
+    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">전 과목 심화·고난도 문항과 최상위권 학습법으로 변별 구간을 돌파합니다.</div></div></div>
       <div class="top-tabs t3">${TABS.map(([k, ic, n, d]) => `<a class="top-tab ${k} ${tab === k ? 'on' : ''}" href="#study/top/${k}"><span class="tt-ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></a>`).join('')}</div>`;
     const body = tab === 'method' ? (window.MethodApp ? MethodApp.view(kid, a) : '') : listView(kid, a, tab);
-    return MS().layout('study/top', `<div class="top-page">${head}${body}</div>`);
+    return MS().layout('study/top/' + tab, `<div class="top-page">${head}${body}</div>`);
   }
 
   /* ---------- 심화 · 고난도 공통 목록 ---------- */
@@ -49,14 +49,15 @@
     let k = a[3] && subs.includes(a[3]) ? a[3] : (u[sk] && subs.includes(u[sk]) ? u[sk] : subs[0]);
     u[sk] = k;
     let sem = +(u[ss] || kid.sem); if (sem !== 1 && sem !== 2) sem = 1;
+    if (a[4] && H().U(a[4])) { sem = H().U(a[4]).sem; u[ss] = sem; }
     const units = k ? unitsFor(k, g, sem) : [];
     const intro = kind === 'deep'
-      ? `<b>심화 사고력</b> · ${GL(g)} 교육과정 안에서 더 깊이 생각하는 서술형·사고력·탐구·융합 문제예요. 답을 써 본 뒤 모범 답안과 채점 포인트로 스스로 채점해요.`
-      : `<b>고난도 문제</b> · 최상위권을 가르는 4지선다 문제예요. ${GL(g)} 내용만으로 풀 수 있지만 여러 단계 추론과 함정이 있어요. 풀고 나면 해설과 최고 기록이 남아요.`;
+      ? `<b>심화 사고력</b> · ${GL(g)} 교육과정 범위 안의 서술형·사고력·탐구·융합 문항입니다. 답안 작성 후 모범 답안과 채점 기준으로 자기 채점합니다.`
+      : `<b>고난도 문항</b> · 최상위권을 가르는 4지선다 문항입니다. ${GL(g)} 내용만으로 풀 수 있으나 다단계 추론과 함정이 포함됩니다. 풀이 후 해설과 최고 기록이 남습니다.`;
     return `<div class="card top-info ${kind}"><p>${intro}</p></div>
       <div class="chips scroll-x mt16" id="topSubj">${subs.map(x => { const S = SKx(listKey(x, g)); return `<a class="chip subj-chip ${x === k ? 'on' : ''}" style="--sc:${S.c}" href="#study/top/${kind}/${x}">${S.ic} ${S.n}</a>`; }).join('')}</div>
       <div class="row sp-filter mt8"><span class="chip on">${GS(g)}</span><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-ta="sem" data-k="${ss}" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-ta="sem" data-k="${ss}" data-s="2">2학기</button></div></div>
-      <div class="top-units mt16" id="topList" data-kind="${kind}" data-subj="${dataKey(k || '')}">${units.length ? units.map(x => unitRow(x, kind)).join('') : `<div class="card"><div class="empty">${GS(g)} ${sem}학기 단원이 없어요.</div></div>`}</div>`;
+      <div class="top-units mt16" id="topList" data-kind="${kind}" data-subj="${dataKey(k || '')}">${units.length ? units.map(x => unitRow(x, kind)).join('') : `<div class="card"><div class="empty">${GS(g)} ${sem}학기 단원이 없습니다.</div></div>`}</div>`;
   }
 
   function unitRow(u, kind) {
@@ -73,19 +74,19 @@
 
   function deepBody(u) {
     const items = DATA.deep[u.id];
-    if (!items || !items.length) return '<div class="muted small">이 단원의 심화 문항은 준비 중이에요.</div>';
+    if (!items || !items.length) return '<div class="muted small">이 단원의 심화 문항은 준비 중입니다.</div>';
     const s = st().deep;
     return items.map((x, i) => {
       const key = u.id + '_' + i, sc = s[key];
       return `<div class="dq" data-key="${key}">
         <div class="dq-h"><span class="dq-t">${esc(x.t)}</span><span class="xs muted">심화 ${i + 1}</span></div>
         <div class="dq-q">${esc(x.q)}</div>
-        <textarea class="input dq-in" rows="3" placeholder="${H().isStu() ? '내 생각과 풀이를 써 보세요' : '아이가 생각과 풀이를 써 보게 해 주세요'}"></textarea>
+        <textarea class="input dq-in" rows="3" placeholder="${H().isStu() ? '풀이와 근거를 작성하십시오' : '학습자가 풀이와 근거를 작성합니다'}"></textarea>
         <button class="btn btn-sm" data-ta="dshow">모범 답안 보기</button>
         <div class="dq-ans" hidden>
           <div class="dq-a"><b>모범 답안</b><p>${esc(x.a)}</p></div>
           <div class="dq-k"><b>채점 포인트</b><ul>${x.k.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
-          <div class="dq-sc"><span class="small">스스로 채점</span>${[['3', '잘함'], ['2', '보통'], ['1', '다시']].map(([v, n]) => `<button class="chip ${sc == v ? 'on' : ''}" data-ta="dscore" data-v="${v}">${n}</button>`).join('')}</div>
+          <div class="dq-sc"><span class="small">자기 채점</span>${[['3', '잘함'], ['2', '보통'], ['1', '다시']].map(([v, n]) => `<button class="chip ${sc == v ? 'on' : ''}" data-ta="dscore" data-v="${v}">${n}</button>`).join('')}</div>
         </div>
       </div>`;
     }).join('');
@@ -94,7 +95,7 @@
   /* ---------- 사교육 최상위 ---------- */
   function hardBody(u) {
     const items = DATA.hard[u.id];
-    if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항은 준비 중이에요.</div>';
+    if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항은 준비 중입니다.</div>';
     return `<div class="hq-wrap" data-u="${u.id}">${items.map((x, i) => `<div class="hq" data-i="${i}">
         <div class="dq-h"><span class="dq-t hard">고난도 ${i + 1}</span></div>
         <div class="dq-q">${esc(x.q)}</div>
@@ -114,6 +115,7 @@
     load(list.dataset.kind, list.dataset.subj);
     list.addEventListener('toggle', e => { const d = e.target; if (d.open && !d.dataset.f) { d.dataset.f = 1; fill(d); } }, true);
     const sc = document.querySelector('#topSubj .chip.on'); if (sc && sc.parentElement.scrollWidth > sc.parentElement.clientWidth) sc.parentElement.scrollLeft = sc.offsetLeft - 16;
+    if (a[4]) { const d = list.querySelector(`details[data-u="${a[4]}"]`); if (d) { d.open = true; setTimeout(() => d.scrollIntoView({ block: 'start', behavior: 'smooth' }), 50); } }
   }
   function rerender() { MS().save(); MS().render(); }
   document.addEventListener('click', e => {
@@ -124,13 +126,13 @@
     if (t === 'dscore') {
       const q = el.closest('.dq'); st().deep[q.dataset.key] = +el.dataset.v; MS().save();
       q.querySelectorAll('[data-ta="dscore"]').forEach(b => b.classList.toggle('on', b === el));
-      MS().toast(el.dataset.v === '1' ? '모범 답안을 다시 읽고 한 번 더 써 봐요' : '채점을 저장했어요'); return;
+      MS().toast(el.dataset.v === '1' ? '모범 답안을 다시 확인하고 재작성하십시오' : '채점 결과를 저장했습니다'); return;
     }
     if (t === 'hans') {
       const q = el.closest('.hq'), wrap = el.closest('.hq-wrap'), uid = wrap.dataset.u, i = +q.dataset.i, x = DATA.hard[uid][i], j = +el.dataset.j;
       if (q.dataset.done) return; q.dataset.done = j === x.a ? 'ok' : 'no';
       q.querySelectorAll('.lp-opt').forEach((b, bj) => { b.disabled = true; if (bj === x.a) b.classList.add('ok'); else if (bj === j) b.classList.add('no'); });
-      const ex = q.querySelector('.hq-e'); ex.hidden = false; ex.innerHTML = `<b>${j === x.a ? '정답이에요! 👏' : '아쉬워요. 정답은 ' + '①②③④'[x.a]}</b><p>${esc(x.e)}</p>`;
+      const ex = q.querySelector('.hq-e'); ex.hidden = false; ex.innerHTML = `<b>${j === x.a ? '정답입니다' : '오답입니다. 정답은 ' + '①②③④'[x.a]}</b><p>${esc(x.e)}</p>`;
       const all = [...wrap.querySelectorAll('.hq')];
       if (all.every(z => z.dataset.done)) {
         const ok = all.filter(z => z.dataset.done === 'ok').length, s = st().hard, r = s[uid] || { best: 0, tries: 0 };
@@ -142,5 +144,5 @@
     if (t === 'hretry') { const det = el.closest('details'); fill(det); return; }
   });
 
-  window.TopApp = { add, page, after, DATA };
+  window.TopApp = { add, page, after, DATA, load, FILES };
 })();

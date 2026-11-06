@@ -1,4 +1,4 @@
-/* 쌤픽 — 앱처럼 열기 · 앱 설치
+/* 탑픽 — 앱처럼 열기 · 앱 설치
    1) 카카오톡·네이버·인스타 등 앱 안 브라우저로 열리면 크롬(안드로이드)·사파리(iOS)로 자동 전환
    2) 크롬·삼성 인터넷·엣지: 설치 배너 + 첫 터치 때 설치 창 자동 표시
    3) iOS 사파리: "공유 → 홈 화면에 추가" 안내
@@ -54,10 +54,10 @@
 
   // iOS 앱 안 브라우저(네이버·인스타 등): 사파리로 여는 방법 안내
   function iosInAppGuide() {
-    const d = sheet(`<h3>사파리에서 열어 주세요</h3><p>지금은 앱 안의 브라우저라 쌤픽을 앱으로 설치할 수 없어요.</p>
+    const d = sheet(`<h3>사파리에서 여십시오</h3><p>현재 앱 내 브라우저에서는 탑픽을 앱으로 설치할 수 없습니다.</p>
       <ol><li>오른쪽 아래(또는 위) <span class="ic">⋯</span> 또는 <span class="ic">↗</span> 버튼</li><li><b>Safari로 열기</b> 또는 <b>기본 브라우저로 열기</b></li></ol>
-      <div class="row"><button class="ins-p" data-ins="copy">주소 복사</button><button class="ins-s" data-ins="close">그냥 볼게요</button></div>`);
-    d.querySelector('[data-ins="copy"]').addEventListener('click', () => { (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => { d.querySelector('[data-ins="copy"]').textContent = '복사했어요. 사파리에 붙여 넣기'; }).catch(() => prompt('이 주소를 복사해 사파리에 붙여 넣어 주세요', url)); });
+      <div class="row"><button class="ins-p" data-ins="copy">주소 복사</button><button class="ins-s" data-ins="close">그대로 보기</button></div>`);
+    d.querySelector('[data-ins="copy"]').addEventListener('click', () => { (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => { d.querySelector('[data-ins="copy"]').textContent = '복사 완료. 사파리에 붙여 넣기'; }).catch(() => prompt('이 주소를 복사해 사파리에 붙여 넣으십시오', url)); });
   }
 
   /* ---------- 2. 설치 ---------- */
@@ -79,24 +79,24 @@
     return true;
   }
   function iosSafariGuide() {
-    sheet(`<h3>쌤픽을 앱으로 설치하기</h3><p>홈 화면에 추가하면 주소창 없이 앱처럼 열려요.</p>
+    sheet(`<h3>탑픽 앱 설치</h3><p>홈 화면에 추가하면 주소창 없이 앱처럼 열립니다.</p>
       <ol><li>아래쪽 <span class="ic">공유 ⬆︎</span> 버튼</li><li><b>홈 화면에 추가</b></li><li>오른쪽 위 <b>추가</b></li></ol>
-      <div class="row"><button class="ins-p" data-ins="close">알겠어요</button></div>`);
+      <div class="row"><button class="ins-p" data-ins="close">확인</button></div>`);
     const a = document.createElement('div'); a.className = 'ins-arrow'; a.id = 'insArrow'; a.textContent = '⬇'; document.body.appendChild(a);
   }
   // 설정·안내 화면에서 부를 수 있게
   function show() {
-    if (standalone) return alert('이미 앱으로 실행 중이에요.');
+    if (standalone) return alert('이미 앱으로 실행 중입니다.');
     if (promptInstall()) return;
     if (isIOS) return iosInAppOrSafari();
-    sheet(`<h3>쌤픽을 앱으로 설치하기</h3><p>크롬 오른쪽 위 <span class="ic">⋮</span> 메뉴에서 <b>앱 설치</b> 또는 <b>홈 화면에 추가</b>를 눌러 주세요.</p><div class="row"><button class="ins-p" data-ins="close">알겠어요</button></div>`);
+    sheet(`<h3>탑픽 앱 설치</h3><p>크롬 오른쪽 위 <span class="ic">⋮</span> 메뉴에서 <b>앱 설치</b> 또는 <b>홈 화면에 추가</b>를 누르십시오.</p><div class="row"><button class="ins-p" data-ins="close">확인</button></div>`);
   }
   function iosInAppOrSafari() { inApp ? iosInAppGuide() : iosSafariGuide(); }
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferred = e;
     if (standalone || snoozed()) return;
-    const ready = () => bar('쌤픽 앱 설치', '<span>주소창 없이 앱처럼 · 홈 화면에서 바로</span>', '설치', () => promptInstall());
+    const ready = () => bar('탑픽 앱 설치', '<span>주소창 없이 앱처럼 · 홈 화면에서 바로</span>', '설치', () => promptInstall());
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', ready) : ready();
     // 첫 터치 때 설치 창을 자동으로 띄움(브라우저 정책상 사용자 동작이 있어야 함). 한 번만.
     if (!sessionStorage.getItem('ins_auto')) {
@@ -115,10 +115,10 @@
     if (standalone) { document.documentElement.classList.add('is-app'); return; }
     if (escapeInApp()) return;
     if (isIOS && !get('ins_done') && !snoozed()) {
-      setTimeout(() => bar(inApp ? '사파리에서 열어 주세요' : '쌤픽 앱 설치', inApp ? '<span>앱으로 설치하려면 사파리가 필요해요</span>' : '<span>공유 → 홈 화면에 추가</span>', inApp ? '방법' : '설치 방법', iosInAppOrSafari), 1500);
+      setTimeout(() => bar(inApp ? '사파리에서 여십시오' : '탑픽 앱 설치', inApp ? '<span>앱 설치에는 사파리가 필요합니다</span>' : '<span>공유 → 홈 화면에 추가</span>', inApp ? '방법' : '설치 방법', iosInAppOrSafari), 1500);
     } else if (isAndroid && inApp) {
       // intent 전환이 막힌 앱: 안내 막대
-      setTimeout(() => bar('크롬에서 열기', '<span>앱으로 설치하려면 크롬이 필요해요</span>', '열기', () => go('intent://' + chromeTarget() + '#Intent;scheme=https;package=com.android.chrome;end')), 1500);
+      setTimeout(() => bar('크롬에서 열기', '<span>앱 설치에는 크롬이 필요합니다</span>', '열기', () => go('intent://' + chromeTarget() + '#Intent;scheme=https;package=com.android.chrome;end')), 1500);
     }
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
@@ -128,7 +128,7 @@
     setTimeout(() => {
       const head = document.querySelector('#app .page-head'); if (!head || document.getElementById('insCard')) return;
       const c = document.createElement('div'); c.className = 'card'; c.id = 'insCard'; c.style.marginBottom = '12px';
-      c.innerHTML = '<div class="card-head"><h2>📲 쌤픽을 앱으로 설치</h2></div><p class="small">홈 화면에 추가하면 주소창 없이 앱처럼 바로 열려요. 설치해도 저장 공간을 거의 쓰지 않아요.</p><button class="btn btn-primary btn-sm" style="margin-top:8px">앱으로 설치하기</button>';
+      c.innerHTML = '<div class="card-head"><h2>📲 탑픽 앱 설치</h2></div><p class="small">홈 화면에 추가하면 주소창 없이 앱처럼 바로 열립니다. 저장 공간을 거의 사용하지 않습니다.</p><button class="btn btn-primary btn-sm" style="margin-top:8px">앱 설치</button>';
       c.querySelector('button').addEventListener('click', show);
       head.insertAdjacentElement('afterend', c);
     }, 60);

@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "쌤픽 · 초·중·고 공부주치의",
-  "short_name": "쌤픽",
-  "description": "꼭 필요한 개념만 콕 집어 주는 초·중·고 공부주치의. 개념 정리 · 족집게 · 1:1 온라인 개념 과외 · 수능·대입 족집게",
+  "name": "탑픽 · 초·중·고 상위권 학습 운영",
+  "short_name": "탑픽",
+  "description": "초·중·고 상위권·최상위권 학습 운영. 상위권 진단 · 심화·고난도 문항 · 최상위권 학습법 · 시험 역산 과제표 · 수능·대입 상위권 전략",
   "lang": "ko",
   "dir": "ltr",
   "start_url": "/?source=pwa",
@@ -44,29 +44,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/icons/shot-picker.jpg",
-      "sizes": "780x1688",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "꼭 필요한 개념만 콕 집어 주는 쌤"
-    },
-    {
-      "src": "/icons/shot-high.jpg",
-      "sizes": "780x1688",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "1:1 온라인 개념 과외"
-    },
-    {
-      "src": "/icons/shot-wide.jpg",
-      "sizes": "1280x800",
-      "type": "image/jpeg",
-      "form_factor": "wide",
-      "label": "수능·대입 족집게"
     }
   ],
   "shortcuts": [

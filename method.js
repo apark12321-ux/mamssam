@@ -1,4 +1,4 @@
-/* 쌤픽 — 최상위 공부법: 메타인지 예측 · 간격 복습 · 섞어 풀기 · 백지 인출 · 오답 원인 분석 */
+/* 탑픽 — 최상위 공부법: 메타인지 예측 · 간격 복습 · 섞어 풀기 · 백지 인출 · 오답 원인 분석 */
 (function () {
   const MS = () => window.MS;
   const H = () => window.SubjApp._h;
@@ -6,8 +6,8 @@
   const GS = (g) => (window.GS ? window.GS(g) : g + '학년');
   const INTERVALS = [1, 3, 7, 14, 30];
   const PRED = [['k', '😎', '확실히 안다'], ['m', '🤔', '헷갈린다'], ['u', '😵', '모른다']];
-  const WHY = [['c', '개념을 몰라서'], ['s', '계산·표기 실수'], ['r', '문제를 잘못 읽어서'], ['g', '찍었어요']];
-  const TIP = { c: '개념이 약해요. 해당 단원 개념·영상을 다시 보고 백지 인출로 떠올려 보세요.', s: '실수가 많아요. 풀이를 한 줄씩 쓰고, 답을 쓴 뒤 문제 조건을 다시 대조하는 습관을 들여요.', r: '문제를 잘못 읽는 경우가 많아요. 묻는 것(구하는 것)에 밑줄을 긋고 조건에 번호를 붙여 읽어요.', g: '찍은 문제는 사실상 모르는 문제예요. 메타인지 예측에서 "모른다"로 솔직하게 표시하고 복습 목록에 넣어요.' };
+  const WHY = [['c', '개념을 몰라서'], ['s', '계산·표기 실수'], ['r', '문항을 잘못 읽어서'], ['g', '추측으로 답함']];
+  const TIP = { c: '개념 이해가 부족합니다. 해당 단원 개념·영상을 다시 보고 백지 인출로 떠올리십시오.', s: '실수 비중이 높습니다. 풀이를 한 줄씩 쓰고, 답을 쓴 뒤 문항 조건을 다시 대조하는 습관이 필요합니다.', r: '문항을 잘못 읽는 경우가 많습니다. 묻는 것(구하는 것)에 밑줄을 긋고 조건에 번호를 붙여 읽으십시오.', g: '추측으로 답한 문항은 사실상 모르는 문항입니다. 메타인지 예측에서 "모른다"로 솔직하게 표시하고 복습 목록에 넣으십시오.' };
 
   const ymd = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   const addDays = (s, n) => { const d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return ymd(d); };
@@ -32,16 +32,16 @@
     u.sec = sec;
     const due = schedule().filter(x => x.due).length;
     const intro = `<div class="card top-info method">
-        <div class="ti-h">🎯 최상위권은 이렇게 공부해요</div>
+        <div class="ti-h">🎯 최상위권 학습 원칙</div>
         <div class="mth-pat">
-          <div><b>🧠 메타인지</b><span>아는 것과 모르는 것을 정확히 구분해요</span></div>
-          <div><b>📝 떠올리기</b><span>다시 읽기보다 머릿속에서 꺼내 봐요</span></div>
-          <div><b>🔁 간격 복습</b><span>잊을 때쯤 다시 봐서 오래 기억해요</span></div>
-          <div><b>🔀 섞어 풀기·오답 분석</b><span>유형을 섞고 틀린 이유를 따져요</span></div>
+          <div><b>🧠 메타인지</b><span>아는 것과 모르는 것을 정확히 구분합니다</span></div>
+          <div><b>📝 인출 연습</b><span>다시 읽기보다 기억에서 직접 꺼냅니다</span></div>
+          <div><b>🔁 간격 복습</b><span>망각 직전에 다시 보아 장기 기억화합니다</span></div>
+          <div><b>🔀 섞어 풀기·오답 분석</b><span>유형을 섞고 오답 원인을 분석합니다</span></div>
         </div>
         <div class="xs muted mt8">근거: EBS 다큐 「0.1%의 비밀」 메타인지 실험, Dunlosky 외(2013) 학습 전략 연구</div>
       </div>`;
-    const tabs = [['review', `🔁 오늘의 복습${due ? ` <i class="mth-dot">${due}</i>` : ''}`], ['mix', '🔀 섞어 풀기'], ['blank', '📝 백지 인출'], ['report', '📊 내 학습 패턴']];
+    const tabs = [['review', `🔁 오늘의 복습${due ? ` <i class="mth-dot">${due}</i>` : ''}`], ['mix', '🔀 섞어 풀기'], ['blank', '📝 백지 인출'], ['report', '📊 학습 패턴 분석']];
     const seg = `<div class="seg seg4 mt16">${tabs.map(([k, n]) => `<a class="${sec === k ? 'on' : ''}" href="#study/top/method/${k}">${n}</a>`).join('')}</div>`;
     const body = sec === 'review' ? reviewView() : sec === 'mix' ? mixView(kid) : sec === 'blank' ? blankView(kid) : reportView();
     return intro + seg + `<div id="mthBody">${body}</div>`;
@@ -49,22 +49,22 @@
 
   function reviewView() {
     const sch = schedule(), due = sch.filter(x => x.due), soon = sch.filter(x => !x.due).slice(0, 5);
-    if (!sch.length) return `<div class="card mt16"><div class="empty">아직 공부한 단원이 없어요.<br>과목별 학습에서 차시를 하나 끝내면 1·3·7·14·30일 간격으로 복습 일정이 자동으로 잡혀요.</div></div>`;
+    if (!sch.length) return `<div class="card mt16"><div class="empty">학습한 단원이 없습니다.<br>과목별 학습에서 차시를 완료하면 1·3·7·14·30일 간격으로 복습 일정이 자동 생성됩니다.</div></div>`;
     const row = (x) => { const S = H().SK[H().subjOf(x.u)] || {}; return `<div class="mth-row"><span class="u-ico">${x.u.icon || S.ic || '📘'}</span><span class="tu-t"><span class="xs muted">${S.n || ''} · ${GS(x.u.grade)} ${x.u.sem}학기 ${x.u.no}단원</span><b>${esc(x.u.title)}</b></span><span class="mth-st">${INTERVALS.map((d, i) => `<i class="${i < x.stage ? 'on' : ''}" title="${d}일"></i>`).join('')}</span><span class="xs ${x.due ? 'due' : 'muted'}">${x.due ? '오늘' : x.next.slice(5).replace('-', '/')}</span></div>`; };
-    return `<p class="small muted mt16">공부한 단원을 1일 → 3일 → 7일 → 14일 → 30일 뒤에 다시 떠올려요. 복습에서 80% 이상 맞히면 다음 간격으로, 못 미치면 처음부터 다시 잡혀요.</p>
+    return `<p class="small muted mt16">학습한 단원을 1일 → 3일 → 7일 → 14일 → 30일 뒤에 다시 인출합니다. 복습 정답률 80% 이상이면 다음 간격으로 넘어가고, 미달이면 처음부터 다시 시작합니다.</p>
       <div class="card mt8"><div class="row between"><b>오늘 복습할 단원 ${due.length}개</b>${due.length ? `<button class="btn btn-primary" data-mt="startRev">복습 시작 ▶</button>` : ''}</div>
-      <div class="mth-list mt12">${due.slice(0, 5).map(row).join('') || '<div class="empty small">오늘 복습할 단원이 없어요. 잘하고 있어요! 👍</div>'}</div></div>
-      ${soon.length ? `<div class="card mt12"><b>다가오는 복습</b><div class="mth-list mt12">${soon.map(row).join('')}</div></div>` : ''}`;
+      <div class="mth-list mt12">${due.slice(0, 5).map(row).join('') || '<div class="empty small">오늘 복습할 단원이 없습니다.</div>'}</div></div>
+      ${soon.length ? `<div class="card mt12"><b>예정된 복습</b><div class="mth-list mt12">${soon.map(row).join('')}</div></div>` : ''}`;
   }
 
   function mixView(kid) {
     const u = ui(), subs = ['kor', 'math', 'soc', 'sci', 'eng', 'his'].filter(k => H().unitsOf(k === 'math' && kid.grade >= 7 ? 'mth' : k, kid.grade).length);
     const pick = (u.mixSubs || subs).filter(k => subs.includes(k));
     const n = studied().length;
-    return `<p class="small muted mt16">여러 단원·과목 문제를 섞어서 풀면 "이 문제는 어떤 개념을 써야 하지?"를 스스로 판단하는 힘이 길러져요. 문제마다 먼저 <b>안다/헷갈린다/모른다</b>를 예측하고 풀어요.</p>
-      <div class="card mt8"><b>섞을 과목</b><div class="chips mt8">${subs.map(k => { const S = H().SK[k === 'math' && kid.grade >= 7 ? 'mth' : k]; return `<button class="chip subj-chip ${pick.includes(k) ? 'on' : ''}" style="--sc:${S.c}" data-mt="mixSub" data-k="${k}">${S.ic} ${S.n}</button>`; }).join('')}</div>
-      <p class="xs muted mt8">${n ? `공부한 단원 ${n}개에서 우선 출제하고, 부족하면 ${GS(kid.grade)} 단원에서 채워요.` : `${GS(kid.grade)} 현재 학기까지의 단원에서 출제해요.`}</p>
-      <div class="row mt12" style="gap:8px">${[10, 15].map(c => `<button class="btn ${c === 10 ? 'btn-primary' : ''}" data-mt="startMix" data-n="${c}">${c}문제 시작</button>`).join('')}</div></div>`;
+    return `<p class="small muted mt16">여러 단원·과목 문항을 섞어 풀면 어떤 개념을 적용할지 스스로 판단하는 변별력이 길러집니다. 문항마다 먼저 <b>안다/헷갈린다/모른다</b>를 예측한 뒤 풉니다.</p>
+      <div class="card mt8"><b>출제 과목 선택</b><div class="chips mt8">${subs.map(k => { const S = H().SK[k === 'math' && kid.grade >= 7 ? 'mth' : k]; return `<button class="chip subj-chip ${pick.includes(k) ? 'on' : ''}" style="--sc:${S.c}" data-mt="mixSub" data-k="${k}">${S.ic} ${S.n}</button>`; }).join('')}</div>
+      <p class="xs muted mt8">${n ? `학습한 단원 ${n}개에서 우선 출제하고, 부족하면 ${GS(kid.grade)} 단원에서 보충합니다.` : `${GS(kid.grade)} 현재 학기까지의 단원에서 출제합니다.`}</p>
+      <div class="row mt12" style="gap:8px">${[10, 15].map(c => `<button class="btn ${c === 10 ? 'btn-primary' : ''}" data-mt="startMix" data-n="${c}">${c}문항 시작</button>`).join('')}</div></div>`;
   }
 
   function blankView(kid) {
@@ -73,13 +73,13 @@
     const cur = ['kor', 'math', 'soc', 'sci', 'eng', 'his'].flatMap(k => H().unitsOf(k === 'math' && kid.grade >= 7 ? 'mth' : k, kid.grade, kid.sem));
     const pool = list.length ? list : cur;
     const sel = H().U(u.blankU) || pool[0];
-    if (!sel) return '<div class="card mt16"><div class="empty">단원이 없어요.</div></div>';
+    if (!sel) return '<div class="card mt16"><div class="empty">단원이 없습니다.</div></div>';
     const r = d.blank[sel.id];
-    return `<p class="small muted mt16">교과서를 덮고 단원에서 배운 것을 <b>떠오르는 대로 모두</b> 써 보세요. 그다음 핵심 목록과 비교해 떠올린 것에 체크해요. 다시 읽기보다 기억에 훨씬 오래 남아요.</p>
-      <div class="card mt8"><label class="small bold">단원 고르기${list.length ? ' (공부한 단원)' : ''}</label>
-      <select class="input mt8" data-mt="blankU">${pool.map(x => `<option value="${x.id}" ${x.id === sel.id ? 'selected' : ''}>${esc((H().SK[H().subjOf(x)] || {}).n || '')} · ${GS(x.grade)}-${x.sem} ${esc(x.title)}${d.blank[x.id] ? ` (${d.blank[x.id].rate}%)` : ''}</option>`).join('')}</select>
+    return `<p class="small muted mt16">교과서를 덮고 단원에서 배운 내용을 <b>떠오르는 대로 모두</b> 쓰십시오. 그다음 핵심 목록과 비교해 인출한 항목에 체크합니다. 다시 읽기보다 기억에 훨씬 오래 남습니다.</p>
+      <div class="card mt8"><label class="small bold">단원 선택${list.length ? ' (학습한 단원)' : ''}</label>
+      <select class="input mt8" data-mt="blankU">${pool.map(x => `<option value="${x.id}" ${x.id === sel.id ? 'selected' : ''}>${esc((H().SK[H().subjOf(x)] || {}).n || '')} · ${GS(x.grade)} ${x.sem}학기 ${esc(x.title)}${d.blank[x.id] ? ` (${d.blank[x.id].rate}%)` : ''}</option>`).join('')}</select>
       <textarea class="input dq-in mt12" id="blankIn" rows="7" placeholder="예) 이 단원에서는 ~을 배웠다. 핵심은 ~이다. ~할 때는 ~에 주의한다..."></textarea>
-      <button class="btn btn-primary" data-mt="blankCheck">다 썼어요 · 핵심과 비교하기</button>
+      <button class="btn btn-primary" data-mt="blankCheck">작성 완료 · 핵심과 비교</button>
       ${r ? `<div class="xs muted mt8">지난 기록: 인출률 ${r.rate}% (${r.date})</div>` : ''}
       <div id="blankRes"></div></div>`;
   }
@@ -91,7 +91,7 @@
 
   function reportView() {
     const d = data(), ms = d.ms.slice(-10);
-    if (!ms.length) return `<div class="card mt16"><div class="empty">아직 기록이 없어요.<br>오늘의 복습이나 섞어 풀기를 한 번 하면 메타인지 정확도와 오답 원인이 분석돼요.</div></div>`;
+    if (!ms.length) return `<div class="card mt16"><div class="empty">기록이 없습니다.<br>오늘의 복습이나 섞어 풀기를 1회 완료하면 메타인지 정확도와 오답 원인이 분석됩니다.</div></div>`;
     const avg = (f) => Math.round(ms.reduce((a, x) => a + f(x), 0) / ms.length);
     const cal = avg(x => x.cal), acc = avg(x => Math.round(x.ok * 100 / x.n));
     const ill = ms.reduce((a, x) => a + (x.ill || 0), 0), hid = ms.reduce((a, x) => a + (x.hid || 0), 0);
@@ -101,17 +101,17 @@
     const br = Object.values(d.blank); const bavg = br.length ? Math.round(br.reduce((a, x) => a + x.rate, 0) / br.length) : null;
     const bar = (v, c) => `<div class="mth-bar"><i style="width:${v}%;background:${c}"></i></div>`;
     return `<div class="grid g2 mt16 mth-kpi">
-        <div class="card"><div class="xs muted">🧠 메타인지 정확도</div><div class="mth-big">${cal}%</div>${bar(cal, 'var(--green)')}<div class="xs muted mt8">예측(안다/모른다)과 실제 결과가 맞은 비율. 최상위권은 이 값이 높아요.</div></div>
+        <div class="card"><div class="xs muted">🧠 메타인지 정확도</div><div class="mth-big">${cal}%</div>${bar(cal, 'var(--green)')}<div class="xs muted mt8">예측(안다/모른다)과 실제 결과가 일치한 비율. 최상위권은 이 값이 높습니다.</div></div>
         <div class="card"><div class="xs muted">✅ 정답률 (최근 ${ms.length}회)</div><div class="mth-big">${acc}%</div>${bar(acc, 'var(--blue)')}<div class="xs muted mt8">착각 문항 ${ill}개 · 숨은 실력 ${hid}개</div></div>
-        <div class="card"><div class="xs muted">🔁 장기 기억으로 넘어간 단원</div><div class="mth-big">${mast}<small>/${sch.length}</small></div>${bar(sch.length ? Math.round(mast * 100 / sch.length) : 0, 'var(--orange)')}<div class="xs muted mt8">간격 복습 3단계(7일) 이상 통과한 단원</div></div>
+        <div class="card"><div class="xs muted">🔁 장기 기억 전환 단원</div><div class="mth-big">${mast}<small>/${sch.length}</small></div>${bar(sch.length ? Math.round(mast * 100 / sch.length) : 0, 'var(--orange)')}<div class="xs muted mt8">간격 복습 3단계(7일) 이상 통과한 단원</div></div>
         <div class="card"><div class="xs muted">📝 백지 인출률</div><div class="mth-big">${bavg == null ? '–' : bavg + '%'}</div>${bar(bavg || 0, 'var(--pink)')}<div class="xs muted mt8">교과서 없이 떠올린 핵심 비율 평균</div></div>
       </div>
-      <div class="card mt12"><b>❌ 틀린 이유 분석</b>${wt ? `<div class="mth-why mt12">${WHY.map(([k, n]) => `<div><span class="small">${n}</span>${bar(Math.round((why[k] || 0) * 100 / wt), 'var(--red)')}<span class="xs muted">${why[k] || 0}</span></div>`).join('')}</div><div class="ti-ready mt12">💡 ${TIP[top[0]]}</div>` : '<div class="small muted mt8">틀린 문제에서 이유를 골라 주면 분석돼요.</div>'}</div>
-      <div class="card mt12"><b>🧭 다음 행동 추천</b><ul class="ti-list mt8">
-        ${cal < 70 ? '<li>예측이 자주 빗나가요. "확실히 안다"는 친구에게 설명할 수 있을 때만 고르세요.</li>' : '<li>메타인지가 좋아요. 헷갈린다·모른다로 표시한 문제부터 복습하세요.</li>'}
-        ${ill ? `<li>안다고 생각했는데 틀린 '착각 문항'이 ${ill}개 있어요. 가장 위험한 문제라 간격 복습에 다시 들어가요.</li>` : ''}
-        ${sch.filter(x => x.due).length ? `<li>오늘 복습할 단원이 ${sch.filter(x => x.due).length}개 있어요. 잊기 직전에 떠올리는 게 가장 효과적이에요.</li>` : ''}
-        ${bavg != null && bavg < 60 ? '<li>백지 인출률이 낮아요. 차시 제목을 먼저 떠올리고 그 아래 내용을 채우는 연습을 해 보세요.</li>' : ''}
+      <div class="card mt12"><b>❌ 오답 원인 분석</b>${wt ? `<div class="mth-why mt12">${WHY.map(([k, n]) => `<div><span class="small">${n}</span>${bar(Math.round((why[k] || 0) * 100 / wt), 'var(--red)')}<span class="xs muted">${why[k] || 0}</span></div>`).join('')}</div><div class="ti-ready mt12">💡 ${TIP[top[0]]}</div>` : '<div class="small muted mt8">오답 문항에서 원인을 선택하면 분석됩니다.</div>'}</div>
+      <div class="card mt12"><b>🧭 다음 학습 권고</b><ul class="ti-list mt8">
+        ${cal < 70 ? '<li>예측 오차가 큽니다. "확실히 안다"는 타인에게 설명할 수 있을 때만 선택하십시오.</li>' : '<li>메타인지가 정확합니다. 헷갈린다·모른다로 표시한 문항부터 복습하십시오.</li>'}
+        ${ill ? `<li>안다고 판단했으나 틀린 '착각 문항'이 ${ill}개 있습니다. 가장 위험한 문항이므로 간격 복습에 다시 포함됩니다.</li>` : ''}
+        ${sch.filter(x => x.due).length ? `<li>오늘 복습할 단원이 ${sch.filter(x => x.due).length}개 있습니다. 망각 직전 인출이 가장 효과적입니다.</li>` : ''}
+        ${bavg != null && bavg < 60 ? '<li>백지 인출률이 낮습니다. 차시 제목을 먼저 떠올린 뒤 세부 내용을 채우는 연습이 필요합니다.</li>' : ''}
       </ul></div>`;
   }
 
@@ -119,11 +119,11 @@
   let S = null;
   function startSession(units, per, total, kind) {
     const box = document.getElementById('mthBody'); if (!box) return;
-    box.innerHTML = '<div class="card mt16"><div class="empty">문제를 준비하고 있어요…</div></div>';
+    box.innerHTML = '<div class="card mt16"><div class="empty">문항을 준비하고 있습니다…</div></div>';
     Promise.all(units.map(u => H().qsReady(u))).then(() => {
       let qs = []; units.forEach(u => { qs = qs.concat(H().qsFor(u, per)); });
       qs = qs.filter(Boolean).sort(() => Math.random() - .5).slice(0, total);
-      if (!qs.length) { box.innerHTML = '<div class="card mt16"><div class="empty">출제할 문제가 없어요.</div></div>'; return; }
+      if (!qs.length) { box.innerHTML = '<div class="card mt16"><div class="empty">출제할 문항이 없습니다.</div></div>'; return; }
       S = { kind, qs, i: 0, res: [], units: units.map(u => u.id) };
       draw();
     });
@@ -134,15 +134,15 @@
     const p = S.qs[S.i], r = S.res[S.i] || {}, u = H().U(p.unitId), Sk = H().SK[H().subjOf(u)] || {};
     const dots = S.qs.map((_, j) => `<i class="${S.res[j] && S.res[j].ok != null ? (S.res[j].ok ? 'o' : 'x') : j === S.i ? 'cur' : ''}"></i>`).join('');
     let body = '';
-    if (!r.pred) body = `<div class="mth-pred"><div class="small bold">먼저 예측해 보세요: 이 문제, 풀 수 있을까?</div><div class="mth-pred-b">${PRED.map(([k, ic, n]) => `<button class="btn" data-mt="pred" data-k="${k}"><span>${ic}</span>${n}</button>`).join('')}</div></div>`;
+    if (!r.pred) body = `<div class="mth-pred"><div class="small bold">풀기 전 예측: 이 문항을 풀 수 있습니까?</div><div class="mth-pred-b">${PRED.map(([k, ic, n]) => `<button class="btn" data-mt="pred" data-k="${k}"><span>${ic}</span>${n}</button>`).join('')}</div></div>`;
     else if (r.ok == null) {
       body = p.t === 'choice' ? `<div class="lp-opts">${p.opts.map((o, j) => `<button class="lp-opt" data-mt="ans" data-j="${j}"><span class="lp-on">${'①②③④⑤'[j] || j + 1}</span><span>${o}</span></button>`).join('')}</div>`
         : `<form class="lp-inp" data-mt-form="1"><input class="input kid-input" id="mthIn" autocomplete="off" placeholder="답">${p.unit ? `<span class="bold">${p.unit}</span>` : ''}<button class="btn btn-primary btn-lg">확인</button></form>`;
     } else {
       body = p.t === 'choice' ? `<div class="lp-opts">${p.opts.map((o, j) => `<button class="lp-opt ${j === p.v ? 'ok' : j === r.sel ? 'no' : ''}" disabled><span class="lp-on">${'①②③④⑤'[j] || j + 1}</span><span>${o}</span></button>`).join('')}</div>` : '';
-      body += `<div class="feedback ${r.ok ? 'ok' : 'no'}">${r.ok ? (r.pred === 'k' ? '정답! 예측도 정확해요 🎯' : '정답! 생각보다 잘 알고 있었네요 ✨') : (r.pred === 'k' ? '착각 문항이에요! 안다고 생각했지만 틀렸어요 ⚠️' : `정답은 ${p.t === 'choice' ? p.opts[p.v] : esc(p.a)}`)}</div>${p.ex ? `<div class="lp-ex">${p.ex}</div>` : ''}`;
-      if (!r.ok && !r.why) body += `<div class="mth-why-q"><div class="small bold">왜 틀렸을까요?</div><div class="chips mt8">${WHY.map(([k, n]) => `<button class="chip" data-mt="why" data-k="${k}">${n}</button>`).join('')}</div></div>`;
-      else body += `<button class="btn btn-primary btn-lg btn-block mt12" data-mt="next">${S.i + 1 < S.qs.length ? '다음 문제 ▶' : '결과 보기'}</button>`;
+      body += `<div class="feedback ${r.ok ? 'ok' : 'no'}">${r.ok ? (r.pred === 'k' ? '정답. 예측도 정확합니다 🎯' : '정답. 예측보다 실력이 높습니다 ✨') : (r.pred === 'k' ? '착각 문항입니다. 안다고 판단했으나 오답입니다 ⚠️' : `정답은 ${p.t === 'choice' ? p.opts[p.v] : esc(p.a)}`)}</div>${p.ex ? `<div class="lp-ex">${p.ex}</div>` : ''}`;
+      if (!r.ok && !r.why) body += `<div class="mth-why-q"><div class="small bold">오답 원인 선택</div><div class="chips mt8">${WHY.map(([k, n]) => `<button class="chip" data-mt="why" data-k="${k}">${n}</button>`).join('')}</div></div>`;
+      else body += `<button class="btn btn-primary btn-lg btn-block mt12" data-mt="next">${S.i + 1 < S.qs.length ? '다음 문항 ▶' : '결과 보기'}</button>`;
     }
     box.innerHTML = `<div class="lp-card mth-card mt16" style="--sc:${Sk.c || 'var(--blue)'}"><div class="kid-progress">${dots}</div><div class="lp-kicker">${Sk.ic || ''} ${esc(Sk.n || '')} · ${esc(u ? u.title : '')}</div><div class="lp-q">${p.q}${p.fig || ''}</div>${body}</div>`;
     const inp = document.getElementById('mthIn'); if (inp) inp.focus();
@@ -180,8 +180,8 @@
     box.innerHTML = `<div class="lp-card pop mt16" style="text-align:center"><div class="big-emoji">${ok / n >= .8 ? '🎉' : ok / n >= .5 ? '👍' : '💪'}</div>
       <h2 style="margin:6px 0">${ok}/${n} 정답</h2>
       <div class="grid g3 mth-res mt12"><div><b>${cal}%</b><span>메타인지 정확도</span></div><div><b class="${ill ? 'warn' : ''}">${ill}</b><span>착각 문항</span></div><div><b>${hid}</b><span>숨은 실력</span></div></div>
-      <p class="small muted mt12">${ill ? '안다고 생각했는데 틀린 문제는 가장 위험해요. 이 단원들은 내일 다시 복습에 나와요.' : cal >= 80 ? '내가 아는 것과 모르는 것을 정확히 알고 있어요. 최상위권의 공부 습관이에요! 🎯' : '예측과 결과를 비교하는 연습을 계속하면 메타인지가 좋아져요.'}${moved.length ? `<br>✅ ${moved.length}개 단원이 다음 복습 간격으로 넘어갔어요.` : ''}</p>
-      <div class="row mt16" style="justify-content:center;gap:8px"><a class="btn" href="#study/top/method/report">📊 내 학습 패턴</a><button class="btn btn-primary" data-mt="again">다시 하기</button></div></div>`;
+      <p class="small muted mt12">${ill ? '안다고 판단했으나 틀린 문항이 가장 위험합니다. 해당 단원은 내일 복습에 다시 포함됩니다.' : cal >= 80 ? '아는 것과 모르는 것을 정확히 구분하고 있습니다. 최상위권의 학습 습관입니다 🎯' : '예측과 결과를 비교하는 연습을 지속하면 메타인지가 향상됩니다.'}${moved.length ? `<br>✅ ${moved.length}개 단원이 다음 복습 간격으로 넘어갔습니다.` : ''}</p>
+      <div class="row mt16" style="justify-content:center;gap:8px"><a class="btn" href="#study/top/method/report">📊 학습 패턴 분석</a><button class="btn btn-primary" data-mt="again">다시 풀기</button></div></div>`;
     S = null;
   }
 
@@ -209,9 +209,9 @@
     if (t === 'blankCheck') {
       const sel = H().U(ui().blankU) || null; const id = document.querySelector('[data-mt="blankU"]').value; const unit = H().U(id) || sel;
       const txt = (document.getElementById('blankIn').value || '').trim();
-      if (txt.length < 10) { MS().toast('떠오르는 내용을 조금 더 써 보세요 ✍️'); return; }
+      if (txt.length < 10) { MS().toast('떠오르는 내용을 조금 더 작성하십시오 ✍️'); return; }
       const pts = keyPoints(unit);
-      document.getElementById('blankRes').innerHTML = `<div class="dq-ans mt12"><b>핵심 목록 — 내가 떠올린 것에 체크하세요</b><div class="blank-list mt8">${pts.map((p, i) => `<label class="blank-pt"><input type="checkbox" data-i="${i}"> <span>${p.k === 'l' ? '📌 ' : '💡 '}${esc(p.t)}</span></label>`).join('')}</div><button class="btn btn-primary mt12" data-mt="blankDone" data-u="${unit.id}" data-n="${pts.length}">체크 완료</button></div>`;
+      document.getElementById('blankRes').innerHTML = `<div class="dq-ans mt12"><b>핵심 목록 · 인출한 항목에 체크하십시오</b><div class="blank-list mt8">${pts.map((p, i) => `<label class="blank-pt"><input type="checkbox" data-i="${i}"> <span>${p.k === 'l' ? '📌 ' : '💡 '}${esc(p.t)}</span></label>`).join('')}</div><button class="btn btn-primary mt12" data-mt="blankDone" data-u="${unit.id}" data-n="${pts.length}">체크 완료</button></div>`;
       el.remove(); return;
     }
     if (t === 'blankDone') {
@@ -219,7 +219,7 @@
       data().blank[el.dataset.u] = { rate, date: MS().today() };
       if (rate < 60) { const d = data(); d.rev[el.dataset.u] = { stage: 0, next: addDays(MS().today(), 1) }; }
       MS().save();
-      el.parentElement.insertAdjacentHTML('beforeend', `<div class="ti-ready ${rate >= 80 ? 'ok' : ''} mt12">인출률 <b>${rate}%</b> — ${rate >= 80 ? '훌륭해요! 머릿속에 잘 정리되어 있어요 🎯' : rate >= 60 ? '좋아요. 빠뜨린 항목만 다시 보고 내일 한 번 더 떠올려 봐요.' : '빠뜨린 게 많아요. 개념을 다시 보고 내일 복습 목록에 넣었어요.'}</div>`);
+      el.parentElement.insertAdjacentHTML('beforeend', `<div class="ti-ready ${rate >= 80 ? 'ok' : ''} mt12">인출률 <b>${rate}%</b> · ${rate >= 80 ? '우수합니다. 기억이 잘 정리되어 있습니다 🎯' : rate >= 60 ? '양호합니다. 누락 항목만 다시 보고 내일 한 번 더 인출하십시오.' : '누락 항목이 많습니다. 개념을 다시 확인하십시오. 내일 복습 목록에 추가되었습니다.'}</div>`);
       el.remove(); if (rate >= 80 && window.FunApp) FunApp.confetti(null, innerHeight / 3, 60, 1.2);
     }
   });

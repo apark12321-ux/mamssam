@@ -1,4 +1,4 @@
-/* 쌤픽 — 재미 요소: 학습 캐릭터 · XP/레벨 · 배지 · 오늘의 미션 · 정답 효과 */
+/* 탑픽 — 상위권 성장 기록: 학습 캐릭터 · XP/레벨 · 배지 · 오늘의 목표 · 정답 효과 */
 (function () {
   const MS = () => window.MS;
   const ready = () => { try { return MS() && MS().st().kids && MS().st().kids.length && MS().kid(); } catch (e) { return false; } };
@@ -7,20 +7,20 @@
 
   /* ---------- 캐릭터 · 레벨 ---------- */
   const STAGES = [
-    [1, '🥚', '학습 알', '새싹 학습자'],
-    [2, '🐣', '아기 병아리', '호기심 탐험가'],
+    [1, '🥚', '학습 알', '입문 학습자'],
+    [2, '🐣', '아기 병아리', '기초 탐구자'],
     [3, '🐥', '병아리', '꾸준 연습생'],
-    [5, '🐤', '아기 새', '개념 수집가'],
-    [7, '🦜', '똑똑 앵무새', '생각 탐구가'],
-    [10, '🦉', '지혜 부엉이', '지식 마스터'],
-    [14, '🦅', '하늘 독수리', '최상위 도전자'],
-    [20, '🐉', '전설의 용', '전설의 학습왕']
+    [5, '🐤', '아기 새', '개념 정립자'],
+    [7, '🦜', '앵무새', '사고 탐구자'],
+    [10, '🦉', '부엉이', '지식 숙련자'],
+    [14, '🦅', '독수리', '최상위 도전자'],
+    [20, '🐉', '용', '상위권 완성자']
   ];
   const stageOf = (lv) => STAGES.filter(s => lv >= s[0]).pop();
   const lvStart = (lv) => { let x = 0; for (let k = 1; k < lv; k++) x += 80 + 40 * k; return x; };
   const lvOf = (xp) => { let lv = 1; while (xp >= lvStart(lv + 1)) lv++; return lv; };
 
-  const LINES = ['오늘도 한 걸음! 같이 가 보자 💪', '틀려도 괜찮아, 다시 보면 내 것이 돼!', '문제를 천천히 읽으면 답이 보여 👀', '어제보다 조금 더 똑똑해졌어!', '쉬는 것도 공부야. 물 한 잔 마시고 하자 🥤', '모르는 걸 아는 게 진짜 실력이야 ✨', '꾸준함이 최고의 비법이야 🔥', '오늘 미션 3개, 할 수 있어!', '고난도 문제 하나 도전해 볼까? 🔥', '설명할 수 있으면 진짜 아는 거야 🗣️'];
+  const LINES = ['오늘도 한 걸음 전진합니다 💪', '오답은 복습을 거쳐 자기 것이 됩니다', '문항을 천천히 읽으면 답이 보입니다 👀', '어제보다 한 단계 성장했습니다', '휴식도 학습입니다. 물 한 잔 후 다시 시작합니다 🥤', '모르는 것을 아는 것이 진짜 실력입니다 ✨', '꾸준한 학습이 상위권을 만듭니다 🔥', '오늘의 목표 3개, 완수 가능합니다', '고난도 문항 하나에 도전합니다 🔥', '설명할 수 있어야 진짜 아는 것입니다 🗣️'];
 
   /* ---------- 통계 (저장 데이터에서 계산) ---------- */
   function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -47,19 +47,19 @@
   /* ---------- 배지 ---------- */
   const BADGES = [
     ['first', '👣', '첫 걸음', '첫 차시 학습 완료', s => s.lessons >= 1],
-    ['l10', '📚', '열 걸음', '차시 10개 학습', s => s.lessons >= 10],
-    ['l50', '🏃', '공부 러너', '차시 50개 학습', s => s.lessons >= 50],
-    ['s3', '🔥', '3일 연속', '3일 연속 공부', s => s.streak >= 3],
-    ['s7', '🌟', '일주일 개근', '7일 연속 공부', s => s.streak >= 7],
-    ['c30', '✅', '정답 수집가', '확인 문제 30개 정답', s => s.correct >= 30],
-    ['c100', '💯', '정답왕', '확인 문제 100개 정답', s => s.correct >= 100],
-    ['v10', '🎬', '영상 탐험가', '개념 영상 10개 시청', s => s.videos >= 10],
-    ['sub4', '🧭', '전 과목 탐험', '4과목 이상 학습', s => s.subjects >= 4],
-    ['deep1', '🧠', '생각 도전자', '심화 문항 첫 채점', s => s.deep >= 1],
-    ['deep20', '💡', '생각의 달인', "심화 '잘함' 20개", s => s.deepGood >= 20],
-    ['hard1', '⚔️', '고난도 정복', '고난도 3문항 모두 정답', s => s.hardPerfect >= 1],
-    ['hard10', '👑', '최상위 마스터', '고난도 만점 10단원', s => s.hardPerfect >= 10],
-    ['coin100', '🪙', '코인 부자', '코인 100개 모으기', s => s.coins >= 100],
+    ['l10', '📚', '10차시 달성', '차시 10회 학습 완료', s => s.lessons >= 10],
+    ['l50', '🏃', '50차시 달성', '차시 50회 학습 완료', s => s.lessons >= 50],
+    ['s3', '🔥', '3일 연속 학습', '3일 연속 학습 완료', s => s.streak >= 3],
+    ['s7', '🌟', '7일 연속 학습', '7일 연속 학습 완료', s => s.streak >= 7],
+    ['c30', '✅', '정답 30문항', '확인 문항 30개 정답', s => s.correct >= 30],
+    ['c100', '💯', '정답 100문항', '확인 문항 100개 정답', s => s.correct >= 100],
+    ['v10', '🎬', '개념 영상 10편', '개념 영상 10편 시청', s => s.videos >= 10],
+    ['sub4', '🧭', '4과목 학습', '4과목 이상 학습', s => s.subjects >= 4],
+    ['deep1', '🧠', '첫 심화 도전', '심화 문항 첫 채점', s => s.deep >= 1],
+    ['deep20', '💡', '심화 우수 20회', "심화 '잘함' 20개", s => s.deepGood >= 20],
+    ['hard1', '⚔️', '첫 고난도 돌파', '고난도 3문항 모두 정답', s => s.hardPerfect >= 1],
+    ['hard10', '👑', '최상위 완성', '고난도 만점 10단원', s => s.hardPerfect >= 10],
+    ['coin100', '🪙', '코인 100개', '코인 100개 적립', s => s.coins >= 100],
     ['lv5', '🐤', '레벨 5', '레벨 5 달성', (s, lv) => lv >= 5],
     ['lv10', '🦉', '레벨 10', '레벨 10 달성', (s, lv) => lv >= 10]
   ];
@@ -72,9 +72,9 @@
     const corr = (s.correct - b.correct) + Math.floor((s.coins - b.coins) / 2);
     const alt = new Date().getDay() % 2 === 0;
     return [
-      { ic: '📖', n: '1차시 학습하기', v: s.todayLessons, g: 1 },
-      { ic: '✅', n: '문제 5개 맞히기', v: corr, g: 5 },
-      alt ? { ic: '🎬', n: '개념 영상 1개 보기', v: s.videos - b.videos, g: 1 } : { ic: '🏆', n: '최상위 1문항 도전', v: (s.deep - b.deep) + (s.hard - b.hard > 0 ? 1 : 0), g: 1 }
+      { ic: '📖', n: '1차시 학습 완료', v: s.todayLessons, g: 1 },
+      { ic: '✅', n: '문항 5개 정답', v: corr, g: 5 },
+      alt ? { ic: '🎬', n: '개념 영상 1편 시청', v: s.videos - b.videos, g: 1 } : { ic: '🏆', n: '최상위 1문항 도전', v: (s.deep - b.deep) + (s.hard - b.hard > 0 ? 1 : 0), g: 1 }
     ].map(m => Object.assign(m, { ok: m.v >= m.g, v: Math.max(0, Math.min(m.v, m.g)) }));
   }
 
@@ -111,7 +111,7 @@
     if (ok) {
       combo++; tone(combo >= 3 ? SND.combo : SND.ok); buzz(25);
       confetti(r.left + r.width / 2, r.top + r.height / 2, combo >= 3 ? 50 : 24, combo >= 3 ? 1.2 : .7);
-      if (combo >= 3) floatMsg(`🔥 ${combo}연속 정답!`, 'combo');
+      if (combo >= 3) floatMsg(`🔥 ${combo}연속 정답`, 'combo');
     } else {
       combo = 0; tone(SND.no); buzz([40, 30, 40]);
       el.classList.remove('fx-shake'); void el.offsetWidth; el.classList.add('fx-shake');
@@ -140,7 +140,7 @@
     if (!ready()) return;
     const f = fun(), s = stats();
     const ms = missions(s, f);
-    if (ms.every(m => m.ok) && !f.bonus[today()]) { f.bonus[today()] = 50; if (!silent && PET) { setTimeout(() => { floatMsg('🎁 오늘의 미션 완료! +50 XP', 'mission'); confetti(null, innerHeight / 2, 70, 1.3); tone(SND.lv); }, 600); } }
+    if (ms.every(m => m.ok) && !f.bonus[today()]) { f.bonus[today()] = 50; if (!silent && PET) { setTimeout(() => { floatMsg('🎁 오늘의 목표 완료 +50 XP', 'mission'); confetti(null, innerHeight / 2, 70, 1.3); tone(SND.lv); }, 600); } }
     const xp = xpOf(s, f), lv = lvOf(xp);
     const init = f.xp == null;
     const gain = xp - (f.xp || 0), prevLv = f.lv || lv;
@@ -164,14 +164,14 @@
     const a = stageOf(from), b = stageOf(to), evolve = a !== b;
     tone(SND.lv); buzz([30, 40, 30, 40, 80]);
     const ov = document.createElement('div'); ov.className = 'fx-lv';
-    ov.innerHTML = `<div class="fx-lv-box"><div class="fx-lv-t">레벨 업!</div><div class="fx-lv-pet">${evolve ? `<span class="old">${a[1]}</span><span class="new">${b[1]}</span>` : `<span class="new">${b[1]}</span>`}</div><div class="fx-lv-n">Lv.${to}</div><p>${evolve ? `<b>${esc(b[2])}</b>(으)로 자랐어요!<br>칭호: ${esc(b[3])}` : '계속 이렇게만 하면 곧 진화해요!'}</p><button class="btn btn-primary btn-lg" data-fx="close">좋아요!</button></div>`;
+    ov.innerHTML = `<div class="fx-lv-box"><div class="fx-lv-t">레벨 상승</div><div class="fx-lv-pet">${evolve ? `<span class="old">${a[1]}</span><span class="new">${b[1]}</span>` : `<span class="new">${b[1]}</span>`}</div><div class="fx-lv-n">Lv.${to}</div><p>${evolve ? `<b>${esc(b[2])}</b>(으)로 성장했습니다<br>칭호: ${esc(b[3])}` : '현재 속도를 유지하면 곧 다음 단계로 진화합니다'}</p><button class="btn btn-primary btn-lg" data-fx="close">확인</button></div>`;
     document.body.appendChild(ov);
     confetti(null, innerHeight / 2.5, 120, 1.6); setTimeout(() => confetti(null, innerHeight / 2.5, 80, 1.3), 500);
     ov.addEventListener('click', e => { if (e.target === ov || e.target.dataset.fx === 'close') ov.remove(); });
   }
   function badgeToast(id) {
     const b = BADGES.find(x => x[0] === id); if (!b) return;
-    tone(SND.badge); floatMsg(`<span class="bt-ic">${b[1]}</span><span><b>새 배지! ${esc(b[2])}</b><small>${esc(b[3])}</small></span>`, 'badge');
+    tone(SND.badge); floatMsg(`<span class="bt-ic">${b[1]}</span><span><b>배지 획득 · ${esc(b[2])}</b><small>${esc(b[3])}</small></span>`, 'badge');
     confetti(innerWidth / 2, innerHeight - 140, 40, 1);
   }
 
@@ -185,23 +185,23 @@
     const got = BADGES.filter(x => f.badges.includes(x[0]));
     return `<div class="fun-card${compact ? ' compact' : ''}" id="funCard">
       <div class="fun-top">
-        <button class="fun-pet" data-fx="pet" aria-label="캐릭터 쓰다듬기"><span class="pet">${sg[1]}</span><span class="lv">Lv.${lv}</span></button>
+        <button class="fun-pet" data-fx="pet" aria-label="캐릭터 터치"><span class="pet">${sg[1]}</span><span class="lv">Lv.${lv}</span></button>
         <div class="fun-info">
           <div class="fun-name"><b>${esc(name)}의 ${esc(sg[2])}</b><span class="fun-title">${esc(sg[3])}</span></div>
           <div class="fun-bar"><i style="width:${pc}%"></i></div>
-          <div class="fun-xp xs"><span>${xp - a} / ${b - a} XP</span><span>${nx ? `Lv.${nx[0]}에 ${nx[1]} 진화` : '최고 단계!'}</span></div>
+          <div class="fun-xp xs"><span>${xp - a} / ${b - a} XP</span><span>${nx ? `Lv.${nx[0]}에 ${nx[1]} 진화` : '최고 단계'}</span></div>
           <div class="fun-say" id="funSay">${esc(line)}</div>
         </div>
         <button class="fun-snd" data-fx="snd" aria-label="효과음 ${sound ? '끄기' : '켜기'}">${sound ? '🔊' : '🔇'}</button>
       </div>
-      <div class="fun-ms"><div class="fun-ms-h"><b>오늘의 미션</b><span class="xs muted">${ms.filter(m => m.ok).length}/3 · 모두 하면 +50 XP</span></div>
+      <div class="fun-ms"><div class="fun-ms-h"><b>오늘의 목표</b><span class="xs muted">${ms.filter(m => m.ok).length}/3 · 전부 완료 시 +50 XP</span></div>
         <div class="fun-ms-list">${ms.map(m => `<div class="fun-m ${m.ok ? 'ok' : ''}"><span class="m-ic">${m.ok ? '✔' : m.ic}</span><span class="m-n">${esc(m.n)}</span><span class="m-p">${m.v}/${m.g}</span></div>`).join('')}</div></div>
-      <button class="fun-bd" data-fx="badges"><span class="bd-row">${got.slice(-6).map(x => `<span>${x[1]}</span>`).join('') || '<span class="muted xs">아직 배지가 없어요</span>'}</span><span class="xs">배지 ${got.length}/${BADGES.length} ›</span></button>
+      <button class="fun-bd" data-fx="badges"><span class="bd-row">${got.slice(-6).map(x => `<span>${x[1]}</span>`).join('') || '<span class="muted xs">획득한 배지가 없습니다</span>'}</span><span class="xs">배지 ${got.length}/${BADGES.length} ›</span></button>
     </div>`;
   }
   function badgeModal() {
     const f = fun();
-    MS().modal(`<h2>🏅 나의 배지</h2><p class="muted small" style="margin:-6px 0 14px">공부할수록 하나씩 모여요. 회색 배지는 아직 잠겨 있어요.</p>
+    MS().modal(`<h2>🏅 획득 배지</h2><p class="muted small" style="margin:-6px 0 14px">학습 기록에 따라 자동 획득됩니다. 회색 배지는 미획득 상태입니다.</p>
       <div class="bd-grid">${BADGES.map(b => { const on = f.badges.includes(b[0]); return `<div class="bd ${on ? 'on' : ''}"><span class="bd-ic">${b[1]}</span><b>${esc(b[2])}</b><small>${esc(b[3])}</small></div>`; }).join('')}</div>
       <div class="modal-actions"><button class="btn btn-primary" data-act="closeModal">닫기</button></div>`);
   }

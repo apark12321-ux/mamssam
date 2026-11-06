@@ -1,4 +1,4 @@
-/* 쌤픽 — 광고 지면 · 인바운드 광고 문의 (부모 화면에만 노출, 아이 학습 화면은 광고 없음) */
+/* 탑픽 — 광고 지면 · 인바운드 광고 문의 (학부모 화면에만 노출, 학습 화면은 광고 없음) */
 (function () {
   /* ===== 설정: ID를 채우면 자동으로 해당 네트워크 광고가 붙습니다 ===== */
   const CFG = {
@@ -13,13 +13,13 @@
   const MS = () => window.MS;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const SLOTS = {
-    home_top: { name: '홈 상단 배너', size: '가로 전체 × 100', where: '앱을 열면 가장 먼저 보이는 학부모 홈 화면, 오늘 수업 카드 바로 아래' },
-    home_mid: { name: '홈 중간 카드', size: '카드형 (제목·설명·버튼)', where: '오늘 수업·우리 학교 카드 사이, 콘텐츠처럼 보이는 네이티브 지면' },
+    home_top: { name: '홈 상단 배너', size: '가로 전체 × 100', where: '앱을 열면 가장 먼저 보이는 학부모 홈 화면, 오늘 학습 카드 바로 아래' },
+    home_mid: { name: '홈 중간 카드', size: '카드형 (제목·설명·버튼)', where: '오늘 학습·우리 학교 카드 사이의 네이티브 지면' },
     school: { name: '우리 학교 페이지', size: '가로 전체 × 100', where: '급식·학사일정·시간표를 매일 확인하는 화면 하단' },
-    records: { name: '학습 기록 페이지', size: '카드형', where: '정답률·오답 노트를 보는 화면 — 학습지·문제집·학원 광고와 궁합' },
-    high_top: { name: '고등 홈 상단 배너', size: '가로 전체 × 100', where: '수능 D-day·플래너를 매일 여는 고등 홈 상단 — 인강·교재·학원' },
-    high_consult: { name: '대입 컨설팅 카드', size: '카드형 (제목·설명·버튼)', where: '고등 홈·컨설팅 페이지의 네이티브 카드 — 입시 컨설팅·학원·과외 플랫폼' },
-    splash: { name: '앱 첫 화면 하단', size: '가로 전체 × 100', where: '앱을 열 때마다 4~5초 보이는 첫 화면 아래 — 브랜드 인지 광고' },
+    records: { name: '학습 기록 페이지', size: '카드형', where: '정답률·오답 노트를 보는 화면, 학습지·문제집·학원 광고에 적합' },
+    high_top: { name: '고등 홈 상단 배너', size: '가로 전체 × 100', where: '수능 D-day·플래너를 매일 여는 고등 홈 상단, 인강·교재·학원 광고에 적합' },
+    high_consult: { name: '대입 컨설팅 카드', size: '카드형 (제목·설명·버튼)', where: '고등 홈·컨설팅 페이지의 네이티브 카드, 입시 컨설팅·학원·과외 플랫폼에 적합' },
+    splash: { name: '앱 첫 화면 하단', size: '가로 전체 × 100', where: '앱을 열 때마다 4~5초 보이는 첫 화면 아래, 브랜드 인지 광고에 적합' },
     guide: { name: '학습 가이드 (검색 유입)', size: '본문 중간 + 하단', where: '구글·네이버 검색으로 들어오는 단원별 학습 가이드 페이지' }
   };
   const PAGES = { home: ['home_top', 'home_mid'], school: ['school'], records: ['records'], high: ['high_top', 'high_consult'] };
@@ -43,7 +43,7 @@
   }
   function houseHTML(slot) {
     const S = SLOTS[slot] || SLOTS.home_top; const card = /mid|records|consult/.test(slot);
-    return `<a class="ad ad-house ${card ? 'ad-card' : 'ad-bar'}" href="#ads"><span class="ad-t"><b>📣 이 자리에 우리 브랜드를 알려 보세요</b><small>${esc(S.name)} · ${/high/.test(slot) ? '인강·교재·입시 컨설팅·학원 광고주를 위한 지면' : '학습지·교재·에듀테크 광고주를 위한 지면'}</small></span><span class="ad-cta">광고 안내</span></a>`;
+    return `<a class="ad ad-house ${card ? 'ad-card' : 'ad-bar'}" href="#ads"><span class="ad-t"><b>📣 정액 광고 지면</b><small>${esc(S.name)} · 학습지·교재·에듀테크·입시 컨설팅 광고주 안내</small></span><span class="ad-cta">광고 안내</span></a>`;
   }
   function networkHTML(slot) {
     if (CFG.adsense) return `<ins class="adsbygoogle ad-net" style="display:block" data-ad-client="${CFG.adsense}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
@@ -93,22 +93,22 @@
   /* ---------- 광고 안내 페이지 (#ads) ---------- */
   function page() {
     const rows = Object.entries(SLOTS).map(([k, S]) => `<tr><td><b>${S.name}</b><br><span class="xs muted">${S.where}</span></td><td class="xs">${S.size}</td></tr>`).join('');
-    const html = `<div class="page-head"><div><h1>📣 쌤픽 광고 안내</h1><div class="sub">초등 학부모, 중학생, 수능·대입을 준비하는 고등학생과 학부모가 매일 여는 앱입니다.</div></div></div>
+    const html = `<div class="page-head"><div><h1>📣 탑픽 광고 안내</h1><div class="sub">초·중·고 상위권·최상위권 학습자와 학부모가 매일 여는 앱입니다.</div></div></div>
       <div class="grid g2">
-        <div class="card"><h2>누가 보나요</h2><ul class="ad-ul">
-          <li><b>초1~중3 학부모</b> — 아이 학년·과목·교과서 출판사를 등록하고 매일 수업 진도를 관리합니다.</li>
-          <li><b>높은 재방문</b> — 급식·학사일정·시간표·시험 D-day를 보러 아침마다 들어옵니다.</li>
-          <li><b>구매 결정권자</b> — 학습지, 문제집, 온라인 학습, 학원을 직접 고르는 분들입니다.</li>
-          <li><b>학년별 타겟팅</b> — 광고를 특정 학년·과목 이용자에게만 보여 줄 수 있습니다.</li></ul></div>
-        <div class="card"><h2>이런 광고주에게 맞아요</h2><ul class="ad-ul">
+        <div class="card"><h2>이용자 구성</h2><ul class="ad-ul">
+          <li><b>초·중·고 학부모</b> · 학습자 학년·과목·교과서 출판사를 등록하고 매일 학습 진도를 관리합니다.</li>
+          <li><b>높은 재방문</b> · 급식·학사일정·시간표·시험 D-day를 보러 아침마다 들어옵니다.</li>
+          <li><b>구매 결정권자</b> · 학습지, 문제집, 온라인 학습, 학원을 직접 선택하는 학부모입니다.</li>
+          <li><b>학년별 타겟팅</b> · 광고를 특정 학년·과목 이용자에게만 보여 줄 수 있습니다.</li></ul></div>
+        <div class="card"><h2>적합 광고주</h2><ul class="ad-ul">
           <li>학습지 · 방문·화상 교육 (무료 체험 신청)</li><li>문제집 · 참고서 · 교과서 출판사</li><li>에듀테크 앱 · 온라인 영어·수학</li><li>지역 학원 · 공부방 · 독서 논술</li><li>아동 도서 · 문구 · 학습 가구</li></ul></div>
       </div>
       <div class="card mt16"><h2>광고 지면</h2><table class="ad-table"><thead><tr><th>지면</th><th>형태</th></tr></thead><tbody>${rows}</tbody></table>
-        <p class="xs muted mt8">아이가 문제를 풀고 영상을 보는 학습 화면에는 광고를 넣지 않습니다. 학부모가 보는 화면에만 노출되며, 지면당 광고는 한 개입니다.</p></div>
+        <p class="xs muted mt8">정액 광고만 운영하며, 모든 광고에 ‘광고’ 표기를 합니다. 학습 화면(문항 풀이·영상)에는 노출하지 않으며, 지면당 광고는 한 개입니다.</p></div>
       <div class="card mt16"><h2>진행 방식</h2><ol class="ad-ol">
-        <li><b>문의</b> — 아래 폼을 보내 주시면 1~2일 안에 현재 이용자 수·노출 수와 견적을 메일로 드립니다.</li>
-        <li><b>소재 전달</b> — 제목 1줄 + 설명 1줄 + 링크 (배너 이미지는 선택). 소재 제작이 필요하면 무료로 도와드립니다.</li>
-        <li><b>게재·리포트</b> — 월 단위 게재, 노출·클릭 리포트를 매주 보내 드립니다. 무료 체험 신청 등 성과 기준(CPA) 계약도 가능합니다.</li></ol></div>
+        <li><b>문의</b> · 아래 양식을 제출하면 1~2일 내 이용자 수·노출 수와 견적을 메일로 회신합니다.</li>
+        <li><b>소재 전달</b> · 제목 1줄 + 설명 1줄 + 링크 (배너 이미지는 선택). 소재 제작은 무상 지원합니다.</li>
+        <li><b>게재·리포트</b> · 월 단위 게재, 노출·클릭 리포트를 매주 제공합니다. 무료 체험 신청 등 성과 기준(CPA) 계약도 가능합니다.</li></ol></div>
       <div class="card mt16" id="adLead"><h2>광고 문의</h2>
         <form id="adForm" class="ad-form">
           <div class="form-grid">
@@ -116,23 +116,23 @@
             <div class="field"><label>담당자</label><input class="input" name="contact" required maxlength="60"></div>
             <div class="field"><label>이메일</label><input class="input" name="email" type="email" required maxlength="120"></div>
             <div class="field"><label>연락처 <span class="xs muted">(선택)</span></label><input class="input" name="phone" maxlength="30" inputmode="tel"></div>
-            <div class="field"><label>관심 지면</label><select class="input" name="slot"><option value="">아직 모르겠어요</option>${Object.entries(SLOTS).map(([k, S]) => `<option value="${k}" ${k === new URLSearchParams(location.hash.split('?')[1] || '').get('slot') ? 'selected' : ''}>${S.name}</option>`).join('')}<option value="all">전체 패키지</option></select></div>
+            <div class="field"><label>관심 지면</label><select class="input" name="slot"><option value="">미정</option>${Object.entries(SLOTS).map(([k, S]) => `<option value="${k}" ${k === new URLSearchParams(location.hash.split('?')[1] || '').get('slot') ? 'selected' : ''}>${S.name}</option>`).join('')}<option value="all">전체 패키지</option></select></div>
             <div class="field"><label>월 예산</label><select class="input" name="budget"><option value="">미정</option><option>30만 원 이하</option><option>30~100만 원</option><option>100~300만 원</option><option>300만 원 이상</option><option>성과 기준(CPA) 희망</option></select></div>
           </div>
-          <div class="field"><label>내용</label><textarea class="input" name="message" rows="4" maxlength="2000" placeholder="광고하려는 상품·서비스, 희망 기간, 타겟 학년 등을 적어 주세요"></textarea></div>
-          <button class="btn btn-primary" type="submit">문의 보내기</button>
+          <div class="field"><label>내용</label><textarea class="input" name="message" rows="4" maxlength="2000" placeholder="광고 상품·서비스, 희망 기간, 대상 학년 등을 기재하십시오"></textarea></div>
+          <button class="btn btn-primary" type="submit">문의 제출</button>
           <p class="xs muted mt8">입력하신 정보는 광고 상담 목적으로만 사용하며, 상담 종료 후 파기합니다.</p>
         </form></div>`;
     return MS().layout('ads', html);
   }
   document.addEventListener('submit', e => {
     if (e.target.id !== 'adForm') return; e.preventDefault();
-    const f = e.target, btn = f.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = '보내는 중…';
+    const f = e.target, btn = f.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = '제출 중…';
     const d = {}; new FormData(f).forEach((v, k) => d[k] = String(v).trim()); d.device = (localStorage.getItem('ms_dev') || '');
     sb('mamssam_ad_leads', { method: 'POST', body: JSON.stringify(d), prefer: 'return=minimal' }).then(() => {
       // 알림에는 개인정보(이메일·연락처·내용)를 담지 않고, 상세는 Supabase mamssam_ad_leads 에서 확인
-      try { if (CFG.ntfy) fetch(CFG.ntfy, { method: 'POST', headers: { Title: encodeURIComponent('쌤픽 광고 문의'), Priority: 'high', Tags: 'moneybag' }, body: `새 광고 문의가 들어왔어요 · 지면: ${d.slot || '-'} · 예산: ${d.budget || '-'}\nSupabase에서 확인하세요.` }).catch(() => { }); } catch (err) { }
-      f.innerHTML = `<div class="empty"><div class="e-ico">✅</div><b>문의를 받았어요</b><p class="small muted mt8">${esc(d.email)}로 1~2일 안에 답변드릴게요. 감사합니다!</p></div>`;
+      try { if (CFG.ntfy) fetch(CFG.ntfy, { method: 'POST', headers: { Title: encodeURIComponent('탑픽 광고 문의'), Priority: 'high', Tags: 'moneybag' }, body: `새 광고 문의 접수 · 지면: ${d.slot || '미정'} · 예산: ${d.budget || '미정'}\nSupabase에서 확인하십시오.` }).catch(() => { }); } catch (err) { }
+      f.innerHTML = `<div class="empty"><div class="e-ico">✅</div><b>문의가 접수되었습니다</b><p class="small muted mt8">${esc(d.email)}로 1~2일 내 회신합니다.</p></div>`;
     });
   });
 

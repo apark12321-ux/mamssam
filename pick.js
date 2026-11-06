@@ -1,4 +1,4 @@
-/* 쌤픽 — 입력 대신 선택
+/* 탑픽 — 입력 대신 선택
    · data-chips="a|b|c"      : 입력칸 아래 빠른 선택 칩(누르면 값이 채워짐). data-chips-mode="append"면 쉼표로 이어 붙임
    · data-chips="@date"       : 오늘·내일·모레·이번 주말 칩
    · data-suggest="목록이름"  : 입력하면 아래에 추천 목록(초성 검색 지원). 고르면 값이 채워짐. data-pick-submit이면 고르는 즉시 제출

@@ -1,4 +1,4 @@
-/* 쌤픽 — 이모지 대신 선 아이콘
+/* 탑픽 — 이모지 대신 선 아이콘
    · 아이콘 자리(메뉴·바로가기·목록 머리)에 있는 이모지는 같은 뜻의 선 아이콘으로 바꾼다
    · 제목·버튼·문장 앞에 붙은 장식용 이모지는 지운다
    · 아이 모드·학습 알(캐릭터 그림)처럼 이모지가 그림 역할을 하는 곳은 그대로 둔다 */
@@ -62,7 +62,7 @@
       el.innerHTML = svg(MAP[e] || MAP[e.replace(/️/g, '')] || 'dot');
     });
     // 개념 과외 말풍선 얼굴 → 글자 표지
-    root.querySelectorAll('.tu-av').forEach(el => { if (el.dataset.ci) return; el.dataset.ci = '1'; el.textContent = /🙋/.test(el.textContent) ? '나' : '쌤'; });
+    root.querySelectorAll('.tu-av').forEach(el => { if (el.dataset.ci) return; el.dataset.ci = '1'; el.textContent = /🙋/.test(el.textContent) ? '나' : '탑'; });
   }
   function stripText(root) {
     const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (!n.nodeValue || !EMO1.test(n.nodeValue)) ? NodeFilter.FILTER_REJECT : (n.parentElement && n.parentElement.closest(KEEP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
