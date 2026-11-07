@@ -20,9 +20,27 @@
     (MS().st().lessons || []).filter(l => l.kidId === kid.id && l.unitId).forEach(l => { if (!m[l.unitId] || l.date < m[l.unitId]) m[l.unitId] = l.date; });
     return Object.entries(m).map(([id, first]) => ({ u: H().U(id), first })).filter(x => x.u);
   }
+  /* 기억 모델 기반 복습 간격 산출 (단원별 안정도·난이도 추정, 목표 회상률 0.9) */
+  const RET = 0.9, W = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34, 1.26, 0.29, 2.61];
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const daysBetween = (a, b) => Math.max(0, Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 864e5));
+  const retr = (S, el) => Math.pow(1 + el / (9 * S), -1);
+  const ivl = (S) => clamp(Math.round(S * 9 * (1 / RET - 1)), 1, 180);
+  const initS = (g) => W[g - 1];
+  const initD = (g) => clamp(W[4] - (g - 3) * W[5], 1, 10);
+  const nextD = (D, g) => clamp(W[7] * initD(3) + (1 - W[7]) * (D - W[6] * (g - 3)), 1, 10);
+  const recallS = (D, S, R, g) => S * (1 + Math.exp(W[8]) * (11 - D) * Math.pow(S, -W[9]) * (Math.exp((1 - R) * W[10]) - 1) * (g === 2 ? W[15] : 1) * (g === 4 ? W[16] : 1));
+  const forgetS = (D, S, R) => clamp(W[11] * Math.pow(D, -W[12]) * (Math.pow(S + 1, W[13]) - 1) * Math.exp((1 - R) * W[14]), 0.1, S);
+  function advance(cur, g, today) {
+    if (!cur || cur.S == null) { const S = initS(g), D = initD(g); return { S, D, last: today, next: addDays(today, g === 1 ? 1 : ivl(S)), reps: 1, lapses: g === 1 ? 1 : 0 }; }
+    const R = retr(cur.S, daysBetween(cur.last, today)), D = nextD(cur.D, g);
+    const S = g === 1 ? forgetS(D, cur.S, R) : recallS(D, cur.S, R, g);
+    return { S, D, last: today, next: addDays(today, g === 1 ? 1 : ivl(S)), reps: (cur.reps || 0) + 1, lapses: (cur.lapses || 0) + (g === 1 ? 1 : 0) };
+  }
+  const stageOf = (r) => { if (!r) return 0; if (r.S == null) return r.stage || 0; const d = ivl(r.S); return INTERVALS.filter(x => d >= x).length; };
   function schedule() {
     const d = data(), t = MS().today();
-    return studied().map(x => { const r = d.rev[x.u.id] || { stage: 0, next: addDays(x.first, INTERVALS[0]) }; return { u: x.u, stage: r.stage, next: r.next, due: r.next <= t }; }).sort((a, b) => a.next.localeCompare(b.next));
+    return studied().map(x => { const r = d.rev[x.u.id] || { stage: 0, next: addDays(x.first, INTERVALS[0]) }; return { u: x.u, stage: stageOf(r), next: r.next, due: r.next <= t }; }).sort((a, b) => a.next.localeCompare(b.next));
   }
 
   /* ---------- 화면 ---------- */
@@ -165,15 +183,15 @@
     const ill = res.filter(r => r.pred === 'k' && !r.ok).length, hid = res.filter(r => r.pred === 'u' && r.ok).length;
     const why = {}; res.forEach(r => { if (r.why) why[r.why] = (why[r.why] || 0) + 1; });
     d.ms.push({ date: MS().today(), kind: S.kind, n, ok, cal, ill, hid, why }); d.ms = d.ms.slice(-30);
-    // 간격 복습 갱신: 단원별 정답률 80% 이상 → 다음 단계, 미만이거나 착각 문항 → 처음부터
-    const byU = {}; S.qs.forEach((p, i) => { const b = byU[p.unitId] = byU[p.unitId] || { ok: 0, n: 0, ill: 0 }; b.n++; if (res[i].ok) b.ok++; if (res[i].pred === 'k' && !res[i].ok) b.ill++; });
-    const moved = [];
+    // 복습 간격 갱신: 단원별 기억 안정도·난이도를 결과로 재추정해 다음 복습일 산출
+    const byU = {}; S.qs.forEach((p, i) => { const b = byU[p.unitId] = byU[p.unitId] || { ok: 0, n: 0, ill: 0, sure: 0 }; b.n++; if (res[i].ok) b.ok++; if (res[i].pred === 'k' && res[i].ok) b.sure++; if (res[i].pred === 'k' && !res[i].ok) b.ill++; });
+    const moved = [], today = MS().today();
     Object.entries(byU).forEach(([id, b]) => {
-      const cur = d.rev[id] || { stage: 0 };
-      if (S.kind === 'review' || cur.next) {
-        const pass = b.ok / b.n >= .8 && !b.ill; const stage = pass ? Math.min(cur.stage + 1, INTERVALS.length) : 0;
-        d.rev[id] = { stage, next: addDays(MS().today(), INTERVALS[Math.min(stage, INTERVALS.length - 1)]) }; if (pass) moved.push(id);
-      } else if (!(b.ok / b.n >= .8)) d.rev[id] = { stage: 0, next: addDays(MS().today(), 1) };
+      const cur = d.rev[id], acc = b.ok / b.n;
+      // 평가 등급: 착각 문항 또는 정답률 50% 미만 → 1, 80% 미만 → 2, 80% 이상 → 3, 전부 정답이고 확신 일치 → 4
+      const g = (b.ill || acc < .5) ? 1 : acc < .8 ? 2 : (acc === 1 && b.sure === b.n) ? 4 : 3;
+      if (S.kind === 'review' || (cur && cur.next)) { const nx = advance(cur, g, today); if (stageOf(nx) > stageOf(cur)) moved.push(id); d.rev[id] = nx; }
+      else if (g <= 2) d.rev[id] = advance(null, g, today);
     });
     MS().save();
     const box = document.getElementById('mthBody');
