@@ -229,7 +229,7 @@
     return layout('high/tutor', `
       <div class="page-head"><div><h1>1:1 온라인 개념 과외</h1><div class="sub">수능 변별 개념만 선별해 한 단계씩 진행. 개념 정리 → 족집게 → 함정 → 확인 문항</div></div></div>
       <div class="card tu-intro"><div class="tu-prog"><b>${doneN()}</b>/${C.length} 개념 완료</div><div class="tu-bar"><i style="width:${Math.round(doneN() / C.length * 100)}%"></i></div>
-        <p class="xs muted mt8">오늘의 과외는 최근 모의고사에서 등급이 가장 낮은 과목부터 추천합니다. 오답 개념은 3일 후 복습 일정이 플래너에 자동 등록됩니다.</p></div>
+        <p class="xs muted mt8">오늘의 과외: 최근 모의고사 최저 등급 과목 우선 · 오답 개념은 3일 후 복습 일정 플래너 자동 등록</p></div>
       <div class="chips scroll-x hi-sub mt12"><button class="chip ${open === 'all' ? 'on' : ''}" data-act="tuS" data-k="all">전체 ${doneN()}/${C.length}</button>${SUBJ.map(s => `<button class="chip ${open === s.k ? 'on' : ''}" data-act="tuS" data-k="${s.k}" style="--sc:${s.c}">${s.ic} ${s.n} <span class="xs">${doneN(s.k)}/${C.filter(c => c.s === s.k).length}</span></button>`).join('')}</div>
       <div class="list tu-list">${rows.map(c => { const r = h.tutor[c.id]; return `<a class="li" href="#high/tutor/${c.id}" style="color:inherit" ${c.id === nxId ? 'data-next="1"' : ''}><div class="li-ico" style="background:${S(c.s).c}1a">${r && r.ok ? '✅' : r ? '🔁' : S(c.s).ic}</div><div class="li-main"><div class="li-t">${esc(c.t)} ${c.hot ? '<span class="tu-hot">빈출</span>' : ''}</div><div class="li-s">${S(c.s).n} · ${r && r.ok ? '완료 ' + r.date.slice(5).replace('-', '/') : r ? '재풀이' : '3분 과외'}</div></div><span class="muted">›</span></a>`; }).join('')}</div>
       <p class="xs muted mt12">개념 정리·문항·해설은 탑픽이 직접 작성한 학습 자료입니다. 심화 강의는 <a href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 무료 강의</a>, 질문은 EBSi "선생님께 묻기"를 이용합니다.</p>`);
@@ -276,7 +276,7 @@
     { g: '수시 지원 규칙', it: [
       '수시는 최대 6회 지원. 산업대·전문대, KAIST·GIST·DGIST·UNIST·한국에너지공과대, 경찰대·사관학교 등 특별법 학교는 6회 제한에 포함되지 않습니다.',
       '수시에 한 곳이라도 합격(추가 합격 포함)하면 등록 여부와 상관없이 정시에 지원할 수 없습니다. 수능을 잘 봤다면 수능 후 대학별고사 응시 여부가 가장 큰 결정입니다.',
-      '수시 합격자는 복수 합격해도 한 곳에만 등록할 수 있습니다. 등록 기간을 놓치면 합격이 취소됩니다.'] },
+      '수시 합격자: 복수 합격 시에도 1개교 등록 등록 기간을 놓치면 합격이 취소됩니다.'] },
     { g: '수능 최저학력기준', it: [
       '"3개 영역 등급 합 6 이내(3합 6)"처럼 정해집니다. 탐구는 1과목 반영인지, 2과목 평균인지(소수점 절사·올림)가 대학마다 다릅니다.',
       '영어를 최저에 넣는 대학이 많아 영어 1~2등급은 최저 충족의 안전판입니다. 한국사는 별도 기준(예: 4등급 이내)을 두기도 합니다.',
@@ -320,7 +320,7 @@
     const iv = h.iv; const kw = (iv.kw || '').split(/[,·\n]/).map(s => s.trim()).filter(Boolean);
     const qs = (IVQ[iv.type] || IVQ.doc).flatMap(t => /\{k\}/.test(t) ? (kw.length ? kw.slice(0, 3).map(k => t.replace(/\{k\}/g, k)) : [t.replace(/\{k\}/g, '(세특 활동)')]) : [t]).slice(0, 10).concat(IVBASE.slice(0, 3));
     const J = h.jeong; const verdict = J.map(x => x.v || ''); const nUp = verdict.filter(v => v === 'up').length, nSafe = verdict.filter(v => v === 'safe').length, filled = verdict.filter(Boolean).length;
-    const jWarn = filled < 3 ? '세 군을 모두 입력하면 배치 진단이 산출됩니다.' : !nSafe ? '⚠️ 안정 카드가 없습니다. 세 곳 모두 불합격 시 재수 또는 추가 모집뿐입니다. 한 군은 안정으로 배치합니다.' : nSafe === 3 ? '⚠️ 세 곳 모두 안정입니다. 점수 대비 하향 지원 손실이 큽니다. 한 군은 적정 이상으로 상향합니다.' : nUp === 3 ? '⚠️ 세 곳 모두 상향입니다. 최소 한 곳은 안정으로 배치하는 것이 원칙입니다.' : '✅ 상향·적정·안정이 배분된 균형 배치입니다. 군별 모집 인원과 전년도 추가 합격 규모를 확인합니다.';
+    const jWarn = filled < 3 ? '가·나·다군 입력 완료 → 배치 진단 산출' : !nSafe ? '⚠️ 안정 카드가 없습니다. 세 곳 모두 불합격 시 재수 또는 추가 모집뿐입니다. 한 군은 안정으로 배치합니다.' : nSafe === 3 ? '⚠️ 세 곳 모두 안정입니다. 점수 대비 하향 지원 손실이 큽니다. 한 군은 적정 이상으로 상향합니다.' : nUp === 3 ? '⚠️ 세 곳 모두 상향입니다. 최소 한 곳은 안정으로 배치하는 것이 원칙입니다.' : '✅ 상향·적정·안정이 배분된 균형 배치입니다. 군별 모집 인원과 전년도 추가 합격 규모를 확인합니다.';
     return layout('high/ipsi', `
       <div class="page-head"><div><h1>대입 족집게</h1><div class="sub">${HA().examYear(kid)}학년도 기준 · 핵심 변화, 필수 규칙, 입시 상담 실무 도구 4종 무료 제공</div></div></div>
       ${window.ConsultApp && kid.grade === 12 ? ConsultApp.stageCard(kid) : ''}
@@ -331,7 +331,7 @@
         <div class="form-grid tu-min-rule">${'<div class="field"><label>반영 영역 수</label>' + sel('n', h.min.n, [[2, '2개 영역'], [3, '3개 영역'], [4, '4개 영역']]) + '</div><div class="field"><label>등급 합</label>' + sel('sum', h.min.sum, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(x => [x, x + ' 이내'])) + '</div><div class="field"><label>탐구 반영</label>' + sel('tam', h.min.tam, [['one', '상위 1과목'], ['avg', '2과목 평균(절사)'], ['avgUp', '2과목 평균(올림)']]) + '</div><div class="field"><label>영어</label>' + sel('eng', h.min.eng, [[1, '포함'], [0, '제외']]) + '</div><div class="field"><label>한국사</label>' + sel('his', h.min.his, [[0, '기준 없음'], [3, '3등급 이내'], [4, '4등급 이내'], [5, '5등급 이내']]) + '</div>'}</div>
         <div class="tu-min-g">${gsel('kor', '국어')}${gsel('math', '수학')}${gsel('eng', '영어')}${gsel('t1', '탐구1')}${gsel('t2', '탐구2')}${gsel('his', '한국사')}</div>
         <div class="tu-min-r ${r.ok === true ? 'ok' : r.ok === false ? 'no' : ''}">${r.ok == null ? r.msg : `<b>${r.ok ? '충족' : '미충족'}</b> · ${r.best.map(a => `${a[0]} ${a[1]}`).join(' + ')} = ${r.sum} (기준 ${h.min.n}합 ${h.min.sum})${!r.hisOK ? ' · 한국사 기준 미달' : ''}${r.ok ? (r.margin >= 1 ? ` · 여유 ${r.margin}등급` : ' · 경계선, 한 영역만 흔들려도 미충족') : ` · ${-r.margin}등급 부족`}`}</div>
-        <p class="xs muted mt8">대학마다 필수 영역(예: 수학 포함), 탐구 계산 방식이 다릅니다. 지원 대학 모집요강의 최저 기준으로 재확인이 필요합니다.</p></div>
+        <p class="xs muted mt8">대학별 필수 영역·탐구 계산 방식 상이 · 지원 대학 모집요강 최저 기준 재확인 필요</p></div>
       <div class="card mt12"><div class="card-head"><h2>🎤 면접 족집게 · 예상 질문 생성</h2></div>
         <div class="form-grid"><div class="field"><label>면접 유형</label>${'<select class="input" data-act="tuIvType">' + [['doc', '서류 기반(학생부 확인)'], ['text', '제시문 기반'], ['mmi', '의약 계열 MMI']].map(([v, l]) => `<option value="${v}" ${iv.type === v ? 'selected' : ''}>${l}</option>`).join('') + '</select>'}</div><div class="field"><label>세특·활동 키워드 (쉼표로 구분)</label><input class="input" data-act="tuIvKw" maxlength="80" placeholder="직접 입력 또는 아래에서 선택" data-suggest="ivkw" data-chips-mode="append" data-chips="탐구 보고서|실험 설계|데이터 분석|독서 토론|동아리 프로젝트|진로 탐색" value="${esc(iv.kw)}"></div></div>
         <ol class="tu-ivq">${qs.map(q => `<li>${esc(q)}</li>`).join('')}</ol>

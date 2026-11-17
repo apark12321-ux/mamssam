@@ -35,7 +35,7 @@
     const kid = MS().kid(), u = ui();
     const tab = TABS.some(t => t[0] === a[2]) ? a[2] : (TABS.some(t => t[0] === u.tab) ? u.tab : 'deep');
     u.tab = tab;
-    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">전 과목 심화·고난도 문항과 최상위권 학습법으로 변별 구간을 돌파합니다.</div></div></div>
+    const head = `<div class="page-head"><div><h1>🏆 최상위 학습</h1><div class="sub">전 과목 심화·고난도 문항 · 최상위권 학습법 · 변별 구간 돌파</div></div></div>
       <div class="top-tabs t3">${TABS.map(([k, ic, n, d]) => `<a class="top-tab ${k} ${tab === k ? 'on' : ''}" href="#study/top/${k}"><span class="tt-ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></a>`).join('')}</div>`;
     const body = tab === 'method' ? (window.MethodApp ? MethodApp.view(kid, a) : '') : listView(kid, a, tab);
     return MS().layout('study/top/' + tab, `<div class="top-page">${head}${body}</div>`);
@@ -74,7 +74,7 @@
 
   function deepBody(u) {
     const items = DATA.deep[u.id];
-    if (!items || !items.length) return '<div class="muted small">이 단원의 심화 문항은 준비 중입니다.</div>';
+    if (!items || !items.length) return '<div class="muted small">이 단원의 심화 문항 준비 중</div>';
     const s = st().deep;
     return items.map((x, i) => {
       const key = u.id + '_' + i, sc = s[key];
@@ -95,7 +95,7 @@
   /* ---------- 사교육 최상위 ---------- */
   function hardBody(u) {
     const items = DATA.hard[u.id];
-    if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항은 준비 중입니다.</div>';
+    if (!items || !items.length) return '<div class="muted small">이 단원의 고난도 문항 준비 중</div>';
     return `<div class="hq-wrap" data-u="${u.id}">${items.map((x, i) => `<div class="hq" data-i="${i}">
         <div class="dq-h"><span class="dq-t hard">고난도 ${i + 1}</span></div>
         <div class="dq-q">${esc(x.q)}</div>

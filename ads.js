@@ -93,7 +93,7 @@
   /* ---------- 광고 안내 페이지 (#ads) ---------- */
   function page() {
     const rows = Object.entries(SLOTS).map(([k, S]) => `<tr><td><b>${S.name}</b><br><span class="xs muted">${S.where}</span></td><td class="xs">${S.size}</td></tr>`).join('');
-    const html = `<div class="page-head"><div><h1>📣 탑픽 광고 안내</h1><div class="sub">초·중·고 상위권·최상위권 학습자와 학부모가 매일 여는 앱입니다.</div></div></div>
+    const html = `<div class="page-head"><div><h1>📣 탑픽 광고 안내</h1><div class="sub">초·중·고 상위권·최상위권 학습자·학부모 대상 · 매일 접속</div></div></div>
       <div class="grid g2">
         <div class="card"><h2>이용자 구성</h2><ul class="ad-ul">
           <li><b>초·중·고 학부모</b> · 학습자 학년·과목·교과서 출판사를 등록하고 매일 학습 진도를 관리합니다.</li>
@@ -104,7 +104,7 @@
           <li>학습지 · 방문·화상 교육 (무료 체험 신청)</li><li>문제집 · 참고서 · 교과서 출판사</li><li>에듀테크 앱 · 온라인 영어·수학</li><li>지역 학원 · 공부방 · 독서 논술</li><li>아동 도서 · 문구 · 학습 가구</li></ul></div>
       </div>
       <div class="card mt16"><h2>광고 지면</h2><table class="ad-table"><thead><tr><th>지면</th><th>형태</th></tr></thead><tbody>${rows}</tbody></table>
-        <p class="xs muted mt8">정액 광고만 운영하며, 모든 광고에 ‘광고’ 표기를 합니다. 학습 화면(문항 풀이·영상)에는 노출하지 않으며, 지면당 광고는 한 개입니다.</p></div>
+        <p class="xs muted mt8">정액 광고만 운영 · 전 광고 ‘광고’ 표기 · 학습 화면(문항 풀이·영상) 미노출 · 지면당 광고 1개</p></div>
       <div class="card mt16"><h2>진행 방식</h2><ol class="ad-ol">
         <li><b>문의</b> · 아래 양식을 제출하면 1~2일 내 이용자 수·노출 수와 견적을 메일로 회신합니다.</li>
         <li><b>소재 전달</b> · 제목 1줄 + 설명 1줄 + 링크 (배너 이미지는 선택). 소재 제작은 무상 지원합니다.</li>
@@ -121,7 +121,7 @@
           </div>
           <div class="field"><label>내용</label><textarea class="input" name="message" rows="4" maxlength="2000" placeholder="광고 상품·서비스, 희망 기간, 대상 학년 등을 기재하십시오"></textarea></div>
           <button class="btn btn-primary" type="submit">문의 제출</button>
-          <p class="xs muted mt8">입력하신 정보는 광고 상담 목적으로만 사용하며, 상담 종료 후 파기합니다.</p>
+          <p class="xs muted mt8">입력 정보는 광고 상담 목적으로만 사용 · 상담 종료 후 파기</p>
         </form></div>`;
     return MS().layout('ads', html);
   }

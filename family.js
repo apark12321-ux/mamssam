@@ -64,7 +64,7 @@
         <div class="fm-score"><b>${tot.n ? Math.round(tot.ok / tot.n * 100) : 0}<small>점</small></b><span>${tot.ok}/${tot.n} 정답</span></div>
         ${tot.wrong.length ? `<div class="fm-wrong"><div class="xs muted">함께 다시 볼 문항</div><ul>${tot.wrong.slice(0, 4).map(p => `<li>${esc(qText(p) || '문항')}</li>`).join('')}</ul></div>` : '<div class="fm-wrong"><b>전 문항 정답</b></div>'}
       </div>
-      <div class="fm-praise" data-keep-emoji><div class="xs muted">칭찬 스티커 · 누르면 학습자 화면에 표시됩니다</div><div class="fm-stk">${STICK.map(([e, t]) => `<button class="fm-st" data-act="fmPraise" data-t="${e} ${t}"><span>${e}</span>${t}</button>`).join('')}</div></div>` : ''}
+      <div class="fm-praise" data-keep-emoji><div class="xs muted">칭찬 스티커 · 선택 시 학습자 화면 표시</div><div class="fm-stk">${STICK.map(([e, t]) => `<button class="fm-st" data-act="fmPraise" data-t="${e} ${t}"><span>${e}</span>${t}</button>`).join('')}</div></div>` : ''}
     </details>`;
   }
   document.addEventListener('toggle', e => { const d = e.target; if (d && d.matches && d.matches('[data-fam-fold]')) { try { MS().st()._famOpen = d.open; MS().save(); } catch (err) { } } }, true);

@@ -132,7 +132,7 @@
   /* ---------- 우리 학교 페이지 ---------- */
   function page() {
     const kid = MS().kid(), s = kidSchool(kid);
-    if (!s) return MS().layout('school', `<div class="page-head"><div><h1>🏫 우리 학교</h1><div class="sub">학교를 등록하면 급식, 학사일정, 시험 D-day, 학급 시간표를 확인할 수 있습니다.</div></div></div>
+    if (!s) return MS().layout('school', `<div class="page-head"><div><h1>🏫 우리 학교</h1><div class="sub">학교 등록 시 급식 · 학사일정 · 시험 D-day · 학급 시간표 제공</div></div></div>
       <div class="card"><div class="empty"><div class="e-ico">🏫</div>등록된 학교가 없습니다.<div class="mt12"><a class="btn btn-primary" href="#editkid">학교 등록</a></div></div></div>`);
     const today = ymd(new Date());
     const html = `<div class="page-head"><div><h1>🏫 ${esc(s.name)}</h1><div class="sub">${esc(s.addr || s.region)} · ${gradeTag(kid.grade)}${kid.cls ? ` ${esc(kid.cls)}반` : ''} ${s.hp ? `· <a href="${esc(hpUrl(s.hp))}" target="_blank" rel="noopener">홈페이지 ↗</a>` : ''} <a href="#editkid" class="xs">학교·반 변경</a></div></div></div>

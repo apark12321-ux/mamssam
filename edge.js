@@ -102,7 +102,7 @@
     const bars = days.map(d => { const s = daySec(h, d); const dd = new Date(d); return `<div class="ed-day ${d === today() ? 'today' : ''}"><div class="ed-col"><em style="height:${Math.round(s / max * 100)}%"></em><i style="bottom:${Math.round(h.goal.daily * 60 / max * 100)}%"></i></div><b>${s ? Math.round(s / 360) / 10 + 'h' : ''}</b><span>${'일월화수목금토'[dd.getDay()]}</span></div>`; }).join('');
     const bySub = SUB.map(([k, n, c]) => [n, c, days.reduce((a, d) => a + daySec(h, d, k), 0)]).filter(x => x[2] > 0).sort((a, b) => b[2] - a[2]); const tot = bySub.reduce((a, x) => a + x[2], 0) || 1;
     return MS().layout('high/timer', `<div class="hi">
-      <div class="page-head"><div><h1>공부 타이머</h1><div class="sub">과목 선택 후 시작. 조기 종료해도 학습한 시간만큼 기록됩니다. 시간 배분 훈련의 기준 자료입니다.</div></div></div>
+      <div class="page-head"><div><h1>공부 타이머</h1><div class="sub">과목 선택 후 시작 · 조기 종료 시 학습 시간만큼 기록 · 시간 배분 훈련 기준 자료</div></div></div>
       ${timerCard(true)}
       <div class="card mt12"><div class="card-head"><h2>최근 7일</h2><span class="xs muted">연속 ${streak(h)}일 · 노란 선은 하루 목표</span></div><div class="ed-week">${bars}</div></div>
       <div class="card mt12"><div class="card-head"><h2>과목별 비중 (7일)</h2></div>${bySub.length ? `<div class="ed-stack">${bySub.map(([n, c, s]) => `<i style="width:${s / tot * 100}%;background:${c}" title="${n}"></i>`).join('')}</div><ul class="ed-sublist">${bySub.map(([n, c, s]) => `<li><i style="background:${c}"></i>${n}<b>${fmt(s)}</b><span>${Math.round(s / tot * 100)}%</span></li>`).join('')}</ul>` : '<p class="small muted">기록이 없습니다. 위에서 시작을 누르십시오.</p>'}</div>

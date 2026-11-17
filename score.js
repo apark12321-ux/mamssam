@@ -30,14 +30,14 @@
 
   function gcPage() {
     const kid = MS().kid(), h = store(); const g = grades(h); const s = HA().suneungDate(); const sd = ymd(s); const t = ymd(new Date());
-    const when = t < sd ? `수능(${s.getMonth() + 1}/${s.getDate()}) 당일 시험 종료 후 가채점합니다. 모의고사 채점에도 사용할 수 있습니다.` : t === sd ? '오늘이 수능입니다. 영역별 시험 종료 후 평가원이 정답을 공개합니다.' : '평가원 정답으로 채점한 원점수를 입력하십시오.';
+    const when = t < sd ? `수능(${s.getMonth() + 1}/${s.getDate()}) 시험 당일 종료 후 가채점 · 모의고사 채점 겸용` : t === sd ? '오늘이 수능입니다. 영역별 시험 종료 후 평가원이 정답을 공개합니다.' : '평가원 정답으로 채점한 원점수를 입력하십시오.';
     const done = AREAS.every(([k]) => k === 't2' || g[k]);
     const avg = avgG(g);
     return MS().layout('high/gachae', `<div class="hi">
       <div class="page-head"><div><h1>가채점</h1><div class="sub">${esc(when)}</div></div></div>
       <div class="card sc-links"><div class="card-head"><h2>1. 정답·등급컷 확인</h2></div>
         <div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm btn-primary" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 정답 ↗</a><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 예상 등급컷 ↗</a></div>
-        <p class="xs muted mt8">시험지에 표시한 답을 공식 정답과 대조해 원점수를 산출합니다. 예상 등급컷은 기관마다 다를 수 있어 두 곳 이상 비교를 권장합니다.</p></div>
+        <p class="xs muted mt8">표시 답안과 공식 정답 대조 → 원점수 산출 · 예상 등급컷은 기관별 상이, 두 곳 이상 비교 권장</p></div>
       <div class="card mt12"><div class="card-head"><h2>2. 원점수와 등급</h2><span class="xs muted">영어·한국사는 자동 산출</span></div>
         <div class="sc-grid">${AREAS.map(([k, n, max, kind]) => `<div class="sc-row"><div class="sc-n"><b>${n}</b><small>${max}점 만점</small></div>
           <input class="input sc-raw" type="number" inputmode="numeric" min="0" max="${max}" data-act="scRaw" data-k="${k}" placeholder="원점수" value="${esc(h.gc.raw[k] ?? '')}">
@@ -47,7 +47,7 @@
         <div class="sc-line">${AREAS.map(([k, n]) => `<span>${n} <b>${g[k] || '–'}</b></span>`).join('')}<span>평균 <b>${avg != null ? avg.toFixed(2) : '–'}</b></span></div>
         <div class="row mt12" style="gap:8px;flex-wrap:wrap"><button class="btn btn-primary" data-act="scToMin" ${done ? '' : 'disabled'}>수능 최저 계산기에 적용 ›</button><button class="btn" data-act="scToMock" ${done ? '' : 'disabled'}>등급 추이에 기록</button><a class="btn btn-ghost" href="#high/chance">합격 가늠 ›</a></div>
         ${h.gc.saved ? `<p class="xs muted mt8">${esc(h.gc.saved)}에 등급 추이에 기록했습니다.</p>` : ''}
-        <p class="xs muted mt8">가채점은 실제 성적과 다를 수 있습니다. 확정 성적은 성적표(수능 성적 통지일)로 확인하십시오. 경계선이면 대학별고사는 응시하는 것이 원칙입니다.</p></div>
+        <p class="xs muted mt8">가채점은 실제 성적과 상이 가능 · 확정 성적은 성적표(통지일) 기준 · 경계선이면 대학별고사 응시 원칙</p></div>
       <div class="hi-consult-anchor"></div></div>`);
   }
 
@@ -77,7 +77,7 @@
         <div class="ch-b">${r ? `<span class="ch-tag" style="--bc:${BL[r.b][1]}">${BL[r.b][0]}</span><small>${r.txt}</small>` : '<small class="muted">두 값을 입력하면 구간을 표시합니다</small>'}</div></div></div>`; }).join('');
     const cnt = (b) => h.chance.filter(c => { const r = band(c); return r && r.b === b; }).length;
     return MS().layout('high/chance', `<div class="hi">
-      <div class="page-head"><div><h1>합격 가늠</h1><div class="sub">작년 입결과 내 성적을 비교해 안정·적정·상향·위험 구간을 표시합니다</div></div></div>
+      <div class="page-head"><div><h1>합격 가늠</h1><div class="sub">작년 입결 대비 내 성적 → 안정·적정·상향·위험 구간 표시</div></div></div>
       <div class="card ch-how"><ol class="steps"><li><span><a href="https://www.adiga.kr" target="_blank" rel="noopener"><b>어디가 ↗</b></a> 또는 대학 입학처에서 지원 학과의 <b>작년 입결(70% 컷)</b> 확인</span></li><li><span>아래에 입력하면 내 성적(가채점·최근 모의고사·내신)이 자동으로 입력됩니다</span></li><li><span>구간을 보고 정시 3장·수시 6장을 상향·적정·안정으로 배분합니다</span></li></ol></div>
       ${h.chance.length ? `<div class="ch-sum mt12">${Object.entries(BL).map(([k, [n, c]]) => `<div style="--bc:${c}"><b>${cnt(k)}</b><span>${n}</span></div>`).join('')}</div>` : ''}
       <div class="ch-list mt12">${rows}</div>

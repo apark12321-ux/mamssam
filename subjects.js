@@ -189,7 +189,7 @@
       ${hero}
       <div class="row sp-filter"><div class="chips">${gs.map(x => `<button class="chip ${x === g ? 'on' : ''}" data-sa="sg" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div><span class="cur-sep"></span><div class="chips"><button class="chip ${sem === 1 ? 'on' : ''}" data-sa="ss" data-s="1">1학기</button><button class="chip ${sem === 2 ? 'on' : ''}" data-sa="ss" data-s="2">2학기</button></div></div>
       <div class="grid g3 sp-ulist mt16">${cards}</div>
-      ${k === 'math' ? '<p class="small muted mt16">수학은 단원별 학부모 설명 대본과 자동 출제 문제지를 함께 사용할 수 있습니다. <a href="#lessons">수학 학부모 지원 ›</a></p>' : ''}
+      ${k === 'math' ? '<p class="small muted mt16">수학: 단원별 설명 자료 · 자동 출제 문제지 병행 <a href="#lessons">수학 학부모 지원 ›</a></p>' : ''}
       ${(isStu() ? meta.pubNoteM : meta.pubNote) ? `<p class="xs muted mt16">※ ${esc(isStu() ? meta.pubNoteM : meta.pubNote)}</p>` : ''}`);
   }
 
@@ -625,8 +625,8 @@
       <div class="small muted">학습 과목</div>
       <div class="chips mt8">${subs.map(s => `<button class="chip subj-chip ${mine.includes(s.k) ? 'on' : ''}" style="--sc:${s.c}" data-sa="ttsub" data-k="${s.k}">${s.ic} ${s.n}</button>`).join('')}</div>
       <div class="tt-grid mt16">${days.map(d => `<div class="tt-day"><b>${DAYN[d]}</b><div class="chips">${mine.map(k => `<button class="chip subj-chip ${kid.tt[d].includes(k) ? 'on' : ''}" style="--sc:${SK[k].c}" data-sa="ttcell" data-d="${d}" data-k="${k}">${SK[k].ic} ${SK[k].n}</button>`).join('')}</div></div>`).join('') || '<p class="muted small">학습 요일이 없습니다. 학습자 정보 \'수정\'에서 요일을 선택하십시오.</p>'}</div>
-      <p class="xs muted mt8">요일별 학습 과목을 눌러 켜고 끕니다. 학습 요일·시간은 학습자 정보의 '수정'에서 변경합니다.</p>
-      <h3 class="mt16">과목별 교과서 출판사</h3><p class="xs muted">학교 교과서 표지 하단의 출판사를 선택합니다. 같은 출판사 영상이 먼저 표시됩니다.</p>
+      <p class="xs muted mt8">요일별 학습 과목 선택 · 학습 요일·시간은 학습자 정보 수정에서 변경</p>
+      <h3 class="mt16">과목별 교과서 출판사</h3><p class="xs muted">교과서 표지 하단의 출판사 선택 · 같은 출판사 영상 우선 표시</p>
       <div class="mt8">${pubSelects(kid, mine, kidPubs(kid), 'data-pubset', kid.grade)}</div>`;
     main.insertAdjacentElement('afterend', el);
   }
@@ -757,7 +757,7 @@
     }
     let nd = null; for (let i = 1; i <= 7; i++) { const d = new Date(); d.setDate(d.getDate() + i); if ((kid.days || []).includes(d.getDay())) { nd = d; break; } }
     const ns = nd ? kid.tt[nd.getDay()] || [] : [];
-    return { text: `오늘은 휴식일입니다.${nd ? `\n다음 학습은 ${nd.getMonth() + 1}월 ${nd.getDate()}일(${DAYN[nd.getDay()]}) ${ns.map(k => SK[k].n).join('·')}입니다.` : ''}\n\n오늘도 한 과목을 가볍게 학습할 수 있습니다.`, actions: [['과목별 학습', 'nav', 'study'], ['시간표 바꾸기', 'nav', 'settings']] };
+    return { text: `오늘은 휴식일입니다.${nd ? `\n다음 학습은 ${nd.getMonth() + 1}월 ${nd.getDate()}일(${DAYN[nd.getDay()]}) ${ns.map(k => SK[k].n).join('·')}입니다.` : ''}\n\n오늘 학습 과목 1개 권장`, actions: [['과목별 학습', 'nav', 'study'], ['시간표 바꾸기', 'nav', 'settings']] };
   }
 
   /* ---------- 중학생 자기주도 홈 ---------- */

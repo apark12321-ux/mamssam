@@ -60,22 +60,22 @@
   let S = null;
   function page(a) {
     const kid = MS().kid(), d = dg(kid);
-    if (kid.grade <= 2) return MS().layout('diag', `<div class="page-head"><div><h1>🧪 상위권 진단</h1><div class="sub">초등 3학년부터 제공합니다.</div></div></div>`);
+    if (kid.grade <= 2) return MS().layout('diag', `<div class="page-head"><div><h1>🧪 상위권 진단</h1><div class="sub">초등 3학년부터 제공</div></div></div>`);
     const head = `<div class="page-head"><div><h1>🧪 상위권 진단</h1><div class="sub">${GL(kid.grade)} 전 과목 고난도 ${N}문항 · 약 15분 · 현재 위치와 약점 영역 산출</div></div></div>`;
     let body;
     if (S && S.kidId === kid.id) body = '<div id="dgBody"></div>';
     else if (d && !(a[2] === 'new')) body = resultHTML(kid, d) + `<div class="row mt16" style="gap:8px;justify-content:center"><a class="btn btn-primary" href="#home">오늘 과제 보기</a><a class="btn" href="#diag/x/new">다시 진단</a></div>`;
     else body = `<div class="card dg-intro">
-        <ul class="dg-ul"><li>과목별 2문항씩, 현재 학기 단원 위주의 최상위 변별 문항으로 구성합니다.</li><li>문항마다 <b>확신 여부</b>를 함께 표시합니다. 확신했으나 틀린 문항(착각)이 학습 우선순위가 됩니다.</li><li>결과는 전체 이용자 응답 분포와 비교해 <b>상위 n%</b>로 표시하고, 약점 단원을 오늘 과제표에 바로 배정합니다.</li></ul>
+        <ul class="dg-ul"><li>과목별 2문항 · 현재 학기 단원 위주 최상위 변별 문항</li><li>문항별 <b>확신 여부</b> 표시 · 확신 후 오답(착각) 문항은 학습 최우선</li><li>전체 이용자 응답 분포 대비 <b>상위 n%</b> 표시 · 약점 단원 오늘 과제표 즉시 배정</li></ul>
         <button class="btn btn-primary btn-block mt12" data-dg="start">진단 시작</button></div>`;
     return MS().layout('diag', head + body);
   }
   function start() {
     const kid = MS().kid(); const box = document.getElementById('app').querySelector('.wrap');
-    const b = document.createElement('div'); b.id = 'dgBody'; b.innerHTML = '<div class="card mt16"><div class="empty">문항을 준비하고 있습니다…</div></div>';
+    const b = document.createElement('div'); b.id = 'dgBody'; b.innerHTML = '<div class="card mt16"><div class="empty">문항 준비 중…</div></div>';
     const intro = document.querySelector('.dg-intro'); if (intro) intro.replaceWith(b); else box.appendChild(b);
     pickItems(kid).then(items => {
-      if (items.length < 6) { b.innerHTML = '<div class="card mt16"><div class="empty">이 학년의 진단 문항이 아직 충분하지 않습니다.</div></div>'; return; }
+      if (items.length < 6) { b.innerHTML = '<div class="card mt16"><div class="empty">이 학년 진단 문항 준비 중</div></div>'; return; }
       S = { kidId: kid.id, items, i: 0, res: [], sure: true }; draw();
     });
   }
@@ -100,7 +100,7 @@
   }
   function finish() {
     const kid = MS().kid(), res = S.res, score = res.filter(r => r.ok).length;
-    const b = document.getElementById('dgBody'); if (b) b.innerHTML = '<div class="card mt16"><div class="empty">결과를 산출하고 있습니다…</div></div>';
+    const b = document.getElementById('dgBody'); if (b) b.innerHTML = '<div class="card mt16"><div class="empty">결과 산출 중…</div></div>';
     percentile(kid.grade, score).then(p => {
       const bySubj = {}; res.forEach(r => { const s = bySubj[r.subj] = bySubj[r.subj] || { ok: 0, n: 0, ill: 0 }; s.n++; if (r.ok) s.ok++; if (!r.ok && r.sure) s.ill++; });
       const weak = Object.entries(bySubj).filter(([k, s]) => s.ok < s.n).sort((a, b) => (a[1].ok / a[1].n) - (b[1].ok / b[1].n)).map(([k]) => k);
@@ -118,12 +118,12 @@
     return `<div class="card dg-res"><div class="dg-top"><small>${GL(g)} 고난도 ${d.total}문항 기준</small><b>상위 ${d.top}%</b><span class="dg-tier">${tier}</span></div>
       <div class="grid g3 mth-res mt12"><div><b>${d.score}/${d.total}</b><span>정답</span></div><div><b class="${d.ill ? 'warn' : ''}">${d.ill}</b><span>착각 문항</span></div><div><b>${d.hid}</b><span>숨은 실력</span></div></div>
       <div class="dg-bars mt16">${Object.entries(d.bySubj).map(([k, s]) => { const Sk = H().SK[listKey(k, g)] || {}; return `<div class="dg-bar"><span>${Sk.ic} ${Sk.n}</span><div class="progress"><i style="width:${Math.round(s.ok * 100 / s.n)}%;background:${Sk.c}"></i></div><span class="xs">${s.ok}/${s.n}${s.ill ? ' · 착각 ' + s.ill : ''}</span></div>`; }).join('')}</div>
-      <p class="small muted mt12">${d.weak.length ? `약점 영역: <b>${d.weak.map(k => (H().SK[listKey(k, g)] || {}).n).join(' · ')}</b>. 해당 단원의 심화·고난도 문항이 과제표에 우선 배정됩니다.` : '전 과목 전 문항 정답입니다. 과제표는 다음 학기 범위와 고난도 재도전으로 구성됩니다.'}${d.ill ? ' 확신했으나 틀린 문항은 개념 오해 가능성이 높아 백지 인출 과제가 함께 배정됩니다.' : ''}</p>
-      <p class="xs muted">${d.basis === 'prior' ? '이용자 응답이 쌓이는 중이라 문항 난도 기준 추정치입니다.' : `${GL(g)} 이용자 ${d.n}명의 응답 분포와 비교한 추정치입니다.`} 진단일 ${d.date}</p></div>`;
+      <p class="small muted mt12">${d.weak.length ? `약점 영역: <b>${d.weak.map(k => (H().SK[listKey(k, g)] || {}).n).join(' · ')}</b>. 해당 단원 심화·고난도 문항 과제표 우선 배정.` : '전 과목 전 문항 정답 · 과제표는 다음 학기 범위·고난도 재도전으로 구성.'}${d.ill ? ' 확신 후 오답 문항은 개념 오해 가능성 · 백지 인출 과제 추가 배정.' : ''}</p>
+      <p class="xs muted">${d.basis === 'prior' ? '응답 누적 전 · 문항 난도 기준 추정치' : `${GL(g)} 이용자 ${d.n}명 응답 분포 대비 추정치`} 진단일 ${d.date}</p></div>`;
   }
 
   /* ---------- 과제표 ---------- */
-  const PHASES = [[28, '개념·심화기', '개념을 서술형으로 정리하고 심화 문항으로 깊이를 확보하는 시기'], [14, '고난도 집중기', '변별 문항을 매일 풀어 다단계 추론과 함정 대응력을 올리는 시기'], [7, '혼합·복습기', '과목을 섞어 풀고 간격 복습으로 장기 기억을 굳히는 시기'], [0, '인출·오답기', '백지 인출과 오답 재풀이로 시험 당일 꺼낼 수 있게 만드는 시기']];
+  const PHASES = [[28, '개념·심화기', '개념 서술형 정리 · 심화 문항으로 깊이 확보'], [14, '고난도 집중기', '변별 문항 매일 풀이 · 다단계 추론·함정 대응'], [7, '혼합·복습기', '과목 혼합 풀이 · 간격 복습으로 장기 기억 고정'], [0, '인출·오답기', '백지 인출 · 오답 재풀이로 시험 당일 인출력 확보']];
   function phaseOf(dday) { if (dday == null) return null; return PHASES.find(p => dday >= p[0]) || PHASES[PHASES.length - 1]; }
   function unitPool(kid, d) {
     const g = kid.grade, F = window.TopApp ? TopApp.FILES : { hard: {}, deep: {} };
@@ -187,13 +187,13 @@
   /* ---------- 홈 카드 ---------- */
   function homeCard() {
     const kid = MS().kid(), d = dg(kid); if (kid.grade >= 10 || kid.grade <= 2) return '';
-    if (!d) return `<a class="card dg-home cta" href="#diag" id="dgHome"><div class="row between"><b>🧪 상위권 진단으로 시작</b><span class="xs muted">${N}문항 · 15분 ›</span></div><div class="small muted mt4">현재 위치(상위 n%)와 약점 영역을 산출하고, 오늘 과제표를 자동으로 배정합니다.</div></a>`;
+    if (!d) return `<a class="card dg-home cta" href="#diag" id="dgHome"><div class="row between"><b>🧪 상위권 진단으로 시작</b><span class="xs muted">${N}문항 · 15분 ›</span></div><div class="small muted mt4">현재 위치(상위 n%)·약점 영역 산출 · 오늘 과제표 자동 배정</div></a>`;
     const p = plan(kid); const list = p.list.map(x => Object.assign({}, x, { ok: isDone(x, kid) })); const done = list.filter(x => x.ok).length;
     setTimeout(() => syncExam(kid), 0);
     const Sk = (k) => H().SK[listKey(k, kid.grade)] || {};
     return `<div class="card dg-home" id="dgHome">
       <div class="row between"><div><b>📋 오늘 과제</b> <span class="xs muted">${done}/${list.length} 완료</span></div><a class="dg-pct" href="#diag">상위 ${d.top}% <span class="xs">${d.weak.length ? '약점 ' + d.weak.slice(0, 2).map(k => Sk(k).n).join('·') : '약점 없음'}</span> ›</a></div>
-      ${p.exam ? `<div class="dg-phase"><b>${esc(p.exam.name)} D-${p.exam.dday === 0 ? 'DAY' : p.exam.dday}</b> · ${p.phase} <span class="xs muted">${(PHASES.find(x => x[1] === p.phase) || [])[2] || ''}</span></div>` : `<div class="dg-phase muted xs">학교를 등록하면 시험일 기준으로 과제가 역산 배정됩니다. <a href="#editkid">학교 등록 ›</a></div>`}
+      ${p.exam ? `<div class="dg-phase"><b>${esc(p.exam.name)} D-${p.exam.dday === 0 ? 'DAY' : p.exam.dday}</b> · ${p.phase} <span class="xs muted">${(PHASES.find(x => x[1] === p.phase) || [])[2] || ''}</span></div>` : `<div class="dg-phase muted xs">학교 등록 시 시험일 역산 과제 배정 · <a href="#editkid">학교 등록 ›</a></div>`}
       <div class="dg-tasks mt8">${list.map((x, i) => `<div class="dg-task ${x.ok ? 'ok' : ''}"><button class="dg-chk" data-dg="done" data-i="${i}" aria-label="완료 표시">${x.ok ? '✓' : ''}</button><a href="${x.href}" class="dg-tl"><b>${x.label}</b>${x.title ? `<small>${esc(x.title)}</small>` : ''}</a></div>`).join('')}</div>
     </div>`;
   }

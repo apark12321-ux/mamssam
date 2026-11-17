@@ -70,7 +70,7 @@
     const s = H.st, link = location.origin + location.pathname + '#live/' + H.code;
     o.innerHTML = `<div class="lv-top"><b>학습자 기기와 함께 보기</b><span class="lv-dot ${H.kidOn ? 'on' : ''}">${H.kidOn ? '학습자 기기 연결됨' : '연결 대기 중'}</span><button class="btn btn-sm" data-lv="end">종료</button></div>
       <div class="lv-scroll">
-        ${H.kidOn ? '' : `<div class="lv-pair"><div class="lv-pair-t">학습자 기기에 이 코드를 입력하십시오</div><div class="lv-code">${fmt(H.code)}</div><div class="lv-pair-s">학습자 기기: 탑픽 → <b>초등</b> → <b>코드 입력</b></div><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn btn-primary" data-lv="share" data-link="${esc(link)}">카카오톡으로 보내기</button><button class="btn" data-lv="copy" data-link="${esc(link)}">링크 복사</button></div><p class="xs muted mt8">링크를 받은 학습자 기기에서 누르면 바로 연결됩니다</p></div>`}
+        ${H.kidOn ? '' : `<div class="lv-pair"><div class="lv-pair-t">학습자 기기에 이 코드를 입력하십시오</div><div class="lv-code">${fmt(H.code)}</div><div class="lv-pair-s">학습자 기기: 탑픽 → <b>초등</b> → <b>코드 입력</b></div><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn btn-primary" data-lv="share" data-link="${esc(link)}">카카오톡으로 보내기</button><button class="btn" data-lv="copy" data-link="${esc(link)}">링크 복사</button></div><p class="xs muted mt8">학습자 기기에서 링크 선택 시 즉시 연결</p></div>`}
         ${H.log.length ? `<div class="lv-log">${H.log.slice(0, 3).map((x, i) => `<div class="lv-rx ${i ? '' : 'new'}"><span>${REACT[x.r][0]}</span><b>${REACT[x.r][1]}</b><small>${new Date(x.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</small></div>`).join('')}</div>` : ''}
         <div class="lv-ctl"><div class="lv-lbl">학습자 화면 제어</div>
           <div class="lv-btns">${s.card.pts.map((p, i) => `<button class="lv-b ${s.mode === 'card' && s.hi === i ? 'on' : ''}" data-lv="hi" data-i="${i}">핵심 ${i + 1} 강조</button>`).join('')}<button class="lv-b ${s.mode === 'card' && s.hi === -1 ? 'on' : ''}" data-lv="all">전체 보기</button>${s.card.q ? `<button class="lv-b ${s.mode === 'q' ? 'on' : ''}" data-lv="q">확인 질문 제시</button>` : ''}</div>
@@ -151,7 +151,7 @@
   // who: 'mom'(엄마 폰에서 처음 누를 때 → 다 읽으면 시작) / 'kid'(아이 폰 쪽) / ''(첫 화면에서 그냥 설명 보기)
   const PH = (label, inner) => `<div class="eg-ph"><div class="eg-who">${label}</div><div class="eg-scr">${inner}</div></div>`;
   const STEPS = [
-    { t: '기기 두 대로 함께 학습합니다', d: '학부모가 설명하면 학습자 기기에 그림이 크게 표시됩니다', art: `<div class="eg-two">${PH('학부모', '<i class="eg-bar"></i><i class="eg-bar s"></i><i class="eg-btn">누르기</i>')}<span class="eg-arr">→</span>${PH('학습자', '<i class="eg-big">½</i>')}</div>` },
+    { t: '기기 두 대로 함께 학습합니다', d: '학부모 설명 중 학습자 기기에 그림 확대 표시', art: `<div class="eg-two">${PH('학부모', '<i class="eg-bar"></i><i class="eg-bar s"></i><i class="eg-btn">누르기</i>')}<span class="eg-arr">→</span>${PH('학습자', '<i class="eg-big">½</i>')}</div>` },
     { t: '학부모 기기에서 이 버튼을 누릅니다', d: '초등 홈 상단에 있습니다', art: PH('학부모', '<i class="eg-bar"></i><i class="eg-btn hot">📱 학습자 기기와 함께 보기</i><i class="eg-bar s"></i>') },
     { t: '코드가 표시됩니다', d: '숫자 6자리입니다', art: PH('학부모', '<i class="eg-code">382 615</i>') },
     { t: '학습자 기기에 그 코드를 입력합니다', d: '학습자 기기: 탑픽 → 초등 → 코드 입력', art: PH('학습자', '<i class="eg-in">382 615</i><i class="eg-btn hot">연결하기</i>') },

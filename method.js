@@ -67,9 +67,9 @@
 
   function reviewView() {
     const sch = schedule(), due = sch.filter(x => x.due), soon = sch.filter(x => !x.due).slice(0, 5);
-    if (!sch.length) return `<div class="card mt16"><div class="empty">학습한 단원이 없습니다.<br>과목별 학습에서 차시를 완료하면 1·3·7·14·30일 간격으로 복습 일정이 자동 생성됩니다.</div></div>`;
+    if (!sch.length) return `<div class="card mt16"><div class="empty">학습한 단원이 없습니다.<br>차시 완료 시 1·3·7·14·30일 간격 복습 일정 자동 생성</div></div>`;
     const row = (x) => { const S = H().SK[H().subjOf(x.u)] || {}; return `<div class="mth-row"><span class="u-ico">${x.u.icon || S.ic || '📘'}</span><span class="tu-t"><span class="xs muted">${S.n || ''} · ${GS(x.u.grade)} ${x.u.sem}학기 ${x.u.no}단원</span><b>${esc(x.u.title)}</b></span><span class="mth-st">${INTERVALS.map((d, i) => `<i class="${i < x.stage ? 'on' : ''}" title="${d}일"></i>`).join('')}</span><span class="xs ${x.due ? 'due' : 'muted'}">${x.due ? '오늘' : x.next.slice(5).replace('-', '/')}</span></div>`; };
-    return `<p class="small muted mt16">학습한 단원을 1일 → 3일 → 7일 → 14일 → 30일 뒤에 다시 인출합니다. 복습 정답률 80% 이상이면 다음 간격으로 넘어가고, 미달이면 처음부터 다시 시작합니다.</p>
+    return `<p class="small muted mt16">학습 단원을 1 → 3 → 7 → 14 → 30일 뒤 재인출 · 정답률 80% 이상이면 다음 간격, 미달이면 처음부터</p>
       <div class="card mt8"><div class="row between"><b>오늘 복습할 단원 ${due.length}개</b>${due.length ? `<button class="btn btn-primary" data-mt="startRev">복습 시작 ▶</button>` : ''}</div>
       <div class="mth-list mt12">${due.slice(0, 5).map(row).join('') || '<div class="empty small">오늘 복습할 단원이 없습니다.</div>'}</div></div>
       ${soon.length ? `<div class="card mt12"><b>예정된 복습</b><div class="mth-list mt12">${soon.map(row).join('')}</div></div>` : ''}`;
@@ -109,7 +109,7 @@
 
   function reportView() {
     const d = data(), ms = d.ms.slice(-10);
-    if (!ms.length) return `<div class="card mt16"><div class="empty">기록이 없습니다.<br>오늘의 복습이나 섞어 풀기를 1회 완료하면 메타인지 정확도와 오답 원인이 분석됩니다.</div></div>`;
+    if (!ms.length) return `<div class="card mt16"><div class="empty">기록이 없습니다.<br>오늘의 복습 또는 섞어 풀기 1회 완료 후 메타인지 정확도·오답 원인 분석</div></div>`;
     const avg = (f) => Math.round(ms.reduce((a, x) => a + f(x), 0) / ms.length);
     const cal = avg(x => x.cal), acc = avg(x => Math.round(x.ok * 100 / x.n));
     const ill = ms.reduce((a, x) => a + (x.ill || 0), 0), hid = ms.reduce((a, x) => a + (x.hid || 0), 0);
@@ -124,7 +124,7 @@
         <div class="card"><div class="xs muted">🔁 장기 기억 전환 단원</div><div class="mth-big">${mast}<small>/${sch.length}</small></div>${bar(sch.length ? Math.round(mast * 100 / sch.length) : 0, 'var(--orange)')}<div class="xs muted mt8">간격 복습 3단계(7일) 이상 통과한 단원</div></div>
         <div class="card"><div class="xs muted">📝 백지 인출률</div><div class="mth-big">${bavg == null ? '–' : bavg + '%'}</div>${bar(bavg || 0, 'var(--pink)')}<div class="xs muted mt8">교과서 없이 떠올린 핵심 비율 평균</div></div>
       </div>
-      <div class="card mt12"><b>❌ 오답 원인 분석</b>${wt ? `<div class="mth-why mt12">${WHY.map(([k, n]) => `<div><span class="small">${n}</span>${bar(Math.round((why[k] || 0) * 100 / wt), 'var(--red)')}<span class="xs muted">${why[k] || 0}</span></div>`).join('')}</div><div class="ti-ready mt12">💡 ${TIP[top[0]]}</div>` : '<div class="small muted mt8">오답 문항에서 원인을 선택하면 분석됩니다.</div>'}</div>
+      <div class="card mt12"><b>❌ 오답 원인 분석</b>${wt ? `<div class="mth-why mt12">${WHY.map(([k, n]) => `<div><span class="small">${n}</span>${bar(Math.round((why[k] || 0) * 100 / wt), 'var(--red)')}<span class="xs muted">${why[k] || 0}</span></div>`).join('')}</div><div class="ti-ready mt12">💡 ${TIP[top[0]]}</div>` : '<div class="small muted mt8">오답 문항의 원인 선택 후 분석</div>'}</div>
       <div class="card mt12"><b>🧭 다음 학습 권고</b><ul class="ti-list mt8">
         ${cal < 70 ? '<li>예측 오차가 큽니다. "확실히 안다"는 타인에게 설명할 수 있을 때만 선택하십시오.</li>' : '<li>메타인지가 정확합니다. 헷갈린다·모른다로 표시한 문항부터 복습하십시오.</li>'}
         ${ill ? `<li>안다고 판단했으나 틀린 '착각 문항'이 ${ill}개 있습니다. 가장 위험한 문항이므로 간격 복습에 다시 포함됩니다.</li>` : ''}
@@ -198,7 +198,7 @@
     box.innerHTML = `<div class="lp-card pop mt16" style="text-align:center"><div class="big-emoji">${ok / n >= .8 ? '🎉' : ok / n >= .5 ? '👍' : '💪'}</div>
       <h2 style="margin:6px 0">${ok}/${n} 정답</h2>
       <div class="grid g3 mth-res mt12"><div><b>${cal}%</b><span>메타인지 정확도</span></div><div><b class="${ill ? 'warn' : ''}">${ill}</b><span>착각 문항</span></div><div><b>${hid}</b><span>숨은 실력</span></div></div>
-      <p class="small muted mt12">${ill ? '안다고 판단했으나 틀린 문항이 가장 위험합니다. 해당 단원은 내일 복습에 다시 포함됩니다.' : cal >= 80 ? '아는 것과 모르는 것을 정확히 구분하고 있습니다. 최상위권의 학습 습관입니다 🎯' : '예측과 결과를 비교하는 연습을 지속하면 메타인지가 향상됩니다.'}${moved.length ? `<br>✅ ${moved.length}개 단원이 다음 복습 간격으로 넘어갔습니다.` : ''}</p>
+      <p class="small muted mt12">${ill ? '안다고 판단했으나 틀린 문항이 가장 위험합니다. 해당 단원은 내일 복습에 다시 포함됩니다.' : cal >= 80 ? '아는 것과 모르는 것을 정확히 구분하고 있습니다. 최상위권의 학습 습관입니다 🎯' : '예측과 결과 비교 반복 → 메타인지 향상'}${moved.length ? `<br>✅ ${moved.length}개 단원이 다음 복습 간격으로 넘어갔습니다.` : ''}</p>
       <div class="row mt16" style="justify-content:center;gap:8px"><a class="btn" href="#study/top/method/report">📊 학습 패턴 분석</a><button class="btn btn-primary" data-mt="again">다시 풀기</button></div></div>`;
     S = null;
   }

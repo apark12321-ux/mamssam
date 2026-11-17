@@ -113,7 +113,7 @@
     // 국어·백지 인출·심화 서술형: 말로 설명하기
     document.querySelectorAll('textarea.dq-in, #blankIn').forEach(t => {
       if (t.dataset.say) return; t.dataset.say = 1;
-      t.insertAdjacentHTML('afterend', `<div class="talk-bar"><button type="button" class="say-btn mic" data-say="talk">🎤 말로 설명하기</button><span class="xs muted">음성을 글로 변환하고 핵심어 포함 비율을 분석합니다</span><div class="talk-res"></div></div>`);
+      t.insertAdjacentHTML('afterend', `<div class="talk-bar"><button type="button" class="say-btn mic" data-say="talk">🎤 말로 설명하기</button><span class="xs muted">음성 → 문자 변환 · 핵심어 포함 비율 분석</span><div class="talk-res"></div></div>`);
     });
   }
   new MutationObserver(() => { clearTimeout(decorate.t); decorate.t = setTimeout(decorate, 60); }).observe(document.documentElement, { childList: true, subtree: true });
@@ -174,7 +174,7 @@
         const ans = ta.closest('.dq') && ta.closest('.dq').querySelector('.dq-ans'); const hideMiss = !!(ans && ans.hidden);
         const pace = spm > 380 ? '속도가 다소 빠릅니다. 천천히 또박또박 말하십시오.' : spm < 120 ? '속도가 느립니다. 핵심부터 자신 있게 말하십시오.' : '말 속도가 적절합니다.';
         res.innerHTML = `<div class="say-out talk"><div class="talk-kpi"><div><b>${R.secs}</b><span>초</span></div><div><b>${chars}</b><span>글자</span></div><div><b>${spm}</b><span>분당 음절</span></div>${cov != null ? `<div><b>${cov}%</b><span>핵심어</span></div>` : ''}</div>
-          ${kw.length ? `<div class="small mt8">✅ 말한 핵심어: ${hideMiss ? hit.length + '개' : hit.map(esc).join(', ') || '없음'}</div>${hideMiss ? '<div class="xs muted">모범 답안을 열면 누락한 핵심어도 표시됩니다.</div>' : `<div class="small">➕ 보완할 핵심어: ${miss.slice(0, 8).map(esc).join(', ') || '없음 · 완벽합니다'}</div>`}` : ''}
+          ${kw.length ? `<div class="small mt8">✅ 말한 핵심어: ${hideMiss ? hit.length + '개' : hit.map(esc).join(', ') || '없음'}</div>${hideMiss ? '<div class="xs muted">모범 답안 열람 시 누락 핵심어 표시</div>' : `<div class="small">➕ 보완할 핵심어: ${miss.slice(0, 8).map(esc).join(', ') || '없음 · 완벽합니다'}</div>`}` : ''}
           <div class="xs muted mt8">${pace} ${chars < 30 ? '설명이 짧습니다. "왜냐하면", "예를 들어"를 넣어 더 길게 말하십시오.' : ''}</div>${R.url ? `<audio controls src="${R.url}"></audio>` : ''}</div>`;
       });
     }

@@ -209,7 +209,7 @@
         <div class="hi-struct"><div class="c-t">출제 구조</div>${esc(nw ? s.nxt : s.cur)}${nw ? `<div class="xs muted mt4">현행(~2027학년도): ${esc(s.cur)}</div>` : `<div class="xs muted mt4">2028학년도부터: ${esc(s.nxt)}</div>`}</div>
         <div class="hi-pins">${s.pts.map((p, i) => `<label class="hi-pin ${h.pin[s.k + i] ? 'on' : ''}"><input type="checkbox" data-act="hiPin" data-k="${s.k + i}" ${h.pin[s.k + i] ? 'checked' : ''}><span>${esc(p)}</span></label>`).join('')}</div>
         <div class="row mt12" style="gap:8px"><button class="btn btn-sm" data-act="hiAdd" data-subj="${s.k}">📅 이 과목 할 일 추가</button><a class="btn btn-sm btn-ghost" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi ↗</a><a class="btn btn-sm btn-ghost" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 기출 ↗</a></div></div>`).join('')}
-      <p class="xs muted mt12">출제 구조는 한국교육과정평가원 시행 기본계획과 교육부 2028학년도 대입제도 개편안을 바탕으로 정리했고, 점검표는 탑픽이 작성한 학습 전략입니다. 기출문제·교재 원문은 저작권이 각 기관에 있어 링크로만 안내합니다.</p>`);
+      <p class="xs muted mt12">출제 구조: 평가원 시행 기본계획·교육부 2028학년도 대입제도 개편안 기준 · 점검표: 탑픽 작성 학습 전략 · 기출문제·교재 원문은 저작권 보호로 링크만 안내</p>`);
   }
   function plan() {
     const h = hi(), t = todayStr(); const st = MS().st();
@@ -220,7 +220,7 @@
     const list = h.plan.filter(p => p.date === sel);
     const S = (k) => SUBJ_H.find(s => s.k === k) || { n: '기타', c: '#667' };
     return layout('high/plan', `
-      <div class="page-head"><div><h1>플래너</h1><div class="sub">과목·할 일·날짜만 입력하고 점검합니다. 완료한 과제는 연속 기록에 누적됩니다.</div></div><button class="btn btn-primary" data-act="hiAdd" data-date="${sel}">+ 할 일</button></div>
+      <div class="page-head"><div><h1>플래너</h1><div class="sub">과목·할 일·날짜 입력 · 완료 과제는 연속 기록에 누적</div></div><button class="btn btn-primary" data-act="hiAdd" data-date="${sel}">+ 할 일</button></div>
       <div class="card"><div class="row between"><button class="btn btn-sm btn-ghost" data-act="hiWk" data-d="-1">‹ 지난주</button><b>${mon.getMonth() + 1}월 ${mon.getDate()}일 주</b><button class="btn btn-sm btn-ghost" data-act="hiWk" data-d="1">다음주 ›</button></div>
         <div class="week hi-week mt8">${days.map((ds, i) => { const L = byDay[i]; const done = L.length && L.every(p => p.done); return `<button class="day ${ds === t ? 'today' : ''} ${ds === sel ? 'sel' : ''} ${done ? 'done' : ''}" data-act="hiDay" data-d="${ds}"><span class="d-w">${DAYN[(i + 1) % 7]}</span><span class="d-n">${+ds.slice(8)}</span><span class="d-l">${L.length ? `${L.filter(p => p.done).length}/${L.length}` : '–'}</span></button>`; }).join('')}</div></div>
       <div class="card mt12"><div class="card-head"><h2>${sel === t ? '오늘' : sel.slice(5).replace('-', '/')} 할 일</h2><span class="xs muted">${list.filter(p => p.done).length}/${list.length}</span></div>
@@ -241,7 +241,7 @@
       <div class="card mt12"><div class="card-head"><h2>기록 ${rows.length}회</h2></div>
         ${rows.length ? `<div class="hi-mock-tbl"><table><thead><tr><th>시험</th>${ks.map(k => `<th>${S(k).n.slice(0, 2)}</th>`).join('')}<th></th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td><b>${esc(r.name)}</b><br><small class="muted">${r.date}</small></td>${ks.map(k => `<td>${r.g[k] || '–'}</td>`).join('')}<td><button class="btn btn-sm btn-ghost" data-act="hiMockDel" data-id="${r.id}">✕</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty small"><div class="e-ico">📈</div>기록이 없습니다. 3·6·9·11월 학력평가와 6·9월 모의평가를 기록하십시오.</div>'}
       </div>
-      <div class="card mt12"><div class="card-head"><h2>등급컷·해설 확인처</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 저작권이 각 기관에 있어 탑픽은 링크만 제공합니다.</p></div>`);
+      <div class="card mt12"><div class="card-head"><h2>등급컷·해설 확인처</h2></div><div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="https://www.ebsi.co.kr" target="_blank" rel="noopener">EBSi 등급컷·해설 ↗</a><a class="btn btn-sm" href="https://www.suneung.re.kr" target="_blank" rel="noopener">평가원 모의평가 ↗</a><a class="btn btn-sm" href="https://www.jinhak.or.kr" target="_blank" rel="noopener">교육청 학력평가 ↗</a></div><p class="xs muted mt8">시험지·해설 원문은 각 기관 저작권 · 탑픽은 링크만 제공</p></div>`);
   }
   function road() {
     const kid = MS().kid(); const st = MS().st(); const g = +(st._hiRoadG || kid.grade);
@@ -252,12 +252,12 @@
       <div class="page-head"><div><h1>대입 로드맵 · 캘린더</h1><div class="sub">학년별 당해 연도 과제와 연간 일정</div></div></div>
       <div class="chips hi-sub">${[10, 11, 12].map(x => `<button class="chip ${x === g ? 'on' : ''}" data-act="hiRoadG" data-g="${x}">${GS(x)}${x === kid.grade ? ' ●' : ''}</button>`).join('')}</div>
       <div class="card"><div class="card-head"><h2>${ROAD[g].t}</h2></div><ol class="steps">${ROAD[g].items.map(t => `<li><span>${esc(t)}</span></li>`).join('')}</ol></div>
-      <div class="card mt12"><div class="card-head"><h2>연간 일정</h2><span class="xs muted">${m}월부터</span></div><div class="hi-cal">${ordered.map(c => `<div class="hi-cal-r ${c.m === m ? 'now' : ''}"><b>${c.m}월</b><span>${esc(c.t)}<small>${esc(c.who)}</small></span></div>`).join('')}</div><p class="xs muted mt8">일반적인 시기를 정리한 것이며, 정확한 날짜는 평가원·대교협·각 대학·교육청의 공식 공지로 확정됩니다.</p></div>
+      <div class="card mt12"><div class="card-head"><h2>연간 일정</h2><span class="xs muted">${m}월부터</span></div><div class="hi-cal">${ordered.map(c => `<div class="hi-cal-r ${c.m === m ? 'now' : ''}"><b>${c.m}월</b><span>${esc(c.t)}<small>${esc(c.who)}</small></span></div>`).join('')}</div><p class="xs muted mt8">일반적 시기 기준 · 확정 일자는 평가원·대교협·각 대학·교육청 공식 공지</p></div>
       <div class="card mt12"><div class="card-head"><h2>전형 한눈에</h2></div><div class="hi-types">${[['수시 · 학생부교과', '내신 성적 중심. 수능 최저학력기준이 있는 대학이 많습니다.'], ['수시 · 학생부종합', '학생부 전체(교과+세특+활동)를 정성 평가. 서류·면접.'], ['수시 · 논술', '대학별 논술고사 + 일부 교과. 수능 최저 적용 대학 다수.'], ['정시 · 수능 위주', '수능 성적으로 가·나·다군 3회 지원. 12월 말~1월 초 원서.']].map(([t, d]) => `<div class="hi-type"><b>${t}</b><span>${d}</span></div>`).join('')}</div><p class="xs muted mt8">수시는 최대 6회, 정시는 3회 지원. 수시 합격(추가합격 포함) 시 정시 지원 불가. 대학별 세부 기준은 <a href="https://www.adiga.kr" target="_blank" rel="noopener">어디가</a>에서 확인하십시오.</p></div>`);
   }
   function res() {
     return layout('high/res', `
-      <div class="page-head"><div><h1>공식 자료실</h1><div class="sub">평가원·EBS·교육청·대교협 등 공공 기관의 자료로 바로 연결합니다.</div></div></div>
+      <div class="page-head"><div><h1>공식 자료실</h1><div class="sub">평가원·EBS·교육청·대교협 공공 자료 직접 연결</div></div></div>
       ${RES.map(G => `<div class="card mt12"><div class="card-head"><h2>${G.g}</h2></div><div class="list">${G.items.map(([n, u, d]) => `<a class="li" href="${u}" target="_blank" rel="noopener" style="color:inherit"><div class="li-ico">🔗</div><div class="li-main"><div class="li-t">${esc(n)}</div><div class="li-s">${esc(d)}</div></div><span class="muted">↗</span></a>`).join('')}</div></div>`).join('')}
       <p class="xs muted mt12">각 사이트의 자료 저작권은 해당 기관에 있습니다. 탑픽은 자료를 복제하지 않고 공식 페이지로 연결만 합니다. 링크는 기관 사정에 따라 변경될 수 있습니다.</p>`);
   }
