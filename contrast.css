@@ -1,0 +1,21 @@
+/* 탑픽 — 글자 명도 대비 보강 (마지막에 적용) */
+:root,body,body.fl-e,body.fl-m,body.fl-h{--muted:#4A5466;--ink2:#2E3646;--e-sub:#4A5466;--m-sub:#3F524B;--h-sub:#3C4760}
+body{color:#141B2D}
+.muted,.xs.muted,.small.muted,.page-head .sub,.card-head .more,.tile .t-label,.tile .t-val small,.empty,.day .d-w,.lp-tt .xs,.ad-t small,.dg-tl small,.sch-home-b,.sch-item small,.sch-pick small,.ev-d,.ev-dd,.dq-h .xs,.stat-strip,.fm-t small,.kp-t small,.ic-next,.ic-vis small,.ed-k span,.ed-k small{color:var(--muted)!important;opacity:1!important}
+.stat-strip b{color:#141B2D!important}
+.xs{font-size:12.5px}
+.small{font-size:13.5px}
+.site-foot{color:#4A5466;font-size:13px}
+.site-foot a{color:#2E3646;text-decoration:underline;text-underline-offset:2px}
+.ad-tag{color:#4A5466;border-color:#b8c0cc}
+.ad-house .ad-t small,.ad-direct .ad-t small{color:#4A5466!important}
+.brand-sub{color:#4A5466!important}
+.bottomnav a,.bottomnav button{color:#3A4358}
+.bottomnav a.on,.bottomnav .on{color:var(--blue,#1452F0)}
+.home-fold>summary .xs,.home-fold>summary span{color:#4A5466!important}
+.hq-opts .lp-opt,.lp-opt{color:#141B2D}
+input::placeholder,textarea::placeholder{color:#6B7488!important;opacity:1}
+.chip{color:#2E3646}
+.badge{color:#2E3646}
+.bottomnav{display:flex!important;flex-wrap:nowrap!important;overflow:hidden}
+.bottomnav a,.bottomnav button{flex:1 1 0!important;min-width:0!important;padding-left:2px!important;padding-right:2px!important;font-size:11px!important;white-space:nowrap}
